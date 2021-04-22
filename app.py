@@ -2,7 +2,11 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 from flask_restful import Resource,Api,reqparse
 import json
 from preprocess import get_state_data
+<<<<<<< HEAD
 from data_preprocessing import merge_db
+=======
+from data_preprocessing import us_begin, us_update
+>>>>>>> 660d1658a0d85be79859b3560f59b806f1210dc4
 
 app = Flask(__name__)
 api = Api(app)
@@ -19,7 +23,19 @@ def index():
 def init_US():
     if request.method == "POST":
         print("SHit is happening")
-        data = get_state_data()
+        data = us_begin()
+        # data_json = json.dumps(raw_data, indent=2)
+        return data
+    else:
+        print("ERROR")
+
+@app.route("/update_US_years", methods=["POST", "GET"])
+def update_US_years():
+    if request.method == "POST":
+        print("called update")
+        min_year = int(request.form['min_year'])
+        max_year = int(request.form['max_year'])
+        data = us_update(min_year, max_year)
         # data_json = json.dumps(raw_data, indent=2)
         return data
     else:

@@ -20,83 +20,72 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="static/js/framework/jquery-3.6.0.min.js"></script>
-
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
+    <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
     <script src="../../static/js/US_map.js"></script>
     <script src="../../static/js/pcp.js"></script>
 
-    <style type="text/css">
-      /* Legend Font Style */
-
-      body {
-        font: 11px sans-serif;
-        background-color: #ffffff;
-      }
-      /* Legend Position Style */
-
-      .legend {
-        position: absolute;
-        left: 20px;
-        top: 30px;
-      }
-
-      .axis text {
-        font: 10px sans-serif;
-      }
-
-      .axis line,
-      .axis path {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-      }
-
-      .state:hover {
-        fill-opacity: 0.5;
-      }
-
-      div.tooltip {
-        position: absolute;
-        text-align: center;
-        padding: 0.7rem;
-        background: #313639;
-        color: #f9f9f9;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-        font-size: 0.7rem;
-        white-space: pre-wrap;
-        font-size: 1.5em;
-      }
-    </style>
     <title>Document</title>
   </head>
 
   <body>
-    <div id="temp"></div>
+    <div id="project-heading">
+      <h1 id="project-name">Crime and Disaster Data Analysis</h1>
+    </div>
+
     <div class="row" id="pcp_row">
       <div class="col-8" id="pcp_col">
         <div id="pcp_plot" style="padding-bottom: 50px"></div>
       </div>
     </div>
-    <!--
+
+    <div class="grid-container">
+      <div class="item1">
+        <div id="year-slider">
+          <p>
+            <label for="amount">Year range:</label>
+            <input
+              type="text"
+              id="amount"
+              readonly
+              style="border: 0; color: #f6931f; font-weight: bold"
+            />
+          </p>
+
+          <div id="slider-range"></div>
+        </div>
+
+        <div id="US-map">
+          <div id="US-map-svg"></div>
+        </div>
+      </div>
+      <div class="item2"></div>
+      <div class="item3"></div>
+      <div class="item4"></div>
+    </div>
+
     <script>
-        //Width and height of map
-        data = null
-        $(document).ready(function() {
-            $.ajax({
-                type: 'POST',
-                url: "http://127.0.0.1:5000/init_US",
-                data: null,
-                success: function(response) {
-                    US_map(response)
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
+      //Width and height of map
+      data = null;
+      $(document).ready(function () {
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:5000/init_US",
+          data: null,
+          success: function (response) {
+            US_map(response);
+          },
+          error: function (error) {
+            console.log(error);
+          },
         });
+      });
     </script>
-    -->
   </body>
 </html>
