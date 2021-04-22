@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="#">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="static/js/framework/jquery-3.6.0.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="../../static/js/US_map.js"></script>
+    <style type="text/css">
+        /* Legend Font Style */
+        
+        body {
+            font: 11px sans-serif;
+            background-color: #ffffff;
+        }
+        /* Legend Position Style */
+        
+        .legend {
+            position: absolute;
+            left: 20px;
+            top: 30px;
+        }
+        
+        .axis text {
+            font: 10px sans-serif;
+        }
+        
+        .axis line,
+        .axis path {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+        
+        .state:hover {
+            fill-opacity: 0.5;
+        }
+        
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 0.7rem;
+            background: #313639;
+            color: #f9f9f9;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+            font-size: .7rem;
+            white-space: pre-wrap;
+            font-size: 1.5em;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="temp"></div>
+
+
+    <script>
+        //Width and height of map
+        data = null
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:5000/init_US",
+                data: null,
+                success: function(response) {
+                    US_map(response)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
