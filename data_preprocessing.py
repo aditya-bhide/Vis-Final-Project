@@ -53,3 +53,26 @@ def crime_db():
     df.drop(labels=["rape_legacy","rape_revised","caveats"],axis=1, inplace=True)
 
     return df
+
+def merge_db():
+    crime_dataframe = crime_db()
+    disaster_dataframe = disaster_db()
+
+    # Left join the 2 dfs using state and year
+    new_df = pd.merge(crime_dataframe, disaster_dataframe,  how='left', left_on=['year','state_abbr'], right_on = ['year','state'])
+
+    # Drop the redundant 'state' column
+    new_df = new_df.drop(columns="state")
+
+    # Replace nan values by zeroes
+    new_df['disaster_number'] = new_df['disaster_number'].fillna(0)
+    new_df['individual_relief'] = new_df['individual_relief'].fillna(0)
+    new_df['community_relief'] = new_df['community_relief'].fillna(0)
+
+    # Convert the dtype of 3 attributes
+    new_df['disaster_number'] = new_df['disaster_number'].astype(int)
+    new_df['individual_relief'] = new_df['individual_relief'].astype(int)
+    new_df['community_relief'] = new_df['community_relief'].astype(int)
+
+
+    return new_df

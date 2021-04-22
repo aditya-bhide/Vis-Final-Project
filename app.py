@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for
+from flask_restful import Resource,Api,reqparse
 import json
 from preprocess import get_state_data
+from data_preprocessing import merge_db
 
 app = Flask(__name__)
+api = Api(app)
 
 @app.route("/")
 def index():
@@ -22,5 +25,27 @@ def init_US():
     else:
         print("ERROR")
 
+
+class getPcpData(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('state_list', type=str ,action="append")
+        parser.add_argument('year_list', type=str ,action="append")
+        args = parser.parse_args()  
+
+        state_list = args['state_list']
+        year_list = args['year_list']
+        
+        pcp_df = final_data.copy()
+        pcp_df = pcp_df.loc[pcp_df['state_abbr'].isin(state_list) & pcp_df['year'].isin(year_list)]
+        pcp_df[['violent_crime','homicide','property_crime','burglary','aggravated_assault']] = pcp_df[['violent_crime','homicide','property_crime','burglary','aggravated_assault']].div(pcp_df['population']/100000, axis=0)
+        pcp_df.drop(labels=["population","community_relief","robbery","state_name",'motor_vehicle_theft'],axis=1, inplace=True)
+
+        pcp_df = pcp_df[['state_abbr','year','disaster_number','individual_relief','homicide','burglary','aggravated_assault']]
+        return jsonify({"data":pcp_df.to_dict("records"), "year_list":year_list, "state_list":state_list})
+
+api.add_resource(getPcpData, "/getPcpData")
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    final_data = merge_db()
+    app.run(debug=False)

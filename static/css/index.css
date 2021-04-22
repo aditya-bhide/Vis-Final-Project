@@ -1,0 +1,59 @@
+#pcp_svg_id .foreground path {
+  fill: none;
+  stroke: steelblue;
+}
+#pcp_svg_id .foreground path.fade {
+  stroke: #000;
+  stroke-opacity: 0.05;
+}
+
+#pcp_svg_id .background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+#pcp_svg_id .foreground path {
+  fill: none;
+  stroke: steelblue;
+}
+#pcp_svg_id .foreground path.fade {
+  stroke: #000;
+  stroke-opacity: 0.05;
+}
+
+/* Brush no eixo */
+#pcp_svg_id .brush .extent .selection {
+  /*fill: red;*/
+  fill-opacity: 0.3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+#pcp_svg_id .pcp_axis line,
+#pcp_svg_id .pcp_axis path {
+  fill: none;
+  stroke: rgb(36, 33, 33);
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+#pcp_svg_id .pcp_axis text {
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
+  font-size: 8pt;
+  fill: black;
+}
+
+#pcp_svg_id .background path {
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
+}
+
+/* Brush no eixo */
+#pcp_svg_id .brush .extent .selection {
+  /*fill: red;*/
+  fill-opacity: 0.3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
