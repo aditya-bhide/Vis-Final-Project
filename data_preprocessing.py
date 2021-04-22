@@ -1,5 +1,9 @@
 import pandas as pd
 import numpy as np
+from pprint import pprint
+import json
+import copy
+
 
 def disaster_db():
     df1 = pd.read_csv("data/us_disaster_declarations.csv")
@@ -53,3 +57,60 @@ def crime_db():
     df.drop(labels=["rape_legacy","rape_revised","caveats"],axis=1, inplace=True)
 
     return df
+    
+df = crime_db()
+f = open('data/us-states.json')
+us_data = json.load(f)
+us_data_no_geo = copy.deepcopy(us_data)
+
+# for i in range(len(us_data_no_geo['features'])):
+#     us_data_no_geo['features'][i].pop('geometry', None)
+#     us_data_no_geo['features'][i].pop('type', None)
+
+
+def us_begin():
+    data = df
+    # print(data.columns)
+    attribute1 = 'violent_crime'
+    data_map = data[['year','state_name', attribute1, 'population']]
+    # pprint(data_map.to_dict('records'))
+    data_map = data_map.loc[(data_map['year'] >= 2019) & (data_map['year'] <= 2019)]
+    data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute1: sum, 'population': sum})).reset_index()
+    print(data_map)
+
+    data_map_dict = {}
+    for i,j,k in zip(data_map.state_name, data_map[attribute1], data_map.population):
+        data_map_dict[i] = [j, k]
+    counter = []
+    for i in range(len(us_data['features'])):
+        state = us_data['features'][i]['properties']['name']
+        if state in data_map_dict:
+            counter.append(int(data_map_dict[state][1]/data_map_dict[state][0]))
+            us_data['features'][i]['properties'][attribute1] = int((data_map_dict[state][0]/data_map_dict[state][1])*100000)
+    us_data['other_features'] = {}
+    us_data['other_features']['min_value'] = min(counter)
+    us_data['other_features']['max_value'] = max(counter)
+    us_data['other_features']['feature_name'] = attribute1
+    # print(max_value)
+    return us_data
+
+def us_update(min_year, max_year):
+    data = df
+    attribute1 = 'violent_crime'
+    data_map = data[['year','state_name', attribute1, 'population']]
+    data_map = data_map.loc[(data_map['year'] >= min_year) & (data_map['year'] <= max_year)]
+    data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute1: sum, 'population': sum})).reset_index()
+    data_map_dict = {}
+    for i,j,k in zip(data_map.state_name, data_map[attribute1], data_map.population):
+        data_map_dict[i] = [j, k]
+    counter = []
+    for i in range(len(us_data_no_geo['features'])):
+        state = us_data_no_geo['features'][i]['properties']['name']
+        if state in data_map_dict:
+            counter.append(int(data_map_dict[state][1]/data_map_dict[state][0]))
+            us_data_no_geo['features'][i]['properties'][attribute1] = int((data_map_dict[state][0]/data_map_dict[state][1])*100000)
+    us_data_no_geo['other_features'] = {}
+    us_data_no_geo['other_features']['min_value'] = min(counter)
+    us_data_no_geo['other_features']['max_value'] = max(counter)
+    us_data_no_geo['other_features']['feature_name'] = attribute1
+    return us_data_no_geo
