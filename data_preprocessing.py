@@ -57,7 +57,6 @@ def crime_db():
     df.drop(labels=["rape_legacy","rape_revised","caveats"],axis=1, inplace=True)
 
     return df
-<<<<<<< HEAD
 
 def merge_db():
     crime_dataframe = crime_db()
@@ -81,7 +80,6 @@ def merge_db():
 
 
     return new_df
-=======
     
 df = crime_db()
 f = open('data/us-states.json')
@@ -101,7 +99,6 @@ def us_begin():
     # pprint(data_map.to_dict('records'))
     data_map = data_map.loc[(data_map['year'] >= 2019) & (data_map['year'] <= 2019)]
     data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute1: sum, 'population': sum})).reset_index()
-    print(data_map)
 
     data_map_dict = {}
     for i,j,k in zip(data_map.state_name, data_map[attribute1], data_map.population):
@@ -139,4 +136,3 @@ def us_update(min_year, max_year):
     us_data_no_geo['other_features']['max_value'] = max(counter)
     us_data_no_geo['other_features']['feature_name'] = attribute1
     return us_data_no_geo
->>>>>>> 660d1658a0d85be79859b3560f59b806f1210dc4
