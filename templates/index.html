@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="#" />
 
     <!-- Latest compiled and minified CSS using Bootstrap-->
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static',filename='css/index.css') }}"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/us_map.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}" />
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main.css') }}" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="static/js/framework/jquery-3.6.0.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-    />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
     <!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -33,17 +25,26 @@
     <script src="../../static/js/crime_donut_chart.js"></script>
 
     <title>Document</title>
-  </head>
+</head>
 
-  <body>
+<body style="background-color: blanchedalmond;">
+
     <div id="project-heading">
-      <h1 id="project-name">Crime and Disaster Data Analysis</h1>
+        <h1 id="project-name">Crime and Disaster Data Analysis</h1>
     </div>
 
-    <div class="row" id="pcp_row">
-      <div class="col-8" id="pcp_col">
-        <div id="pcp_plot" style="padding-bottom: 50px"></div>
-      </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div id="year-slider">
+                <p>
+                    <label for="amount">Year range:</label>
+                    <input type="text" id="amount" readonly style="border: 0; color: #f6931f; font-weight: bold" />
+                </p>
+
+                <div id="slider-range"></div>
+            </div>
+        </div>
     </div>
 
     <div class="grid-container">
@@ -60,33 +61,53 @@
           </p>
 
           <div class="col-6" id="slider-range"></div>
-        </div>
+    <div class="row">
+        <!-- Start column for map -->
+        <div class="col-md-6">
+            <div class="row" style="margin-left: 40px;">
+                <!-- Start column for legend -->
+                <div class="col-md-1">
+                    <div id="US-map-legend-svg"></div>
+                </div>
+                <!-- End column for legend -->
+                <!-- Start column for map -->
+                <div class="col-md-11">
+                    <div id="US-map-svg" style="margin-left: 20px; margin-top:20px"></div>
 
-        <div id="US-map">
-          <div id="US-map-svg"></div>
+                </div>
+                <!-- End column for map -->
+            </div>
         </div>
-      </div>
-      <div class="item2"></div>
-      <div class="item3"></div>
-      <div class="item4"></div>
+        <!-- End column for map -->
     </div>
 
+
+    <div class="row">
+        <div class="col-md-6" id="pcp_col">
+            <div id="pcp_plot" style="padding-bottom: 50px"></div>
+        </div>
+    </div>
+
+
+
+
     <script>
-      //Width and height of map
-      data = null;
-      $(document).ready(function () {
-        $.ajax({
-          type: "POST",
-          url: "http://127.0.0.1:5000/init_US",
-          data: null,
-          success: function (response) {
-            US_map(response);
-          },
-          error: function (error) {
-            console.log(error);
-          },
+        //Width and height of map
+        data = null;
+        $(document).ready(function() {
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:5000/init_US",
+                data: null,
+                success: function(response) {
+                    US_map(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                },
+            });
         });
-      });
     </script>
-  </body>
+</body>
+
 </html>

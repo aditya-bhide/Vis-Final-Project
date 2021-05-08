@@ -1,5 +1,4 @@
 /* Legend Position Style */
-
 #US-map-svg .legend {
     margin-top: 100px;
     font: 11px sans-serif;
@@ -7,6 +6,11 @@
     position: absolute;
     left: 20px;
     top: 30px;
+}
+
+.background-us-map {
+    fill: none;
+    pointer-events: all;
 }
 
 #US-map-svg .axis text {
@@ -24,7 +28,7 @@
     fill-opacity: 0.5;
 }
 
-div.tooltip {
+.tooltip {
     position: absolute;
     text-align: center;
     padding: 0.7rem;
