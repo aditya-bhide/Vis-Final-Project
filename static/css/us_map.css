@@ -8,6 +8,11 @@
     top: 30px;
 }
 
+.background-us-map {
+    fill: none;
+    pointer-events: all;
+}
+
 #US-map-svg .axis text {
     font: 10px sans-serif;
 }

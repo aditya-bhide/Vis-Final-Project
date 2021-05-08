@@ -27,9 +27,11 @@
 </head>
 
 <body style="background-color: blanchedalmond;">
+
     <div id="project-heading">
         <h1 id="project-name">Crime and Disaster Data Analysis</h1>
     </div>
+
 
     <div class="row">
         <div class="col-md-6">
@@ -41,12 +43,31 @@
 
                 <div id="slider-range"></div>
             </div>
+        </div>
+    </div>
 
-            <div id="US-map">
-                <div id="US-map-svg"></div>
+    <div class="row">
+        <!-- Start column for map -->
+        <div class="col-md-6">
+            <div class="row" style="margin-left: 40px;">
+                <!-- Start column for legend -->
+                <div class="col-md-1">
+                    <div id="US-map-legend-svg"></div>
+                </div>
+                <!-- End column for legend -->
+                <!-- Start column for map -->
+                <div class="col-md-11">
+                    <div id="US-map-svg" style="margin-left: 20px; margin-top:20px"></div>
+
+                </div>
+                <!-- End column for map -->
             </div>
         </div>
+        <!-- End column for map -->
+    </div>
 
+
+    <div class="row">
         <div class="col-md-6" id="pcp_col">
             <div id="pcp_plot" style="padding-bottom: 50px"></div>
         </div>

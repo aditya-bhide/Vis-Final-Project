@@ -1,8 +1,6 @@
 function US_map(data) {
-    // const margin = { top: 60, right: 90, bottom: 90, left: 120 };
-    // const width = svg_width - margin.left - margin.right
-    // const height = svg_height - margin.top - margin.bottom
-    var width = 800;
+
+    var width = 700;
     var height = 370;
 
     var lowColor = '#f9f9f9'
@@ -12,8 +10,15 @@ function US_map(data) {
 
     // D3 Projection
     var projection = d3.geoAlbersUsa()
-        .translate([width / 2, height / 2]) // translate to center of screen
+        .translate([(width) / 2, height / 2]) // translate to center of screen
         .scale([750]); // scale things down so see entire US
+
+    var zoom = d3.zoom()
+        // no longer in d3 v4 - zoom initialises with zoomIdentity, so it's already at origin
+        // .translate([0, 0]) 
+        // .scale(1) 
+        .scaleExtent([1, 8])
+        .on("zoom", zoomed);
 
     // Define path generator
     var path = d3.geoPath() // path generator that will convert GeoJSON to SVG paths
@@ -25,7 +30,16 @@ function US_map(data) {
         .attr("width", width)
         .attr("height", height);
 
-    svg.selectAll("path")
+    svg.append("rect")
+        .attr("class", "background")
+        .attr("width", width)
+        .attr("height", height)
+        .on("click", reset);
+
+    var g = svg.append("g");
+    svg.call(zoom);
+
+    g.selectAll("path")
         .data(data.features)
         .enter()
         .append("path")
@@ -33,15 +47,16 @@ function US_map(data) {
         .attr("class", "state");
 
     // add a legend
-    var w = 100,
+    var w = 80,
         h = 300;
 
-    var key = d3.select("#US-map-svg")
+    var key = d3.select("#US-map-legend-svg")
         .append("svg")
         .attr('margin-top', '50px')
         .attr("width", w)
         .attr("height", h)
-        .attr("class", "legend");
+        // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
+        // .attr("class", "legend");
 
     var legend = key.append("defs")
         .append("svg:linearGradient")
@@ -63,7 +78,7 @@ function US_map(data) {
         .attr("stop-opacity", 1);
 
     key.append("rect")
-        .attr("width", w - 60)
+        .attr("width", w - 40)
         .attr("height", h)
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
@@ -90,7 +105,7 @@ function US_map(data) {
         console.log(minVal, maxVal)
             // Bind the data to the SVG and create one path per GeoJSON feature
 
-        svg.selectAll("path")
+        g.selectAll("path")
             .data(data.features)
             .on("mouseover", mouseover)
             .on("mouseout", mouseout)
@@ -168,8 +183,23 @@ function US_map(data) {
 
         key.selectAll("g.y-axis")
             .call(yAxis);
+    }
 
+    function reset() {
+        svg.transition()
+            .duration(750)
+            // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
+            .call(zoom.transform, d3.zoomIdentity); // updated for d3 v4
+    }
 
+    function zoomed() {
+        g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
+        // g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); // not in d3 v4
+        g.attr("transform", d3.event.transform); // updated for d3 v4
+    }
+
+    function stopped() {
+        if (d3.event.defaultPrevented) d3.event.stopPropagation();
     }
 
 

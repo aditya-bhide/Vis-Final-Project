@@ -68,11 +68,16 @@
 
 /* Legend Position Style */
 
-#US-map-svg .legend {
+#US-map-svg .background {
+    fill: none;
+    pointer-events: all;
+}
+
+#US-map-legend-svg .legend {
     margin-top: 100px;
     font: 11px sans-serif;
     background-color: #ffffff;
-    position: absolute;
+    /* position: absolute; */
     left: 20px;
     top: 30px;
 }
