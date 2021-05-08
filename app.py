@@ -60,8 +60,36 @@ class getPcpData(Resource):
         pcp_df = pcp_df[['state_abbr','year','disaster_number','individual_relief','homicide','burglary','aggravated_assault']]
         return jsonify({"data":pcp_df.to_dict("records"), "year_list":year_list, "state_list":state_list})
 
+
+class getCrimeDonutChart(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('state', type=str, help="Select the state")
+        parser.add_argument('year_list', type=str , action="append")
+        args = parser.parse_args()  
+
+        state = args['state']
+        year_list = args['year_list']
+        print(state, year_list)
+
+        crime_donut_df = final_data.copy()
+        crime_donut_df = crime_donut_df[(crime_donut_df['state_abbr'] == state) & crime_donut_df['year'].isin(year_list)] 
+        crime_donut_df[['violent_crime','homicide','property_crime','burglary','aggravated_assault']] = crime_donut_df[['violent_crime','homicide','property_crime','burglary','aggravated_assault']].div(crime_donut_df['population']/100000, axis=0)
+        crime_donut_df.drop(labels = ["year","population","community_relief","state_name","state_abbr","disaster_number","individual_relief"],axis=1,inplace=True)
+        crime_donut_df = crime_donut_df.astype(int)
+        # crime_donut_df = crime_donut_df.sum(axis = 0, skipna = True)
+        # crime_donut_df_total = crime_donut_df.append(crime_donut_df.sum(numeric_only=True), ignore_index=True)
+        crime_donut_df_total = crime_donut_df.sum(numeric_only=True).to_frame()
+
+        print(crime_donut_df_total )
+        return jsonify({"data":crime_donut_df_total.to_dict('records'), "year_list":year_list, "state":[state]})
+
+
 api.add_resource(getPcpData, "/getPcpData")
+api.add_resource(getCrimeDonutChart, "/getCrimeDonutChart")
+
 
 if __name__ == "__main__":
     final_data = merge_db()
-    app.run(debug=False)
+    # print(final_data.columns)
+    app.run(debug=True)
