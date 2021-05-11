@@ -29,6 +29,17 @@
       href="{{ url_for('static',filename='css/main.css') }}"
     />
 
+     <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/radialBarChart.css') }}"
+    />
+     <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/donutChart.css') }}"
+    />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="static/js/framework/jquery-3.6.0.min.js"></script>
     <link
@@ -39,18 +50,25 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v2.min.js"></script>
+
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="../../static/js/d3-scale-radial.js" charset="utf-8"></script>
+
     <script src="../../static/js/US_map.js"></script>
     <script src="../../static/js/pcp.js"></script>
+    <script src="../../static/js/crime_donut_chart.js"></script>
+    <script src="../../static/js/disasterTypes.js"></script>
 
     <title>Document</title>
   </head>
 
-  <body style="background-color: blanchedalmond">
+  <body style="background-color: #23282D">
     <div id="project-heading">
-      <h1 id="project-name">Crime and Disaster Data Analysis</h1>
+      <h3 id="project-name">Crime and Disaster Data Analysis</h3>
     </div>
 
-    <div class="row">
+    <!--<div class="row">
       <div class="col-md-6">
         <div id="year-slider">
           <p>
@@ -66,11 +84,13 @@
           <div id="slider-range"></div>
         </div>
       </div>
-    </div>
+    </div>-->
 
-    <div class="row">
+    <div class="row with-space">
+
+    
       <!-- Start column for map -->
-      <div class="col-md-6">
+      <div class="col-md-12 left-space-2" style="background-color:#1e1f21;box-shadow: 4px 6px #171a1c;">
         <div class="row" style="margin-left: 40px">
           <!-- Start column for legend -->
           <div class="col-md-1">
@@ -88,13 +108,38 @@
         </div>
       </div>
       <!-- End column for map -->
+
+      <!--start column for line chart-->
+      <!--<div class="col-md-6" style="background-color:#1e1f21;box-shadow: 4px 6px #171a1c;">
+      <div>-->
+      
+      <!--end column for line chart-->
+      
     </div>
 
-    <div class="row">
-      <div class="col-md-6" id="pcp_col">
-        <div id="pcp_plot" style="padding-bottom: 50px"></div>
+    <div class="row with-space">
+      <!--Start column for donut chart-->
+      <div class="col-md-4 left-space-2" id="crimeDonutChartColumn" style="background-color:#1e1f21;box-shadow: 4px 6px #171a1c;">
+        <div id="crimeDonutChartId"></div>
       </div>
+      <!--end column for donut chart-->
+
+      <!-- start column for radial bar chart-->
+       <div class="col-md-4 left-space-1" id="radialBarChartColumn" style="background-color:#1e1f21;box-shadow: 4px 6px #171a1c;">
+      <div id="radialBarChartId"></div>
+      <!-- end column for radial bar chart-->
+
+
     </div>
+    <!--<div class="row crimeDonutChartRow">
+      
+    </div>-->
+
+    <div class="row radialBarChartRow">
+     
+    </div>
+
+
 
     <script>
       //Width and height of map

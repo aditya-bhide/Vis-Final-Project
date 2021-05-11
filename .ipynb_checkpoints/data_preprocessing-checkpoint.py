@@ -8,22 +8,44 @@ import copy
 def disaster_db():
 
     df1 = pd.read_csv("data/us_disaster_declarations.csv")
-
-    # drop all rows with year less than 1979 and greater than year 2019
-    index_names = df1[(df1['fy_declared'] < 1979) |
-                      (df1['fy_declared'] > 2019)].index
+    # print(df1.columns)
+    # drop all rows with year less than 2010
+    index_names = df1[df1['fy_declared'] < 1979].index
     df1.drop(index_names, inplace=True)
 
     # List of columns to be dropped
     dropped_columns = ['fema_declaration_string', 'declaration_title', 'incident_begin_date',
                        'incident_end_date', 'disaster_closeout_date', 'place_code',
                        'designated_area', 'declaration_request_number', 'hash', 'last_refresh',
-                       'id', 'declaration_date', "fips"]
+                       'id', 'declaration_date']
 
     # Drop columns listed above
     df1.drop(labels=dropped_columns, axis=1, inplace=True)
 
-    return df1
+    # Rename fy_declared => year
+    df1.rename(columns={"fy_declared": "year"}, inplace=True)
+    # # Drop duplicate pairs in disaster_number and state columns
+    # df1.drop_duplicates(subset=['disaster_number','state'],inplace=True)
+
+    # create individual_relief and community_relief collumns and add to df1
+    df1['individual_relief'] = df1["ih_program_declared"] | df1["ia_program_declared"]
+    df1['community_relief'] = df1["pa_program_declared"] | df1["hm_program_declared"]
+
+    # groupby year and state
+    final_df = df1.groupby(['year', 'state'], as_index=False)[
+        'disaster_number'].count()
+
+    # Sum up individual_relief and community_relief
+    individual_relief = df1.groupby(['year', 'state'], as_index=False)[
+        'individual_relief'].sum()
+    community_relief = df1.groupby(['year', 'state'], as_index=False)[
+        'community_relief'].sum()
+
+    # add the columns to the final df
+    final_df['individual_relief'] = individual_relief['individual_relief']
+    final_df['community_relief'] = community_relief['community_relief']
+
+    return final_df
 
 
 def crime_db():
@@ -43,7 +65,7 @@ def crime_db():
     return df
 
 
-# def merge_db():
+def merge_db():
     crime_dataframe = crime_db()
     disaster_dataframe = disaster_db()
 
@@ -139,11 +161,7 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
 
     # match stateName and yearRange
     crimeDonutDf = crimeDonutDf.loc[(
-        crimeDonutDf['state_abbr'].isin(stateName)) & crimeDonutDf['year'].isin(yearRange)]
-
-    print("in crime chart")
-    print(stateName)
-    print(yearRange)
+        crimeDonutDf['state_abbr'] == stateName) & crimeDonutDf['year'].isin(yearRange)]
 
     # print(crimeDonutDf.sum(numeric_only=True).to_dict())
 
@@ -152,8 +170,8 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
         'violent_crime', 'homicide', 'property_crime', 'burglary', 'aggravated_assault']].div(crimeDonutDf['population']/100000, axis=0)
 
     # drop all columns except crimes
-    crimeDonutDf.drop(labels=["year", "population", "state_name",
-                              "state_abbr", "larceny", "robbery"], axis=1, inplace=True)
+    crimeDonutDf.drop(labels=["year", "population", "community_relief", "state_name",
+                              "state_abbr", "disaster_number", "individual_relief", "larceny", "robbery"], axis=1, inplace=True)
 
     # convert all crimes to integers
     crimeDonutDf = crimeDonutDf.astype(int)
@@ -165,26 +183,3 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
     return crimeDonutDfDict, totalCrimes
 
 # end crime donut preprocessing
-
-
-# start disaster type preprocessing
-def fetchDisasterTypes(disasterDf, stateName, yearRange):
-
-    # match state and yearRange
-    disasterDf = disasterDf.loc[(
-        disasterDf['state'].isin(stateName)) & disasterDf['fy_declared'].isin(yearRange)]
-
-    # Count the type of each disaster
-    disasterTypesDict = disasterDf['incident_type'].value_counts(
-    ).rename_axis("incident_type").reset_index(name="count")
-
-    disasterTypesDict = disasterTypesDict.to_dict(
-        "records")
-
-    # Count the total number of disasters
-    totalDisasters = disasterDf['incident_type'].count()
-
-    return disasterTypesDict, totalDisasters
-
-
-# end disaster type preprocessing

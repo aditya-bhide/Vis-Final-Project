@@ -1,9 +1,9 @@
 var pcp_data, state_list = ["WY", "AK", 'NY', 'AL'],
     year_list = ['2014', '2015', '2016', '2017', '2018', '2019']
 
-$(document).ready(function() {
-    callPcp(state_list, year_list)
-})
+// $(document).ready(function () {
+//     callPcp(state_list, year_list)
+// })
 
 async function getPcpData() {
     const url = "http://localhost:5000/getPcpData"
@@ -43,7 +43,7 @@ async function callPcp(state_list, year_list) {
         .domain(state_list)
         .range(d3.schemeCategory10)
 
-    var highlight = function(d) {
+    var highlight = function (d) {
         selected_label = d['state_abbr']
 
         // first every group turns grey
@@ -62,10 +62,10 @@ async function callPcp(state_list, year_list) {
     }
 
     // Unhighlight
-    var doNotHighlight = function(d) {
+    var doNotHighlight = function (d) {
         d3.selectAll(".line")
             .transition().duration(200).delay(00)
-            .style("stroke", function(d) { return (color(d['state_abbr'])) })
+            .style("stroke", function (d) { return (color(d['state_abbr'])) })
             .style("opacity", "1")
     }
 
@@ -87,7 +87,7 @@ async function callPcp(state_list, year_list) {
 
     x.domain(dimensions = ['state_abbr', 'year', 'disaster_number', 'individual_relief', 'homicide', 'burglary', 'aggravated_assault'])
 
-    x.domain().filter(function(d) {
+    x.domain().filter(function (d) {
         if (d == "state_abbr") {
             y[d] = d3.scalePoint()
                 // .domain(d3.extent(pcp_data, function (p) { return +p[d]; }))
@@ -99,7 +99,7 @@ async function callPcp(state_list, year_list) {
                 .range([height - padding_y, 0 + padding_y])
         } else {
             y[d] = d3.scaleLinear()
-                .domain(d3.extent(pcp_data, function(p) { return +p[d]; })).nice()
+                .domain(d3.extent(pcp_data, function (p) { return +p[d]; })).nice()
                 .range([height - padding_y, 0 + padding_y])
         }
 
@@ -121,7 +121,7 @@ async function callPcp(state_list, year_list) {
         .data(pcp_data)
         .enter().append("path")
         .attr("d", path)
-        // .style('stroke', 'pink')
+    // .style('stroke', 'pink')
 
     // Add blue foreground lines for focus.
     foreground = svg.append("g")
@@ -130,8 +130,8 @@ async function callPcp(state_list, year_list) {
         .data(pcp_data)
         .enter().append("path")
         .attr("d", path)
-        .attr("class", function(d) { return 'line state_abbr' + d['state_abbr'].toString(); })
-        .style("stroke", function(d) { return (color(d['state_abbr'])) })
+        .attr("class", function (d) { return 'line state_abbr' + d['state_abbr'].toString(); })
+        .style("stroke", function (d) { return (color(d['state_abbr'])) })
         .on("mouseover", highlight)
         .on("mouseleave", doNotHighlight)
 
@@ -141,21 +141,21 @@ async function callPcp(state_list, year_list) {
         .data(dimensions)
         .enter().append("g")
         .attr("class", "dimension")
-        .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+        .attr("transform", function (d) { return "translate(" + x(d) + ")"; })
         .call(d3.drag()
-            .subject(function(d) { return { x: x(d) }; })
-            .on("start", function(d) {
+            .subject(function (d) { return { x: x(d) }; })
+            .on("start", function (d) {
                 dragging[d] = x(d);
                 background.attr("visibility", "hidden");
             })
-            .on("drag", function(d) {
+            .on("drag", function (d) {
                 dragging[d] = Math.min(width, Math.max(0, d3.event.x));
                 foreground.attr("d", path);
-                dimensions.sort(function(a, b) { return position(a) - position(b); });
+                dimensions.sort(function (a, b) { return position(a) - position(b); });
                 x.domain(dimensions);
-                g.attr("transform", function(d) { return "translate(" + position(d) + ")"; })
+                g.attr("transform", function (d) { return "translate(" + position(d) + ")"; })
             })
-            .on("end", function(d) {
+            .on("end", function (d) {
                 delete dragging[d];
                 transition(d3.select(this)).attr("transform", "translate(" + x(d) + ")");
                 transition(foreground).attr("d", path);
@@ -171,17 +171,17 @@ async function callPcp(state_list, year_list) {
     // Add an axis and title.
     g.append("g")
         .attr("class", "pcp_axis")
-        .each(function(d) { d3.select(this).call(d3.axisLeft(y[d])); })
+        .each(function (d) { d3.select(this).call(d3.axisLeft(y[d])); })
         .append("text")
         .style("text-anchor", "middle")
         .attr("y", -9)
-        .text(function(d) { return d; })
+        .text(function (d) { return d; })
         .style("fill", "black")
 
 
     g.append("g")
         .attr("class", "brush")
-        .each(function(d) { d3.select(this).call(y[d].brush); })
+        .each(function (d) { d3.select(this).call(y[d].brush); })
         .selectAll("rect")
         .attr("x", -8)
         .attr("width", 16);
@@ -196,7 +196,7 @@ async function callPcp(state_list, year_list) {
     }
 
     function path(d) {
-        return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
+        return line(dimensions.map(function (p) { return [position(p), y[p](d[p])]; }));
     }
 
     function brushstart() {
@@ -207,18 +207,18 @@ async function callPcp(state_list, year_list) {
         var actives = [];
         //filter brushed extents
         svg.selectAll(".brush")
-            .filter(function(d) {
+            .filter(function (d) {
                 return d3.brushSelection(this);
             })
-            .each(function(d) {
+            .each(function (d) {
                 actives.push({
                     dimension: d,
                     extent: d3.brushSelection(this)
                 });
             });
         // set un - brushed foreground line disappear
-        foreground.classed("fade", function(d, i) {
-            return !actives.every(function(active) {
+        foreground.classed("fade", function (d, i) {
+            return !actives.every(function (active) {
                 var dim = active.dimension;
                 return active.extent[0] <= y[dim](d[dim]) && y[dim](d[dim]) <= active.extent[1];
             });
