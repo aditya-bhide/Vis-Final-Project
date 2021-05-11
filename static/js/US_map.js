@@ -1,12 +1,12 @@
 function US_map(data) {
 
-    var width = 700;
+    var width = 560;
     var height = 370;
 
     var lowColor = '#f9f9f9'
     var highColor = '#bc2a66'
-
-    var selected_states = new Set()
+    var start_year = 0
+    var end_year = 0
 
     // D3 Projection
     var projection = d3.geoAlbersUsa()
@@ -52,7 +52,7 @@ function US_map(data) {
 
     var key = d3.select("#US-map-legend-svg")
         .append("svg")
-        .attr('margin-top', '50px')
+        .attr('margin-top', '0px')
         .attr("width", w)
         .attr("height", h)
         // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
@@ -83,6 +83,7 @@ function US_map(data) {
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
 
+    // console.log(data)
     minVal = data.other_features.min_value
     maxVal = data.other_features.max_value
     var y = d3.scaleLinear()
@@ -100,9 +101,7 @@ function US_map(data) {
         features = data.other_features.feature_name
         minVal = data.other_features.min_value
         maxVal = data.other_features.max_value
-        console.log(data)
         var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor])
-        console.log(minVal, maxVal)
             // Bind the data to the SVG and create one path per GeoJSON feature
 
         g.selectAll("path")
@@ -111,10 +110,10 @@ function US_map(data) {
             .on("mouseout", mouseout)
             .on("mousemove", mousemove)
             .on("click", click)
-            .style("stroke", "#000000")
-            .style("stroke-width", "1")
+            .style("stroke", "#FFFFFF")
+            .style("stroke-width", 1)
             .style("fill", function(d) {
-                if (!selected_states.has(d.properties['name'])) {
+                if (!states.has(d.properties['name'])) {
                     return ramp(d.properties[features])
                 } else {
                     return "FFFF00"
@@ -133,6 +132,8 @@ function US_map(data) {
             div.html(`${d.properties['name']} : ${d.properties[features]}`)
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 15) + "px");
+
+            d3.select(this).style("stroke-width", 4)
         }
 
         function mousemove(d) {
@@ -145,34 +146,23 @@ function US_map(data) {
             div.transition()
                 .duration('200')
                 .style("opacity", 0);
+
+            d3.select(this).style("stroke-width", 1)
+
         }
 
         function click(d) {
-            if (selected_states.has(d.properties['name'])) {
+            if (states.has(d.properties['name'])) {
                 d3.select(this).style("fill", function(d) {
                     return ramp(d.properties[features])
                 })
-                selected_states.delete(d.properties['name'])
-            } else if (selected_states.size < 5) {
-                console.log(selected_states)
-                selected_states.add(d.properties['name'])
+                states.delete(d.properties['name'])
+                states_trigger.a = d.properties['name']
+            } else if (states.size < 5) {
+                states.add(d.properties['name'])
+                states_trigger.a = d.properties['name']
                 d3.select(this).style("fill", "#FFFF00")
             }
-
-            // $(document).ready(function() {
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: "http://127.0.0.1:5000/select_state",
-            //         data: { states: selected_states },
-            //         success: function(response) {
-            //             update_US_map(response)
-            //         },
-            //         error: function(error) {
-            //             console.log(error);
-            //         }
-            //     });
-            // });
-
         }
 
         var y = d3.scaleLinear()
@@ -205,31 +195,28 @@ function US_map(data) {
 
     update_US_map(data)
 
-    $(function() {
-        $("#slider-range").slider({
-            range: true,
-            min: 1980,
-            max: 2019,
-            values: [1980, 1980],
-            slide: function(event, ui) {
-                $("#amount").val(ui.values[0] + " - " + ui.values[1]);
 
-                $(document).ready(function() {
-                    $.ajax({
-                        type: 'POST',
-                        url: "http://127.0.0.1:5000/update_US_years",
-                        data: { 'min_year': ui.values[0], 'max_year': ui.values[1] },
-                        success: function(response) {
-                            update_US_map(response)
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                });
-            }
+    year_range_trigger.registerListener(function(val) {
+        // console.log("Here prinintng", year_range)
+
+        start_year = year_range[0]
+        end_year = year_range[1];
+        $('#amount1').text(start_year)
+        $('#amount2').text(end_year)
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:5000/update_US_years",
+                data: { 'min_year': start_year, 'max_year': end_year },
+                success: function(response) {
+                    update_US_map(response)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         });
-        $("#amount").val($("#slider-range").slider("values", 0) +
-            " - " + $("#slider-range").slider("values", 1));
     });
+
+
 }

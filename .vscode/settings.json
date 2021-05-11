@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/aditya/opt/anaconda3/envs/vis/bin/python"
+    "python.pythonPath": "/Users/aditya/opt/anaconda3/envs/vis/bin/python",
+    "liveServer.settings.port": 5501
 }

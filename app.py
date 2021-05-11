@@ -4,12 +4,13 @@ from flask_cors import CORS, cross_origin
 import json
 from preprocess import get_state_data
 from data_preprocessing import merge_db
-from data_preprocessing import us_begin, us_update
+from data_preprocessing import us_begin, us_update, line_chart_begin, line_chart_update
 
 
 app = Flask(__name__)
 cors = CORS(app)
 api = Api(app)
+
 
 @app.route("/")
 def index():
@@ -19,11 +20,14 @@ def index():
     # return render_template("index.html", data=data)
     return render_template("index.html")
 
-@app.route("/init_US", methods=["POST", "GET"])
-def init_US():
+@app.route("/init_All", methods=["POST", "GET"])
+def init_All():
     if request.method == "POST":
-        print("SHit is happening")
-        data = us_begin()
+        us_map_data = us_begin()
+        line_chart_data_crime, line_chart_data_disaster = line_chart_begin()
+        data = {}
+        data['US_begin'] = us_map_data
+        data['line_chart_begin'] = {'line_chart_data_crime': line_chart_data_crime, 'line_chart_data_disaster': line_chart_data_disaster}
         # data_json = json.dumps(raw_data, indent=2)
         return data
     else:
@@ -32,11 +36,20 @@ def init_US():
 @app.route("/update_US_years", methods=["POST", "GET"])
 def update_US_years():
     if request.method == "POST":
-        print("called update")
         min_year = int(request.form['min_year'])
         max_year = int(request.form['max_year'])
+        # print(min_year, max_year)
         data = us_update(min_year, max_year)
-        # data_json = json.dumps(raw_data, indent=2)
+        return data
+    else:
+        print("ERROR")
+
+@app.route("/update_line_chart", methods=["POST", "GET"])
+def update_line_chart():
+    if request.method == "POST":
+        states = request.get_json()
+        data_crime_chart_dict, data_disaster_chart_dict = line_chart_update(states['data'])
+        data = {'line_chart_data_crime':data_crime_chart_dict, 'line_chart_data_disaster': data_disaster_chart_dict}
         return data
     else:
         print("ERROR")
@@ -70,7 +83,7 @@ class getCrimeDonutChart(Resource):
 
         state = args['state']
         year_list = args['year_list']
-        print(state, year_list)
+        # print(state, year_list)
 
         crime_donut_df = final_data.copy()
         crime_donut_df = crime_donut_df[(crime_donut_df['state_abbr'] == state) & crime_donut_df['year'].isin(year_list)] 
@@ -81,7 +94,7 @@ class getCrimeDonutChart(Resource):
         # crime_donut_df_total = crime_donut_df.append(crime_donut_df.sum(numeric_only=True), ignore_index=True)
         crime_donut_df_total = crime_donut_df.sum(numeric_only=True).to_frame()
 
-        print(crime_donut_df_total )
+        # print(crime_donut_df_total )
         return jsonify({"data":crime_donut_df_total.to_dict('records'), "year_list":year_list, "state":[state]})
 
 

@@ -1,129 +1,247 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<meta charset="utf-8">
 <style>
-    .background {
+    .line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+    }
+    
+    .zoom {
+        cursor: move;
         fill: none;
         pointer-events: all;
     }
-    
-    .feature {
-        fill: #ccc;
-        cursor: pointer;
-    }
-    
-    .feature.active {
-        fill: orange;
-    }
-    
-    .mesh {
-        fill: none;
-        stroke: #fff;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-    }
 </style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
 
 <body>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <!-- Inclusion of d3 v4 -->
-    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <div id="temp">
+    </div>
     <script>
-        var width = 960,
-            height = 500,
-            active = d3.select(null);
+        var svg = d3.select("#temp")
+            .append('svg')
+            .attr("width", 960)
+            .attr("height", 500);
 
-        var projection = d3.geoAlbersUsa() // updated for d3 v4
-            .scale(1000)
-            .translate([width / 2, height / 2]);
+        var svg = d3.select("#temp svg"),
+            margin = {
+                top: 20,
+                right: 20,
+                bottom: 110,
+                left: 40
+            },
+            margin2 = {
+                top: 430,
+                right: 20,
+                bottom: 30,
+                left: 40
+            },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            height2 = +svg.attr("height") - margin2.top - margin2.bottom;
+
+        //var parseDate = d3.timeParse("%m/%d/%Y %H:%M");
+        xValue = d => d['Date']
+        yValue = d => d['Air_Temp']
+        yValueR = d => d['Rel_Hum']
+
+        var x = d3.scaleLinear().range([0, width]),
+            x2 = d3.scaleLinear().range([0, width]),
+            y = d3.scaleLinear().range([height, 0]),
+            yR = d3.scaleLinear().range([height, 0]),
+            y2 = d3.scaleLinear().range([height2, 0]),
+            y2R = d3.scaleLinear().range([height2, 0]);
+
+        var xAxis = d3.axisBottom(x).tickFormat(d3.format("d")),
+            xAxis2 = d3.axisBottom(x2).tickFormat(d3.format("d")),
+            yAxis = d3.axisLeft(y),
+            yAxisR = d3.axisRight(yR);
+
+        var brush = d3.brushX()
+            .extent([
+                [0, 0],
+                [width, height2]
+            ])
+            .on("brush end", brushed);
 
         var zoom = d3.zoom()
-            // no longer in d3 v4 - zoom initialises with zoomIdentity, so it's already at origin
-            // .translate([0, 0]) 
-            // .scale(1) 
-            .scaleExtent([1, 8])
+            .scaleExtent([1, 10])
+            .translateExtent([
+                [0, 0],
+                [width, height]
+            ])
+            .extent([
+                [0, 0],
+                [width, height]
+            ])
             .on("zoom", zoomed);
 
-        var path = d3.geoPath() // updated for d3 v4
-            .projection(projection);
+        var line = d3.line()
+            .x(function(d) {
+                return x(xValue(d));
+            })
+            .y(function(d) {
+                return y(yValue(d));
+            });
 
-        var svg = d3.select("body").append("svg")
+        var line_mini = d3.line()
+            .x(function(d) {
+                return x2(xValue(d));
+            })
+            .y(function(d) {
+                return y2(yValue(d));
+            });
+
+        var line2 = d3.line()
+            .x(function(d) {
+                return x(xValue(d));
+            })
+            .y(function(d) {
+                return yR(yValueR(d));
+            });
+
+        var line2_mini = d3.line()
+            .x(function(d) {
+                return x2(xValue(d));
+            })
+            .y(function(d) {
+                return y2R(yValueR(d));
+            });
+
+
+
+        var clip = svg.append("defs").append("svg:clipPath")
+            .attr("id", "clip")
+            .append("svg:rect")
             .attr("width", width)
             .attr("height", height)
-            .on("click", stopped, true);
+            .attr("x", 0)
+            .attr("y", 0);
 
-        svg.append("rect")
-            .attr("class", "background")
-            .attr("width", width)
-            .attr("height", height)
-            .on("click", reset);
 
-        var g = svg.append("g");
+        var Line_chart1 = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("clip-path", "url(#clip)");
 
-        svg
-            .call(zoom); // delete this line to disable free zooming
-        // .call(zoom.event); // not in d3 v4
+        var Line_chart2 = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .attr("clip-path", "url(#clip)");
 
-        d3.json("./templates/us-states.json", function(error, us) {
+        var focus = svg.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        var context = svg.append("g")
+            .attr("class", "context")
+            .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+        d3.csv("temp.csv", type, function(error, data) {
             if (error) throw error;
-            console.log(us)
 
-            g.selectAll("path")
-                .data(us.features)
-                .enter().append("path")
-                .attr("d", path)
-                .attr("class", "feature")
-                .on("click", clicked);
+            x.domain(d3.extent(data, function(d) {
+                return xValue(d);
+            }));
+            y.domain([0, d3.max(data, function(d) {
+                return yValue(d);
+            })]);
+            yR.domain([0, d3.max(data, function(d) {
+                return yValueR(d);
+            })]);
 
-            g.append("path")
-                .datum(topojson.mesh(us, us.objects.states, function(a, b) {
-                    return a !== b;
-                }))
-                .attr("class", "mesh")
-                .attr("d", path);
+            x2.domain(x.domain());
+            y2.domain(y.domain());
+            y2R.domain(yR.domain());
+
+
+            focus.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            focus.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis);
+
+            focus.append("g")
+                .attr("transform", "translate(" + width + ", 0)")
+                .attr("class", "axis axis--y-R")
+                .call(yAxisR);
+
+            Line_chart1.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("d", line);
+
+            Line_chart2.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("d", line2);
+
+            context.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("d", line_mini);
+
+            context.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("d", line2_mini);
+
+            context.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height2 + ")")
+                .call(xAxis2);
+
+            context.append("g")
+                .attr("class", "brush")
+                .call(brush)
+                .call(brush.move, x.range());
+
+            svg.append("rect")
+                .attr("class", "zoom")
+                .attr("width", width)
+                .attr("height", height)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .call(zoom);
+
+
+            console.log(data);
         });
 
-        function clicked(d) {
-            if (active.node() === this) return reset();
-            active.classed("active", false);
-            active = d3.select(this).classed("active", true);
-
-            var bounds = path.bounds(d),
-                dx = bounds[1][0] - bounds[0][0],
-                dy = bounds[1][1] - bounds[0][1],
-                x = (bounds[0][0] + bounds[1][0]) / 2,
-                y = (bounds[0][1] + bounds[1][1]) / 2,
-                scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height))),
-                translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-            svg.transition()
-                .duration(750)
-                // .call(zoom.translate(translate).scale(scale).event); // not in d3 v4
-                .call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale)); // updated for d3 v4
-        }
-
-        function reset() {
-            active.classed("active", false);
-            active = d3.select(null);
-
-            svg.transition()
-                .duration(750)
-                // .call( zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1) ); // not in d3 v4
-                .call(zoom.transform, d3.zoomIdentity); // updated for d3 v4
+        function brushed() {
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+            var s = d3.event.selection || x2.range();
+            x.domain(s.map(x2.invert, x2));
+            start_date = s.map(x2.invert, x2)[0]
+            end_date = s.map(x2.invert, x2)[1]
+            console.log(parseInt(start_date))
+            console.log(parseInt(end_date))
+            Line_chart1.select(".line").attr("d", line);
+            Line_chart2.select(".line").attr("d", line2);
+            focus.select(".axis--x").call(xAxis);
+            svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(width / (s[1] - s[0]))
+                .translate(-s[0], 0));
         }
 
         function zoomed() {
-            g.style("stroke-width", 1.5 / d3.event.transform.k + "px");
-            // g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")"); // not in d3 v4
-            g.attr("transform", d3.event.transform); // updated for d3 v4
+            if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+            var t = d3.event.transform;
+            x.domain(t.rescaleX(x2).domain());
+            Line_chart1.select(".line").attr("d", line);
+            Line_chart2.select(".line").attr("d", line2);
+            focus.select(".axis--x").call(xAxis);
+            context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
         }
 
-        // If the drag behavior prevents the default click,
-        // also stop propagation so we don’t click-to-zoom.
-        function stopped() {
-            if (d3.event.defaultPrevented) d3.event.stopPropagation();
+        function type(d) {
+            d.Date = d['Date'];
+            d.Air_Temp = +d['Air_Temp'];
+            d.Rel_Hum = +d['Rel_Hum']
+            return d;
         }
     </script>
 </body>
-
-</html>

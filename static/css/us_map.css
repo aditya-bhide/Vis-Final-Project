@@ -1,4 +1,5 @@
 /* Legend Position Style */
+
 #US-map-svg .legend {
     margin-top: 100px;
     font: 11px sans-serif;
@@ -22,10 +23,6 @@
     fill: none;
     stroke: #000;
     shape-rendering: crispEdges;
-}
-
-#US-map-svg .state:hover {
-    fill-opacity: 0.5;
 }
 
 .tooltip {
