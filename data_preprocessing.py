@@ -52,7 +52,7 @@ def crime_db():
     return df
 
 
-# def merge_db():
+def merge_db():
     crime_dataframe = crime_db()
     disaster_dataframe = disaster_db()
 

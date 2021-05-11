@@ -2,14 +2,11 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 from flask_restful import Resource, Api, reqparse
 from flask_cors import CORS, cross_origin
 import json
-from preprocess import get_state_data
-<<<<<<< HEAD
-from data_preprocessing import merge_db
+# from preprocess import get_state_data
+# from data_preprocessing import merge_db
 from data_preprocessing import us_begin, us_update, line_chart_begin, line_chart_update
-=======
 from data_preprocessing import crime_db, disaster_db, fetchAllCrimesForStateAndYears, fetchDisasterTypes
 from data_preprocessing import us_begin, us_update
->>>>>>> b893b420c7c2f3e469b04918b0e5bac96845c4b8
 
 
 app = Flask(__name__)
@@ -25,14 +22,8 @@ def index():
     # return render_template("index.html", data=data)
     return render_template("index.html")
 
-<<<<<<< HEAD
 @app.route("/init_All", methods=["POST", "GET"])
 def init_All():
-=======
-
-@app.route("/init_US", methods=["POST", "GET"])
-def init_US():
->>>>>>> b893b420c7c2f3e469b04918b0e5bac96845c4b8
     if request.method == "POST":
         us_map_data = us_begin()
         line_chart_data_crime, line_chart_data_disaster = line_chart_begin()
@@ -98,10 +89,6 @@ class getCrimeDonutChart(Resource):
         args = parser.parse_args()
 
         state = args['state']
-<<<<<<< HEAD
-        year_list = args['year_list']
-        # print(state, year_list)
-=======
         yearList = args['yearList']
 
         # create a df copy to work on
@@ -126,18 +113,12 @@ class getDisasterTypes(Resource):
 
         # create a df copy to work on
         disasterDf = disasterDataframe.copy()
->>>>>>> b893b420c7c2f3e469b04918b0e5bac96845c4b8
 
         # call the function that returns the required dict
         disasterTypesDict, totalDisasters = fetchDisasterTypes(
             disasterDf, state, yearList)
 
-<<<<<<< HEAD
-        # print(crime_donut_df_total )
-        return jsonify({"data":crime_donut_df_total.to_dict('records'), "year_list":year_list, "state":[state]})
-=======
         return jsonify({"data": disasterTypesDict,  "yearList": yearList, "state": state,  "totalDisasters": str(totalDisasters)})
->>>>>>> b893b420c7c2f3e469b04918b0e5bac96845c4b8
 
 
 api.add_resource(getPcpData, "/getPcpData")
