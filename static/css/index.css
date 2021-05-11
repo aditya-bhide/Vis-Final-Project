@@ -102,7 +102,7 @@
     border: 0px;
     border-radius: 8px;
     pointer-events: none;
-    font-size: .7rem;
+    font-size: 0.7rem;
     white-space: pre-wrap;
     font-size: 1em;
 }
@@ -146,3 +146,8 @@
     fill: none;
     pointer-events: all;
 }
+
+
+/* #project-name {
+    font-size: 2em;
+} */
