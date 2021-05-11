@@ -3,13 +3,13 @@
 function multi_line_chart(data) {
     var svg = d3.select("#line-chart-svg")
         .append('svg')
-        .attr("width", 960)
-        .attr("height", 500);
+        .attr("width", 600)
+        .attr("height", 390);
 
     var svg = d3.select("#line-chart-svg svg"),
         margin = {
             top: 10,
-            right: 120,
+            right: 10,
             bottom: 110,
             left: 120
         },
@@ -68,34 +68,34 @@ function multi_line_chart(data) {
         .on("zoom", zoomed);
 
     var line1 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y(yValue(d));
         });
 
     var line1_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2(yValue(d));
         });
 
     var line2 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return yR(yValueR(d));
         });
 
     var line2_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2R(yValueR(d));
         });
 
@@ -213,7 +213,7 @@ function multi_line_chart(data) {
         .attr("cx", d => x(xValue(d)))
         .attr("cy", d => y(yValue(d)))
         .attr("r", 5)
-        .style("fill", function(d) {
+        .style("fill", function (d) {
             return 'blue';
         });
 
@@ -227,7 +227,7 @@ function multi_line_chart(data) {
         .attr("cx", d => x(xValue(d)))
         .attr("cy", d => yR(yValueR(d)))
         .attr("r", 5)
-        .style("fill", function(d) {
+        .style("fill", function (d) {
             return 'black';
         });
 
@@ -285,7 +285,7 @@ function multi_line_chart(data) {
             .attr("cx", d => x(xValue(d)))
             .attr("cy", d => y(yValue(d)))
             .attr("r", 5)
-            .style("fill", function(d) {
+            .style("fill", function (d) {
                 return 'blue';
             });
         points1.exit().remove()
@@ -301,7 +301,7 @@ function multi_line_chart(data) {
             .attr("cx", d => x(xValue(d)))
             .attr("cy", d => yR(yValueR(d)))
             .attr("r", 5)
-            .style("fill", function(d) {
+            .style("fill", function (d) {
                 console.log("PLease work")
                 return 'black';
             });
@@ -335,19 +335,19 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-    states_trigger.registerListener(function(val) {
+    states_trigger.registerListener(function (val) {
         // console.log(Array.from(states))
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'data': Array.from(states) }),
-                success: function(response) {
+                success: function (response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
