@@ -68,34 +68,34 @@ function multi_line_chart(data) {
         .on("zoom", zoomed);
 
     var line1 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y(yValue(d));
         });
 
     var line1_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2(yValue(d));
         });
 
     var line2 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return yR(yValueR(d));
         });
 
     var line2_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2R(yValueR(d));
         });
 
@@ -316,19 +316,19 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-    states_trigger.registerListener(function(val) {
+    states_trigger.registerListener(function (val) {
         // console.log(Array.from(states))
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'data': Array.from(states) }),
-                success: function(response) {
+                success: function (response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });

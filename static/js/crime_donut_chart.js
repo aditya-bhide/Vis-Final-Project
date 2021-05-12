@@ -182,6 +182,9 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
           .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
 
         selectedDonutPath = false
+
+        crimesList = "all"
+        crimeListTrigger.a = "all"
       } else {
         // Blur other slices
         d3.selectAll(".my-paths")
@@ -198,6 +201,9 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
           .style("opacity", "1")
 
         selectedDonutPath = true
+
+        crimesList = d.data.key
+        crimeListTrigger.a = d.data.key
       }
     })
 
