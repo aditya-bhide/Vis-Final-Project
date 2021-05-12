@@ -156,11 +156,24 @@ function US_map(data) {
                 d3.select(this).style("fill", function(d) {
                     return ramp(d.properties[features])
                 })
+                states_for_donut_chart.delete(d.properties['name'])
+                states_for_radial_chart.delete(d.properties['name'])
                 states.delete(d.properties['name'])
+
                 states_trigger.a = d.properties['name']
+                states_trigger_for_donut_chart.a = d.properties['name']
+                states_trigger_for_radial_chart.a = d.properties['name']
+
             } else if (states.size < 5) {
                 states.add(d.properties['name'])
+                states_for_donut_chart.add(d.properties['name'])
+                states_for_radial_chart.add(d.properties['name'])
+
+
                 states_trigger.a = d.properties['name']
+                states_trigger_for_donut_chart.a = d.properties['name']
+                states_trigger_for_radial_chart.a = d.properties['name']
+
                 d3.select(this).style("fill", "red")
             }
         }
@@ -205,7 +218,7 @@ function US_map(data) {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_US",
-                data: { 'min_year': start_year, 'max_year': end_year,  'crimesList': crimesList},
+                data: { 'min_year': start_year, 'max_year': end_year, 'crimesList': crimesList },
                 success: function(response) {
                     update_US_map(response)
                 },

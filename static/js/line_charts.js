@@ -253,14 +253,14 @@ function multi_line_chart(data) {
         y2.domain(y.domain());
         y2R.domain(yR.domain());
 
-        if(crimesList=='all_crimes'){
+        if (crimesList == 'all_crimes') {
             d3.select(".text1-legend").text(yAxisLabel)
-        }else{
+        } else {
             d3.select(".text1-legend").text(crimesList)
         }
-        if(disasterList=='all_disasters'){
+        if (disasterList == 'all_disasters') {
             d3.select(".text2-legend").text(yRAxisLabel)
-        }else{
+        } else {
             d3.select(".text2-legend").text(disasterList)
         }
         d3.select(".axis--x").transition().duration(1000).call(xAxis);
@@ -347,40 +347,40 @@ function multi_line_chart(data) {
 
     crimeListTrigger_line_chart.registerListener(function(val) {
         console.log("crimeListTrigger in line chart")
-            $(document).ready(function() {
-                $.ajax({
-                    type: 'POST',
-                    url: "http://127.0.0.1:5000/update_line_chart",
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
-                    success: function(response) {
-                        variableChange(response)
-                        console.log(response)
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:5000/update_line_chart",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
+                success: function(response) {
+                    variableChange(response)
+                    console.log(response)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
+        });
     });
 
     disasterListTrigger_line_chart.registerListener(function(val) {
         console.log("disaster trigger in line chart")
-            $(document).ready(function() {
-                $.ajax({
-                    type: 'POST',
-                    url: "http://127.0.0.1:5000/update_line_chart",
-                    contentType: 'application/json;charset=UTF-8',
-                    data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
-                    success: function(response) {
-                        variableChange(response)
-                        console.log(response)
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:5000/update_line_chart",
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
+                success: function(response) {
+                    variableChange(response)
+                    console.log(response)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
             });
+        });
     });
 
     function zoomed() {

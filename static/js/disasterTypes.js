@@ -1,8 +1,8 @@
-var disasterTypesData, totalDisasters, radialBarChartStateList = ["CA", "NY", "TX"], radialBarChartYearList = ["1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019']
+var disasterTypesData, totalDisasters
 var selectedRadialBarFlag = false
 
 $(document).ready(function () {
-  createDisasterTypeChart(radialBarChartStateList, radialBarChartYearList)
+  createDisasterTypeChart(Array.from(states_for_radial_chart), year_range)
 })
 
 async function getDisasterTypesData(radialBarChartStateList, radialBarChartYearList) {
@@ -71,7 +71,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .attr("class", "gRadial")
 
   // Add the bars
-  var path = radialGroup
+  path = radialGroup
     .append("path")
     .attr("id", function (d) {
       return "path-" + d.incident_type
@@ -88,6 +88,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
       .padAngle(0.01)
       .padRadius(innerRadius))
 
+  path
     .on("mouseover", function (d) {
 
       if (!selectedRadialBarFlag) {
@@ -257,10 +258,18 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .attr("class", "white-font")
 
 
-  // function updateDisasterTypesChart(radialBarChartStateList, radialBarChartYearList) {
-  //   await getDisasterTypesData(radialBarChartStateList, radialBarChartYearList)
+  // states_trigger_for_radial_chart.registerListener(function (val) {
+  //   $(document).ready(function () {
+  //     updateRadialChart(Array.from(states_for_radial_chart), year_range)
+  //   });
+  // });
 
-  //   data = disasterTypesData
+  // async function updateRadialChart(states, year_range) {
+  //   await getDisasterTypesData(states, year_range)
+
+
+  //   let data = disasterTypesData
+  //   console.log(data)
 
   //   let maxCount = 0
   //   for (var i = 0; i < data.length; i++) {
@@ -270,20 +279,13 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   //   }
 
   //   x.domain(data.map(function (d) { return d.incident_type }))
+
   //   y.domain([0, maxCount])
 
-  //   radialGroupUpdate = d3.selectAll(".gRadial")
-  //     .data(data)
+  //   newPaths_ = radialGroup.selectAll(".radialBarChartPaths").data(data)
 
-  //   radialGroupUpdate.enter()
-  //     .append("g")
-  //     .merge(radialGroupUpdate)
-  //     .attr("class", "gRadial")
-
-
-  //   // Add the bars
-  //   var path = radialGroupUpdate
-  //     .append("path")
+  //   newBars = newPaths_.enter().append("path")
+  //     .merge(newPaths_)
   //     .attr("id", function (d) {
   //       return "path-" + d.incident_type
   //     })
@@ -299,6 +301,11 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   //       .padAngle(0.01)
   //       .padRadius(innerRadius))
 
+
+  //   newPaths_.exit().remove()
+
+
+  //   newBars
   //     .on("mouseover", function (d) {
 
   //       if (!selectedRadialBarFlag) {
@@ -406,6 +413,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
 
   //         selectedRadialBarFlag = false
+  //         disasterList = "all"
+  //         disasterListTrigger.a = "all"
 
   //       } else {
 
@@ -436,38 +445,44 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   //           .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
   //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
 
+  //         disasterList = d.incident_type
+  //         disasterListTrigger.a = d.incident_type
   //         selectedRadialBarFlag = true
   //       }
   //     })
 
-  //   // Add the labels
-  //   radialGroupUpdate
-  //     .append("g")
-  //     .attr("id", function (d) {
-  //       return "radialBarChartLabel-" + d.incident_type
-  //     })
-  //     .attr("class", "radialLabelClass")
-  //     .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //     .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
-  //     .append("text")
-  //     .attr("class", "radialLabelTextClass")
-  //     .text(function (d) { return (d.incident_type) })
-  //     .attr("transform", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
-  //     .style("font-size", "11px")
-  //     .attr("class", "white-font")
-  //     .attr("alignment-baseline", "middle")
 
-  //   radialGroupUpdate.exit().remove()
 
-  //   svg.append("text")
-  //     .attr("text-anchor", "middle")
-  //     .text(totalDisasters)
-  //     .style("font-size", 24)
-  //     .attr("class", "white-font")
+  //   // newLabelsClassGroup = radialGroup.selectAll(".radialLabelClass").data(data)
+
+  //   // newLabelGroups = newLabelsClassGroup.enter().append("g")
+  //   //   .merge(newLabelsClassGroup)
+  //   //   .attr("id", function (d) {
+  //   //     return "radialBarChartLabel-" + d.incident_type
+  //   //   })
+  //   //   .attr("class", "radialLabelClass")
+  //   //   .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+  //   //   .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+
+  //   // newLabelsClassGroup.exit().remove()
+
+
+  //   // newTextGroup = newLabelGroups.selectAll(".radialLabelTextClass").data(data)
+
+  //   // newTexts = newTextGroup.enter().append("text")
+  //   //   .merge(newTextGroup)
+  //   //   .attr("class", "radialLabelTextClass")
+  //   //   .text(function (d) { return (d.incident_type) })
+  //   //   .attr("transform", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
+  //   //   .style("font-size", "11px")
+  //   //   .attr("class", "white-font")
+  //   //   .attr("alignment-baseline", "middle")
+
+  //   // newTextGroup.exit().remove()
+
+
+
 
   // }
-
-
-
 }
 
