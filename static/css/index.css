@@ -82,6 +82,15 @@
     top: 30px;
 }
 
+#US-map-legend-svg .y-axis line,
+#US-map-legend-svg .y-axis path {
+    stroke: white;
+}
+
+#US-map-legend-svg .y-axis text {
+    fill: white;
+}
+
 #US-map-svg .axis text {
     font: 10px sans-serif;
 }
@@ -123,6 +132,29 @@
 
 /*  Line chart */
 
+#line-chart-svg .axis-labels {
+    fill: white;
+    font-size: 1.5em;
+}
+
+#line-chart-svg .axis--y line,
+#line-chart-svg .axis--x line,
+#line-chart-svg .axis--y-R line {
+    stroke: white;
+}
+
+#line-chart-svg .axis--y path,
+#line-chart-svg .axis--x path,
+#line-chart-svg .axis--y-R path {
+    stroke: white;
+}
+
+#line-chart-svg .axis--y text,
+#line-chart-svg .axis--x text,
+#line-chart-svg .axis--y-R text {
+    fill: white;
+}
+
 #line-chart-svg .line1,
 #line-chart-svg .line2,
 #line-chart-svg .line1-mini,
@@ -133,12 +165,22 @@
 
 #line-chart-svg .line1,
 #line-chart-svg .line1-mini {
-    stroke: blue;
+    stroke: orange;
 }
 
 #line-chart-svg .line2,
 #line-chart-svg .line2-mini {
-    stroke: black;
+    stroke: rgb(0, 153, 255);
+}
+
+#line-chart-svg .dot1,
+#line-chart-svg .dot1-legend {
+    fill: orange;
+}
+
+#line-chart-svg .dot2,
+#line-chart-svg .dot2-legend {
+    fill: rgb(0, 153, 255);
 }
 
 #line-chart-svg .zoom {
