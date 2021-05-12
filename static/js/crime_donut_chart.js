@@ -278,7 +278,8 @@ async function createCrimeDonutChart(states, year_range) {
                 return "slice-" + d.data.key
             })
             .attr("class", "my-paths")
-            .attr('d', arcGenerator)
+
+        .attr('d', arcGenerator)
             .attr('fill', function(d) { return (color(d.data.key)) })
             .attr("stroke", "black")
             .style("stroke-width", "1.5px")
@@ -355,8 +356,9 @@ async function createCrimeDonutChart(states, year_range) {
 
                     selectedDonutPath = false
 
-                    crimesList = "all"
-                    crimeListTrigger.a = "all"
+                    crimesList = "all_crimes"
+                    crimeListTrigger_line_chart.a = "all_crimes"
+                    crimeListTrigger_us_map.a = "all_crimes"
                 } else {
                     // Blur other slices
                     d3.selectAll(".my-paths")
@@ -373,9 +375,9 @@ async function createCrimeDonutChart(states, year_range) {
                         .style("opacity", "1")
 
                     selectedDonutPath = true
-
                     crimesList = d.data.key
-                    crimeListTrigger.a = d.data.key
+                    crimeListTrigger_us_map.a = d.data.key
+                    crimeListTrigger_line_chart.a = d.data.key
                 }
             })
 
