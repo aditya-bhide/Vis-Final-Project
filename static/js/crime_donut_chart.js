@@ -225,6 +225,7 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
       return legendLabelY
     })
     .style("font-size", "12px")
+    .attr("class", "white-font")
     .attr("alignment-baseline", "middle")
 
 
@@ -276,7 +277,9 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
   svg.append("text")
     .attr("text-anchor", "middle")
     .text(totalCrimes)
+    .attr("class", "white-font")
     .style("font-size", 24)
+
 
 }
 

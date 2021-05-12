@@ -235,6 +235,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .text(function (d) { return (d.incident_type) })
     .attr("transform", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
     .style("font-size", "11px")
+    .attr("class", "white-font")
     .attr("alignment-baseline", "middle")
 
 
@@ -243,5 +244,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .attr("text-anchor", "middle")
     .text(totalDisasters)
     .style("font-size", 24)
+    .attr("class", "white-font")
+
 
 }

@@ -10,3 +10,7 @@ div.radial-bar-tooltip {
   border-radius: 8px;
   pointer-events: none;
 }
+
+.white-font {
+  fill: white;
+}
