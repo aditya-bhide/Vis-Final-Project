@@ -256,233 +256,249 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .text(totalDisasters)
     .style("font-size", 24)
     .attr("class", "white-font")
+    .attr("id", "radial-middle-text")
 
 
-  // states_trigger_for_radial_chart.registerListener(function (val) {
-  //   $(document).ready(function () {
-  //     updateRadialChart(Array.from(states_for_radial_chart), year_range)
-  //   });
-  // });
+  states_trigger_for_radial_chart.registerListener(function (val) {
+    $(document).ready(function () {
+      updateRadialChart(Array.from(states_for_radial_chart), year_range)
+    });
+  });
 
-  // async function updateRadialChart(states, year_range) {
-  //   await getDisasterTypesData(states, year_range)
+  year_range_trigger_for_radial_chart.registerListener(function (val) {
+    $(document).ready(function () {
+      console.log("year trigger getting called")
+      updateRadialChart(Array.from(states_for_donut_chart), year_range)
+    });
+  });
 
+  async function updateRadialChart(states, year_range) {
+    await getDisasterTypesData(states, year_range)
 
-  //   let data = disasterTypesData
-  //   console.log(data)
+    console.log(states)
+    let data = disasterTypesData
 
-  //   let maxCount = 0
-  //   for (var i = 0; i < data.length; i++) {
-  //     if (maxCount < data[i]['count']) {
-  //       maxCount = data[i]['count']
-  //     }
-  //   }
+    let maxCount = 0
+    for (var i = 0; i < data.length; i++) {
+      if (maxCount < data[i]['count']) {
+        maxCount = data[i]['count']
+      }
+    }
 
-  //   x.domain(data.map(function (d) { return d.incident_type }))
+    x.domain(data.map(function (d) { return d.incident_type }))
 
-  //   y.domain([0, maxCount])
+    y.domain([0, maxCount])
 
-  //   newPaths_ = radialGroup.selectAll(".radialBarChartPaths").data(data)
+    oldGroups = d3.selectAll(".gRadial").remove()
 
-  //   newBars = newPaths_.enter().append("path")
-  //     .merge(newPaths_)
-  //     .attr("id", function (d) {
-  //       return "path-" + d.incident_type
-  //     })
-  //     .attr("class", "radialBarChartPaths")
-  //     .attr("fill", "#69b3a2")
-  //     .attr("stroke", "black")
-  //     .style("stroke-width", "0.6px")
-  //     .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-  //       .innerRadius(innerRadius)
-  //       .outerRadius(function (d) { return y(d['count']); })
-  //       .startAngle(function (d) { return x(d.incident_type); })
-  //       .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-  //       .padAngle(0.01)
-  //       .padRadius(innerRadius))
+    var newGroups = svg.selectAll(".radial-group")
+      .data(data)
+      .enter()
+      .append("g")
+      .attr("class", "gRadial")
 
+    // Add the bars
+    path = newGroups
+      .append("path")
+      .attr("id", function (d) {
+        return "path-" + d.incident_type
+      })
+      .attr("class", "radialBarChartPaths")
+      .attr("fill", "#69b3a2")
+      .attr("stroke", "black")
+      .style("stroke-width", "0.6px")
+      .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+        .innerRadius(innerRadius)
+        .outerRadius(innerRadius + 0.1)
+        .startAngle(function (d) { return x(d.incident_type); })
+        .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+        .padAngle(0.01)
+        .padRadius(innerRadius))
 
-  //   newPaths_.exit().remove()
+    path.transition().duration(200)
+      .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+        .innerRadius(innerRadius)
+        .outerRadius(function (d) { return y(d['count']); })
+        .startAngle(function (d) { return x(d.incident_type); })
+        .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+        .padAngle(0.01)
+        .padRadius(innerRadius))
+      .delay(0)
 
+    path
+      .on("mouseover", function (d) {
 
-  //   newBars
-  //     .on("mouseover", function (d) {
+        if (!selectedRadialBarFlag) {
+          // Make tooltip visible
+          div.transition()
+            .duration(0)
+            .style("opacity", .9);
 
-  //       if (!selectedRadialBarFlag) {
-  //         // Make tooltip visible
-  //         div.transition()
-  //           .duration(0)
-  //           .style("opacity", .9);
+          // Set tooltip text
+          div.html(d.incident_type + "=" + d.count)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY) + "px");
 
-  //         // Set tooltip text
-  //         div.html(d.incident_type + "=" + d.count)
-  //           .style("left", (d3.event.pageX) + "px")
-  //           .style("top", (d3.event.pageY) + "px");
-
-  //         // Blur other bars
-  //         d3.selectAll(".radialBarChartPaths")
-  //           .attr("stroke", "#736f64")
-  //           .style("stroke-width", "0.3px")
-  //           .style("opacity", "0.2")
-
-
-  //         // Increase selected path size
-  //         d3.select(this)
-  //           .attr("stroke", "black")
-  //           .style("stroke-width", "0.6px")
-  //           .style("opacity", "1")
-
-  //           .attr("d", d3.arc()
-  //             .innerRadius(innerRadius)
-  //             .outerRadius(function (d) { return y(d['count'] + 40); })
-  //             .startAngle(function (d) { return x(d.incident_type); })
-  //             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-  //             .padAngle(0.01)
-  //             .padRadius(innerRadius + 10)
-  //           )
-
-  //         // Push label text
-  //         d3.select(this.parentNode).selectAll(".radialLabelClass")
-  //           .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
-  //       }
-  //     })
-  //     .on("mousemove", function (d) {
-
-  //       // Show tooltip
-  //       div.transition()
-  //         .duration(0)
-  //         .style("opacity", .9);
-
-  //       // Set tooltip text
-  //       div.html(d.incident_type + "=" + d.count)
-  //         .style("left", (d3.event.pageX) + "px")
-  //         .style("top", (d3.event.pageY) + "px");
-
-  //     })
-  //     .on("mouseout", function (d) {
-
-  //       // Hide tooltip
-  //       div.transition()
-  //         .duration(0)
-  //         .style("opacity", 0);
-  //       if (!selectedRadialBarFlag) {
+          // Blur other bars
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "#736f64")
+            .style("stroke-width", "0.3px")
+            .style("opacity", "0.2")
 
 
-  //         // Set bars back to normal stroke width and stroke color
-  //         d3.selectAll(".radialBarChartPaths")
-  //           .attr("stroke", "black")
-  //           .style("stroke-width", "0.6px")
-  //           .style("opacity", "1")
-  //           .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-  //             .innerRadius(innerRadius)
-  //             .outerRadius(function (d) { return y(d['count']); })
-  //             .startAngle(function (d) { return x(d.incident_type); })
-  //             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-  //             .padAngle(0.01)
-  //             .padRadius(innerRadius))
+          // Increase selected path size
+          d3.select(this)
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
 
-  //         // Move text label back to position
-  //         d3.select(this.parentNode).select(".radialLabelClass")
-  //           .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
-  //       }
-  //     })
-  //     .on("click", function (d) {
+            .attr("d", d3.arc()
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius + 10)
+            )
 
-  //       // Depending on flag, select/unselect the radialBar
-  //       if (selectedRadialBarFlag) {
+          // Push label text
+          d3.select(this.parentNode).selectAll(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
+        }
+      })
+      .on("mousemove", function (d) {
 
-  //         // Set bars back to normal stroke width and stroke color
-  //         d3.selectAll(".radialBarChartPaths")
-  //           .attr("stroke", "black")
-  //           .style("stroke-width", "0.6px")
-  //           .style("opacity", "1")
+        // Show tooltip
+        div.transition()
+          .duration(0)
+          .style("opacity", .9);
 
-  //           .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-  //             .innerRadius(innerRadius)
-  //             .outerRadius(function (d) { return y(d['count']); })
-  //             .startAngle(function (d) { return x(d.incident_type); })
-  //             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-  //             .padAngle(0.01)
-  //             .padRadius(innerRadius))
+        // Set tooltip text
+        div.html(d.incident_type + "=" + d.count)
+          .style("left", (d3.event.pageX) + "px")
+          .style("top", (d3.event.pageY) + "px");
 
-  //         // Move text label back to position
-  //         d3.select(this.parentNode).select(".radialLabelClass")
-  //           .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+      })
+      .on("mouseout", function (d) {
 
-  //         selectedRadialBarFlag = false
-  //         disasterList = "all"
-  //         disasterListTrigger.a = "all"
-
-  //       } else {
-
-  //         // Blur other paths
-  //         d3.selectAll(".radialBarChartPaths")
-  //           .attr("stroke", "#736f64")
-  //           .style("stroke-width", "0.3px")
-  //           .style("opacity", "0.2")
+        // Hide tooltip
+        div.transition()
+          .duration(0)
+          .style("opacity", 0);
+        if (!selectedRadialBarFlag) {
 
 
+          // Set bars back to normal stroke width and stroke color
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
+            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count']); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius))
 
-  //         // Increase selected path size
-  //         d3.select(this)
-  //           .attr("stroke", "black")
-  //           .style("stroke-width", "0.6px")
-  //           .style("opacity", "1")
-  //           .attr("d", d3.arc()
-  //             .innerRadius(innerRadius)
-  //             .outerRadius(function (d) { return y(d['count'] + 40); })
-  //             .startAngle(function (d) { return x(d.incident_type); })
-  //             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-  //             .padAngle(0.01)
-  //             .padRadius(innerRadius + 10)
-  //           )
+          // Move text label back to position
+          d3.select(this.parentNode).select(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+        }
+      })
+      .on("click", function (d) {
 
-  //         // Push label text
-  //         d3.select(this.parentNode).selectAll(".radialLabelClass")
-  //           .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
+        // Depending on flag, select/unselect the radialBar
+        if (selectedRadialBarFlag) {
 
-  //         disasterList = d.incident_type
-  //         disasterListTrigger.a = d.incident_type
-  //         selectedRadialBarFlag = true
-  //       }
-  //     })
+          // Set bars back to normal stroke width and stroke color
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
+
+            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count']); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius))
+
+          // Move text label back to position
+          d3.select(this.parentNode).select(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+
+          selectedRadialBarFlag = false
+          disasterList = "all_disasters"
+          disasterListTrigger_line_chart.a = "all_disasters"
+
+        } else {
+
+          // Blur other paths
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "#736f64")
+            .style("stroke-width", "0.3px")
+            .style("opacity", "0.2")
 
 
 
-  //   // newLabelsClassGroup = radialGroup.selectAll(".radialLabelClass").data(data)
+          // Increase selected path size
+          d3.select(this)
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
+            .attr("d", d3.arc()
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius + 10)
+            )
 
-  //   // newLabelGroups = newLabelsClassGroup.enter().append("g")
-  //   //   .merge(newLabelsClassGroup)
-  //   //   .attr("id", function (d) {
-  //   //     return "radialBarChartLabel-" + d.incident_type
-  //   //   })
-  //   //   .attr("class", "radialLabelClass")
-  //   //   .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-  //   //   .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+          // Push label text
+          d3.select(this.parentNode).selectAll(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
 
-  //   // newLabelsClassGroup.exit().remove()
-
-
-  //   // newTextGroup = newLabelGroups.selectAll(".radialLabelTextClass").data(data)
-
-  //   // newTexts = newTextGroup.enter().append("text")
-  //   //   .merge(newTextGroup)
-  //   //   .attr("class", "radialLabelTextClass")
-  //   //   .text(function (d) { return (d.incident_type) })
-  //   //   .attr("transform", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
-  //   //   .style("font-size", "11px")
-  //   //   .attr("class", "white-font")
-  //   //   .attr("alignment-baseline", "middle")
-
-  //   // newTextGroup.exit().remove()
+          disasterList = d.incident_type
+          disasterListTrigger_line_chart.a = d.incident_type
+          selectedRadialBarFlag = true
+        }
+      })
 
 
+    // Add the labels
+    newGroups
+      .append("g")
+      .attr("id", function (d) {
+        return "radialBarChartLabel-" + d.incident_type
+      })
+      .attr("class", "radialLabelClass")
+      .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+      .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+      .append("text")
+      .attr("class", "radialLabelTextClass")
+      .text(function (d) { return (d.incident_type) })
+      .attr("transform", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
+      .style("font-size", "11px")
+      .attr("class", "white-font")
+      .attr("alignment-baseline", "middle")
 
 
-  // }
+
+    svg.select("#radial-middle-text")
+      .attr("text-anchor", "middle")
+      .text(totalDisasters)
+      .attr("class", "white-font donut-middle-text")
+      .style("font-size", 24)
+
+
+
+  }
 }
 

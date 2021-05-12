@@ -68,34 +68,34 @@ function multi_line_chart(data) {
         .on("zoom", zoomed);
 
     var line1 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y(yValue(d));
         });
 
     var line1_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2(yValue(d));
         });
 
     var line2 = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return yR(yValueR(d));
         });
 
     var line2_mini = d3.line()
-        .x(function(d) {
+        .x(function (d) {
             return x2(xValue(d));
         })
-        .y(function(d) {
+        .y(function (d) {
             return y2R(yValueR(d));
         });
 
@@ -313,6 +313,14 @@ function multi_line_chart(data) {
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
 
+            year_range_trigger_for_donut_chart.a = parseInt(start_date)
+            year_range_for_donut_chart[0] = parseInt(start_date)
+            year_range_for_donut_chart[1] = parseInt(end_date)
+
+            year_range_trigger_for_radial_chart.a = parseInt(start_date)
+            year_range_for_radial_chart[0] = parseInt(start_date)
+            year_range_for_radial_chart[1] = parseInt(end_date)
+
         }
 
         d3.select('.line1').attr('d', line1)
@@ -326,57 +334,57 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-    states_trigger.registerListener(function(val) {
+    states_trigger.registerListener(function (val) {
         // console.log(Array.from(states))
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
-                success: function(response) {
+                success: function (response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
         });
     });
 
-    crimeListTrigger_line_chart.registerListener(function(val) {
+    crimeListTrigger_line_chart.registerListener(function (val) {
         console.log("crimeListTrigger in line chart")
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
-                success: function(response) {
+                success: function (response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
         });
     });
 
-    disasterListTrigger_line_chart.registerListener(function(val) {
+    disasterListTrigger_line_chart.registerListener(function (val) {
         console.log("disaster trigger in line chart")
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
-                success: function(response) {
+                success: function (response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
@@ -393,6 +401,15 @@ function multi_line_chart(data) {
             year_range_trigger.a = parseInt(start_date)
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
+
+            year_range_trigger_for_donut_chart.a = parseInt(start_date)
+            year_range_for_donut_chart[0] = parseInt(start_date)
+            year_range_for_donut_chart[1] = parseInt(end_date)
+
+            year_range_trigger_for_radial_chart.a = parseInt(start_date)
+            year_range_for_radial_chart[0] = parseInt(start_date)
+            year_range_for_radial_chart[1] = parseInt(end_date)
+
 
         }
 

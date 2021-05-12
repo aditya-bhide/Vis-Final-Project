@@ -48,8 +48,41 @@ var states_trigger_for_radial_chart = {
 }
 
 
-var year_range = [1979, 2019]
+var year_range = [2010, 2019]
 var year_range_trigger = {
+    aInternal: 1000,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+var year_range_for_donut_chart = [2010, 2019]
+var year_range_trigger_for_donut_chart = {
+    aInternal: 1000,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+
+var year_range_for_radial_chart = [2010, 2019]
+var year_range_trigger_for_radial_chart = {
     aInternal: 1000,
     aListener: function (val) { },
     set a(val) {
