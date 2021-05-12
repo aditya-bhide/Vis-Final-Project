@@ -195,8 +195,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
 
         selectedRadialBarFlag = false
-        disasterList = "all"
-        disasterListTrigger.a = "all"
+        disasterList = "all_disasters"
+        disasterListTrigger_line_chart.a = "all_disasters"
 
       } else {
 
@@ -228,7 +228,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
 
         disasterList = d.incident_type
-        disasterListTrigger.a = d.incident_type
+        disasterListTrigger_line_chart.a = d.incident_type
         selectedRadialBarFlag = true
       }
     })

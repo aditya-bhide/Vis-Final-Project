@@ -48,7 +48,6 @@ def crime_db():
     # drop columns with NaN values
     df.drop(labels=["rape_legacy", "rape_revised",
                     "caveats"], axis=1, inplace=True)
-
     return df
 
 
@@ -106,16 +105,16 @@ df_disaster = disaster_db_new()
 
 defaul_years_start = 1979
 defaul_years_end = 2019
-attribute1 = 'burglary'
+# attribute1 = 'all_crimes'
 
 def us_begin():
     data = df
-    data_map = data[['year','state_name', attribute1, 'population']]
+    data_map = data[['year','state_name', 'all_crimes', 'population']]
     data_map = data_map.loc[(data_map['year'] >= defaul_years_start) & (data_map['year'] <= defaul_years_end)]
-    data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute1: sum, 'population': sum})).reset_index()
+    data_map = pd.DataFrame(data_map.groupby('state_name').agg({'all_crimes': sum, 'population': sum})).reset_index()
 
     data_map_dict = {}
-    for i, j, k in zip(data_map.state_name, data_map[attribute1], data_map.population):
+    for i, j, k in zip(data_map.state_name, data_map['all_crimes'], data_map.population):
         data_map_dict[i] = [j, k]
     counter = []
 
@@ -123,47 +122,46 @@ def us_begin():
         state = us_data['features'][i]['properties']['name']
         if state in data_map_dict:
             counter.append(int((data_map_dict[state][0]/data_map_dict[state][1])*1000000))
-            us_data['features'][i]['properties'][attribute1] = int((data_map_dict[state][0]/data_map_dict[state][1])*1000000)
+            us_data['features'][i]['properties']['all_crimes'] = int((data_map_dict[state][0]/data_map_dict[state][1])*1000000)
 
     us_data['other_features'] = {}
     us_data['other_features']['min_value'] = min(counter)
     us_data['other_features']['max_value'] = max(counter)
-    us_data['other_features']['feature_name'] = attribute1
+    us_data['other_features']['feature_name'] = 'all_crimes'
     # print(max_value)
     return us_data
 
 
-def us_update(min_year, max_year):
+def us_update(min_year=1979, max_year=2019, attribute='all_crimes'):
     data = df
-    # attribute1 = 'robbery'
-    data_map = data[['year','state_name', attribute1, 'population']]
+    data_map = data[['year','state_name', attribute, 'population']]
+    print(min_year, max_year, attribute)
 
     data_map = data_map.loc[(data_map['year'] >= min_year) & (data_map['year'] <= max_year)]
-    data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute1: sum, 'population': sum})).reset_index()
+    data_map = pd.DataFrame(data_map.groupby('state_name').agg({attribute: sum, 'population': sum})).reset_index()
     data_map_dict = {}
-    for i, j, k in zip(data_map.state_name, data_map[attribute1], data_map.population):
+    for i, j, k in zip(data_map.state_name, data_map[attribute], data_map.population):
         data_map_dict[i] = [j, k]
     counter = []
     for i in range(len(us_data_no_geo['features'])):
         state = us_data_no_geo['features'][i]['properties']['name']
         if state in data_map_dict:
             counter.append(int((data_map_dict[state][0]/data_map_dict[state][1])*100000))
-            us_data_no_geo['features'][i]['properties'][attribute1] = int((data_map_dict[state][0]/data_map_dict[state][1])*100000)
+            us_data_no_geo['features'][i]['properties'][attribute] = int((data_map_dict[state][0]/data_map_dict[state][1])*100000)
     us_data_no_geo['other_features'] = {}
     us_data_no_geo['other_features']['min_value'] = min(counter)
     us_data_no_geo['other_features']['max_value'] = max(counter)
-    us_data_no_geo['other_features']['feature_name'] = attribute1
+    us_data_no_geo['other_features']['feature_name'] = attribute
     return us_data_no_geo
 
 def line_chart_begin():
     data_crime = df
     data_disaster = df_disaster
-    # attribute1 = 'violent_crime'
-    data_crime_chart = data_crime[['year', attribute1, 'population']]
-    data_crime_chart = pd.DataFrame(data_crime_chart.groupby('year').agg({attribute1: sum, 'population': sum})).reset_index()
+    data_crime_chart = data_crime[['year', 'all_crimes', 'population']]
+    data_crime_chart = pd.DataFrame(data_crime_chart.groupby('year').agg({'all_crimes': sum, 'population': sum})).reset_index()
     data_crime_chart_dict = data_crime_chart.to_dict('records')
     for i in range(len(data_crime_chart_dict)):
-        data_crime_chart_dict[i]['crimes'] = int((data_crime_chart_dict[i][attribute1] / data_crime_chart_dict[i]['population']) * 100000)
+        data_crime_chart_dict[i]['crimes'] = int((data_crime_chart_dict[i]['all_crimes'] / data_crime_chart_dict[i]['population']) * 100000)
 
     data_disaster_chart =  data_disaster[['fy_declared', 'incident_type']]
     # data_disaster_chart = data_disaster_chart.loc[data_disaster_chart['incident_type'] == selected_disaster]
@@ -174,7 +172,7 @@ def line_chart_begin():
 
     return data_crime_chart_dict, data_disaster_chart_dict
 
-def line_chart_update(selected_states, selected_disaster="All"):
+def line_chart_update(selected_states="all", attribute_crime="all_crimes", selected_disaster="all_disasters",):
     data_crime = df
     data_disaster = df_disaster
     
@@ -184,16 +182,16 @@ def line_chart_update(selected_states, selected_disaster="All"):
         data_crime = data_crime.loc[data_crime['state_abbr'].isin(selected_states)]
         data_disaster = data_disaster.loc[data_disaster['state'].isin(selected_states)]
 
-    data_crime_chart = data_crime[['year', attribute1, 'population']]
-    data_crime_chart = pd.DataFrame(data_crime_chart.groupby('year').agg({attribute1: sum, 'population': sum})).reset_index()
+    data_crime_chart = data_crime[['year', attribute_crime, 'population']]
+    data_crime_chart = pd.DataFrame(data_crime_chart.groupby('year').agg({attribute_crime: sum, 'population': sum})).reset_index()
     data_crime_chart_dict = data_crime_chart.to_dict('records')
     for i in range(len(data_crime_chart_dict)):
-        data_crime_chart_dict[i]['crimes'] = int((data_crime_chart_dict[i][attribute1] / data_crime_chart_dict[i]['population']) * 100000)
+        data_crime_chart_dict[i]['crimes'] = int((data_crime_chart_dict[i][attribute_crime] / data_crime_chart_dict[i]['population']) * 100000)
 
     # pprint(data_crime_chart_dict)
 
     data_disaster_chart = data_disaster[['fy_declared', 'incident_type']]
-    if selected_disaster == "All":
+    if selected_disaster == "all_disasters":
         pass
     else:
         data_disaster_chart = data_disaster_chart.loc[data_disaster_chart['incident_type'] == selected_disaster]
@@ -225,7 +223,7 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
 
     # drop all columns except crimes
     crimeDonutDf.drop(labels=["year", "population", "state_name",
-                              "state_abbr", "larceny", "robbery"], axis=1, inplace=True)
+                              "state_abbr", "larceny", "robbery", "all_crimes"], axis=1, inplace=True)
 
     # convert all crimes to integers
     crimeDonutDf = crimeDonutDf.astype(int)

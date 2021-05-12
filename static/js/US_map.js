@@ -17,7 +17,7 @@ function US_map(data) {
         // no longer in d3 v4 - zoom initialises with zoomIdentity, so it's already at origin
         // .translate([0, 0]) 
         // .scale(1) 
-        .scaleExtent([1, 8])
+        .scaleExtent([1, 9])
         .on("zoom", zoomed);
 
     // Define path generator
@@ -44,7 +44,7 @@ function US_map(data) {
         .enter()
         .append("path")
         .attr("d", path)
-        .attr("class", "state");
+        // .attr("class", "state");
 
     // add a legend
     var w = 80,
@@ -172,7 +172,7 @@ function US_map(data) {
         var yAxis = d3.axisRight(y);
 
         key.selectAll("g.y-axis")
-            .call(yAxis);
+            .transition().duration(100).call(yAxis);
     }
 
     function reset() {
@@ -197,8 +197,6 @@ function US_map(data) {
 
 
     year_range_trigger.registerListener(function(val) {
-        // console.log("Here prinintng", year_range)
-
         start_year = year_range[0]
         end_year = year_range[1];
         $('#amount1').text(start_year)
@@ -206,8 +204,29 @@ function US_map(data) {
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
-                url: "http://127.0.0.1:5000/update_US_years",
-                data: { 'min_year': start_year, 'max_year': end_year },
+                url: "http://127.0.0.1:5000/update_US",
+                data: { 'min_year': start_year, 'max_year': end_year,  'crimesList': crimesList},
+                success: function(response) {
+                    update_US_map(response)
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+
+    crimeListTrigger_us_map.registerListener(function(val) {
+        start_year = 1979
+        end_year = 2019
+        console.log(crimesList)
+        $('#amount1').text(start_year)
+        $('#amount2').text(end_year)
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: "http://127.0.0.1:5000/update_US",
+                data: { 'min_year': start_year, 'max_year': end_year, 'crimesList': crimesList },
                 success: function(response) {
                     update_US_map(response)
                 },

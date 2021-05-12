@@ -31,10 +31,10 @@ function multi_line_chart(data) {
     yRAxisLabel = 'Disaster'
     xAxisLabel = 'Years'
 
-    svg.append("circle").attr("class", "dot1-legend").attr("cx", 700).attr("cy", 20).attr("r", 6).style("fill", "blue")
-    svg.append("circle").attr("class", "dot2-legend").on("mouseover", mouseover).attr("cy", 50).attr("r", 6).style("fill", "black")
-    svg.append("text").attr("x", 720).attr("y", 20).text(yAxisLabel).style("font-size", "15px").attr("alignment-baseline", "middle")
-    svg.append("text").attr("x", 720).attr("y", 50).text(yRAxisLabel).style("font-size", "15px").attr("alignment-baseline", "middle")
+    svg.append("circle").attr("class", "dot1-legend").attr("cx", 470).attr("cy", 10).attr("r", 6)
+    svg.append("circle").attr("class", "dot2-legend").attr("cx", 470).attr("cy", 30).attr("r", 6)
+    svg.append("text").attr('class', 'text1-legend').attr("x", 480).attr("y", 10).text(yAxisLabel).attr("alignment-baseline", "middle")
+    svg.append("text").attr('class', 'text2-legend').attr("x", 480).attr("y", 30).text(yRAxisLabel).attr("alignment-baseline", "middle")
 
     var x = d3.scaleLinear().range([0, width]),
         x2 = d3.scaleLinear().range([0, width]),
@@ -68,34 +68,34 @@ function multi_line_chart(data) {
         .on("zoom", zoomed);
 
     var line1 = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y(yValue(d));
         });
 
     var line1_mini = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x2(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y2(yValue(d));
         });
 
     var line2 = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return yR(yValueR(d));
         });
 
     var line2_mini = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x2(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y2R(yValueR(d));
         });
 
@@ -159,7 +159,7 @@ function multi_line_chart(data) {
         .call(xAxis);
 
     focus.select(".axis--x").append('text')
-        .attr("class", "axis-labels")
+        .attr("class", "axis-labels-y")
         .attr('fill', 'black')
         .attr('y', 45)
         .attr('x', width / 2)
@@ -168,7 +168,7 @@ function multi_line_chart(data) {
 
     focus.select(".axis--y").transition().duration(1000).call(yAxis);
     focus.select(".axis--y").append('text')
-        .attr("class", "axis-labels")
+        .attr("class", "axis-labels-yR")
         .attr('fill', 'black')
         .attr('y', -45)
         .attr('x', -height / 2)
@@ -253,6 +253,16 @@ function multi_line_chart(data) {
         y2.domain(y.domain());
         y2R.domain(yR.domain());
 
+        if(crimesList=='all_crimes'){
+            d3.select(".text1-legend").text(yAxisLabel)
+        }else{
+            d3.select(".text1-legend").text(crimesList)
+        }
+        if(disasterList=='all_disasters'){
+            d3.select(".text2-legend").text(yRAxisLabel)
+        }else{
+            d3.select(".text2-legend").text(disasterList)
+        }
         d3.select(".axis--x").transition().duration(1000).call(xAxis);
         d3.select(".axis--y").transition().duration(1000).call(yAxis);
         d3.select(".axis--y-R").transition().duration(1000).call(yAxisR);
@@ -316,23 +326,61 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-    states_trigger.registerListener(function (val) {
+    states_trigger.registerListener(function(val) {
         // console.log(Array.from(states))
-        $(document).ready(function () {
+        $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
-                data: JSON.stringify({ 'data': Array.from(states) }),
-                success: function (response) {
+                data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
+                success: function(response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
             });
         });
+    });
+
+    crimeListTrigger_line_chart.registerListener(function(val) {
+        console.log("crimeListTrigger in line chart")
+            $(document).ready(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: "http://127.0.0.1:5000/update_line_chart",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
+                    success: function(response) {
+                        variableChange(response)
+                        console.log(response)
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+    });
+
+    disasterListTrigger_line_chart.registerListener(function(val) {
+        console.log("disaster trigger in line chart")
+            $(document).ready(function() {
+                $.ajax({
+                    type: 'POST',
+                    url: "http://127.0.0.1:5000/update_line_chart",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
+                    success: function(response) {
+                        variableChange(response)
+                        console.log(response)
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
     });
 
     function zoomed() {

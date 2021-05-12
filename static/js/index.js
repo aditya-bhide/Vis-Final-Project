@@ -1,4 +1,5 @@
 var states = new Set()
+
 var states_trigger = {
     aInternal: null,
     aListener: function (val) { },
@@ -30,8 +31,22 @@ var year_range_trigger = {
 }
 
 
-var crimesList = "all"
-var crimeListTrigger = {
+var crimesList = "all_crimes"
+var crimeListTrigger_us_map = {
+    aInternal: null,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+var crimeListTrigger_line_chart = {
     aInternal: null,
     aListener: function (val) { },
     set a(val) {
@@ -46,9 +61,8 @@ var crimeListTrigger = {
     }
 }
 
-
-var disasterList = "all"
-var disasterListTrigger = {
+var disasterList = "all_disasters"
+var disasterListTrigger_line_chart = {
     aInternal: null,
     aListener: function (val) { },
     set a(val) {

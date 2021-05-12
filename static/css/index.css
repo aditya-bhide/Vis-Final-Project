@@ -132,7 +132,7 @@
 
 /*  Line chart */
 
-#line-chart-svg .axis-labels {
+#line-chart-svg .axis-labels-y, #line-chart-svg .axis-labels-yR {
     fill: white;
     font-size: 1.5em;
 }
@@ -183,13 +183,13 @@
     fill: rgb(0, 153, 255);
 }
 
+#line-chart-svg .text1-legend, #line-chart-svg .text2-legend{
+    fill: white;
+    font-size: 0.7em;
+}
+
 #line-chart-svg .zoom {
     cursor: move;
     fill: none;
     pointer-events: all;
 }
-
-
-/* #project-name {
-    font-size: 2em;
-} */

@@ -1,7 +1,5 @@
-
 var crimeDonutChartData, donutChartStateList = ["NY"], donutChartYearList = ['2019'], totalCrimes
 var selectedDonutPath = false
-
 
 $(document).ready(function () {
   createCrimeDonutChart(donutChartStateList, donutChartYearList)
@@ -183,8 +181,10 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
 
         selectedDonutPath = false
 
-        crimesList = "all"
-        crimeListTrigger.a = "all"
+        crimesList = "all_crimes"
+        crimeListTrigger_line_chart.a = "all_crimes"
+        crimeListTrigger_us_map.a = "all_crimes"
+
       } else {
         // Blur other slices
         d3.selectAll(".my-paths")
@@ -203,7 +203,8 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
         selectedDonutPath = true
 
         crimesList = d.data.key
-        crimeListTrigger.a = d.data.key
+        crimeListTrigger_us_map.a = d.data.key
+        crimeListTrigger_line_chart.a = d.data.key
       }
     })
 

@@ -36,13 +36,14 @@ def init_All():
         print("ERROR")
 
 
-@app.route("/update_US_years", methods=["POST", "GET"])
-def update_US_years():
+@app.route("/update_US", methods=["POST", "GET"])
+def update_US():
     if request.method == "POST":
         min_year = int(request.form['min_year'])
         max_year = int(request.form['max_year'])
-        # print(min_year, max_year)
-        data = us_update(min_year, max_year)
+        crime_type = request.form['crimesList']
+
+        data = us_update(min_year, max_year, crime_type)
         return data
     else:
         print("ERROR")
@@ -50,9 +51,10 @@ def update_US_years():
 @app.route("/update_line_chart", methods=["POST", "GET"])
 def update_line_chart():
     if request.method == "POST":
-        states = request.get_json()
-        data_crime_chart_dict, data_disaster_chart_dict = line_chart_update(states['data'])
+        data_requested = request.get_json()
+        data_crime_chart_dict, data_disaster_chart_dict = line_chart_update(data_requested['states'], data_requested['crimes'], data_requested['disasters'])
         data = {'line_chart_data_crime':data_crime_chart_dict, 'line_chart_data_disaster': data_disaster_chart_dict}
+        print(data_requested)
         return data
     else:
         print("ERROR")
