@@ -9,15 +9,15 @@ function multi_line_chart(data) {
     var svg = d3.select("#line-chart-svg svg"),
         margin = {
             top: 10,
-            right: 10,
+            right: 70,
             bottom: 110,
-            left: 120
+            left: 60
         },
         margin2 = {
-            top: 440,
-            right: 120,
+            top: 340,
+            right: 70,
             bottom: 20,
-            left: 120
+            left: 60
         },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom,
@@ -31,8 +31,8 @@ function multi_line_chart(data) {
     yRAxisLabel = 'Disaster'
     xAxisLabel = 'Years'
 
-    svg.append("circle").on("mouseover", mouseover).on("mouseout", mouseout).attr("cx", 700).attr("cy", 20).attr("r", 6).style("fill", "blue")
-    svg.append("circle").on("mouseover", mouseover).on("mouseout", mouseout).attr("cx", 700).attr("cy", 50).attr("r", 6).style("fill", "black")
+    svg.append("circle").attr("class", "dot1-legend").attr("cx", 700).attr("cy", 20).attr("r", 6).style("fill", "blue")
+    svg.append("circle").attr("class", "dot2-legend").on("mouseover", mouseover).attr("cy", 50).attr("r", 6).style("fill", "black")
     svg.append("text").attr("x", 720).attr("y", 20).text(yAxisLabel).style("font-size", "15px").attr("alignment-baseline", "middle")
     svg.append("text").attr("x", 720).attr("y", 50).text(yRAxisLabel).style("font-size", "15px").attr("alignment-baseline", "middle")
 
@@ -68,34 +68,34 @@ function multi_line_chart(data) {
         .on("zoom", zoomed);
 
     var line1 = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y(yValue(d));
         });
 
     var line1_mini = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x2(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y2(yValue(d));
         });
 
     var line2 = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return yR(yValueR(d));
         });
 
     var line2_mini = d3.line()
-        .x(function (d) {
+        .x(function(d) {
             return x2(xValue(d));
         })
-        .y(function (d) {
+        .y(function(d) {
             return y2R(yValueR(d));
         });
 
@@ -159,40 +159,33 @@ function multi_line_chart(data) {
         .call(xAxis);
 
     focus.select(".axis--x").append('text')
+        .attr("class", "axis-labels")
         .attr('fill', 'black')
-        .attr('y', 40)
+        .attr('y', 45)
         .attr('x', width / 2)
         .text(xAxisLabel)
         .style('text-anchor', 'middle')
-        .style("font-size", "2.5em")
 
     focus.select(".axis--y").transition().duration(1000).call(yAxis);
     focus.select(".axis--y").append('text')
+        .attr("class", "axis-labels")
         .attr('fill', 'black')
-        .attr('y', -40)
+        .attr('y', -45)
         .attr('x', -height / 2)
         .text(yAxisLabel)
         .style('text-anchor', 'middle')
-        .style("font-size", "2.5em")
         .attr('transform', 'rotate(-90)');
 
 
     focus.select(".axis--y-R").transition().duration(1000).call(yAxisR);
     focus.select(".axis--y-R").append('text')
+        .attr("class", "axis-labels")
         .attr('fill', 'black')
-        .attr('y', -40)
+        .attr('y', -47)
         .attr('x', height / 2)
         .text(yRAxisLabel)
         .style('text-anchor', 'middle')
-        .style("font-size", "2.5em")
         .attr('transform', 'rotate(90)');
-
-    var mouseLine = focus
-        .append("path") // create vertical line to follow mouse
-        .attr("class", "mouse-line")
-        .attr("stroke", "#303030")
-        .attr("stroke-width", 2)
-        .attr("opacity", "0");
 
     Line_chart1.append("path")
         .datum(data.line_chart_data_crime)
@@ -213,10 +206,6 @@ function multi_line_chart(data) {
         .attr("cx", d => x(xValue(d)))
         .attr("cy", d => y(yValue(d)))
         .attr("r", 5)
-        .style("fill", function (d) {
-            return 'blue';
-        });
-
 
     Line_chart2_points.selectAll("circle")
         .data(data.line_chart_data_disaster)
@@ -227,9 +216,6 @@ function multi_line_chart(data) {
         .attr("cx", d => x(xValue(d)))
         .attr("cy", d => yR(yValueR(d)))
         .attr("r", 5)
-        .style("fill", function (d) {
-            return 'black';
-        });
 
     context.append("path")
         .datum(data.line_chart_data_crime)
@@ -284,10 +270,8 @@ function multi_line_chart(data) {
             .transition().duration(1000)
             .attr("cx", d => x(xValue(d)))
             .attr("cy", d => y(yValue(d)))
-            .attr("r", 5)
-            .style("fill", function (d) {
-                return 'blue';
-            });
+            .attr("r", 5);
+
         points1.exit().remove()
 
         points2 = Line_chart2_points.selectAll('.dot2').data(data.line_chart_data_disaster)
@@ -300,11 +284,8 @@ function multi_line_chart(data) {
             .transition().duration(1000)
             .attr("cx", d => x(xValue(d)))
             .attr("cy", d => yR(yValueR(d)))
-            .attr("r", 5)
-            .style("fill", function (d) {
-                console.log("PLease work")
-                return 'black';
-            });
+            .attr("r", 5);
+
         points2.exit().remove()
 
         d3.select('.line1-mini').datum(data.line_chart_data_crime).attr('d', line1_mini)
@@ -335,24 +316,23 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-    states_trigger.registerListener(function (val) {
+    states_trigger.registerListener(function(val) {
         // console.log(Array.from(states))
-        $(document).ready(function () {
+        $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({ 'data': Array.from(states) }),
-                success: function (response) {
+                success: function(response) {
                     variableChange(response)
                     console.log(response)
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
             });
         });
-
     });
 
     function zoomed() {

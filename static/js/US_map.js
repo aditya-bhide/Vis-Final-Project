@@ -3,8 +3,8 @@ function US_map(data) {
     var width = 560;
     var height = 370;
 
-    var lowColor = '#f9f9f9'
-    var highColor = '#bc2a66'
+    var lowColor = 'White'
+    var highColor = 'Orange'
     var start_year = 0
     var end_year = 0
 
@@ -55,8 +55,8 @@ function US_map(data) {
         .attr('margin-top', '0px')
         .attr("width", w)
         .attr("height", h)
-    // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
-    // .attr("class", "legend");
+        // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
+        // .attr("class", "legend");
 
     var legend = key.append("defs")
         .append("svg:linearGradient")
@@ -102,7 +102,7 @@ function US_map(data) {
         minVal = data.other_features.min_value
         maxVal = data.other_features.max_value
         var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor])
-        // Bind the data to the SVG and create one path per GeoJSON feature
+            // Bind the data to the SVG and create one path per GeoJSON feature
 
         g.selectAll("path")
             .data(data.features)
@@ -112,11 +112,11 @@ function US_map(data) {
             .on("click", click)
             .style("stroke", "#FFFFFF")
             .style("stroke-width", 1)
-            .style("fill", function (d) {
+            .style("fill", function(d) {
                 if (!states.has(d.properties['name'])) {
                     return ramp(d.properties[features])
                 } else {
-                    return "FFFF00"
+                    return "red"
                 }
             });
 
@@ -153,7 +153,7 @@ function US_map(data) {
 
         function click(d) {
             if (states.has(d.properties['name'])) {
-                d3.select(this).style("fill", function (d) {
+                d3.select(this).style("fill", function(d) {
                     return ramp(d.properties[features])
                 })
                 states.delete(d.properties['name'])
@@ -161,7 +161,7 @@ function US_map(data) {
             } else if (states.size < 5) {
                 states.add(d.properties['name'])
                 states_trigger.a = d.properties['name']
-                d3.select(this).style("fill", "#FFFF00")
+                d3.select(this).style("fill", "red")
             }
         }
 
@@ -196,22 +196,22 @@ function US_map(data) {
     update_US_map(data)
 
 
-    year_range_trigger.registerListener(function (val) {
+    year_range_trigger.registerListener(function(val) {
         // console.log("Here prinintng", year_range)
 
         start_year = year_range[0]
         end_year = year_range[1];
         $('#amount1').text(start_year)
         $('#amount2').text(end_year)
-        $(document).ready(function () {
+        $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_US_years",
                 data: { 'min_year': start_year, 'max_year': end_year },
-                success: function (response) {
+                success: function(response) {
                     update_US_map(response)
                 },
-                error: function (error) {
+                error: function(error) {
                     console.log(error);
                 }
             });
