@@ -313,6 +313,14 @@ function multi_line_chart(data) {
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
 
+            year_range_trigger_for_donut_chart.a = parseInt(start_date)
+            year_range_for_donut_chart[0] = parseInt(start_date)
+            year_range_for_donut_chart[1] = parseInt(end_date)
+
+            year_range_trigger_for_radial_chart.a = parseInt(start_date)
+            year_range_for_radial_chart[0] = parseInt(start_date)
+            year_range_for_radial_chart[1] = parseInt(end_date)
+
         }
 
         d3.select('.line1').attr('d', line1)
@@ -393,6 +401,16 @@ function multi_line_chart(data) {
             year_range_trigger.a = parseInt(start_date)
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
+
+            year_range_trigger_for_donut_chart.a = parseInt(start_date)
+            year_range_for_donut_chart[0] = parseInt(start_date)
+            year_range_for_donut_chart[1] = parseInt(end_date)
+
+            year_range_trigger_for_radial_chart.a = parseInt(start_date)
+            year_range_for_radial_chart[0] = parseInt(start_date)
+            year_range_for_radial_chart[1] = parseInt(end_date)
+
+
         }
 
         d3.select('.line1').attr('d', line1)
