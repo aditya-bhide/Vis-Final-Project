@@ -208,14 +208,18 @@ def line_chart_update(selected_states, selected_disaster="All"):
 # start crime donut preprocessing
 
 def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
+    
 
-    # match stateName and yearRange
-    crimeDonutDf = crimeDonutDf.loc[(
-        crimeDonutDf['state_abbr'].isin(stateName)) & crimeDonutDf['year'].isin(yearRange)]
+    if not stateName:
+        crimeDonutDf = crimeDonutDf.loc[ (crimeDonutDf['year']>=int(yearRange[0])) & (crimeDonutDf['year']<=int(yearRange[1]))]
+        print("states are empty")
+    else:
+        # match stateName and yearRanges
+        crimeDonutDf = crimeDonutDf.loc[(
+            crimeDonutDf['state_name'].isin(stateName)) & (crimeDonutDf['year']>=int(yearRange[0])) & (crimeDonutDf['year']<=int(yearRange[1]))]
+        print(crimeDonutDf)
 
-    print("in crime chart")
-    print(stateName)
-    print(yearRange)
+
 
     # print(crimeDonutDf.sum(numeric_only=True).to_dict())
 
@@ -241,10 +245,23 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
 
 # start disaster type preprocessing
 def fetchDisasterTypes(disasterDf, stateName, yearRange):
+    print(stateName)
 
     # match state and yearRange
-    disasterDf = disasterDf.loc[(
-        disasterDf['state'].isin(stateName)) & disasterDf['fy_declared'].isin(yearRange)]
+    if not stateName:
+        print("here")
+        disasterDf = disasterDf.loc[(disasterDf['fy_declared']>=int(yearRange[0])) & (disasterDf['fy_declared']<=int(yearRange[1]))]
+    
+    else:
+        print("here1")
+        state_abbr_list = []
+        print(states_name_to_abbr)
+        for i in stateName:
+            print(i)
+            state_abbr_list.append(states_name_to_abbr[i])
+        disasterDf = disasterDf.loc[(
+        disasterDf['state'].isin(state_abbr_list)) & (disasterDf['fy_declared']>=int(yearRange[0])) & (disasterDf['fy_declared']<=int(yearRange[1]))]
+    
 
     # Count the type of each disaster
     disasterTypesDict = disasterDf['incident_type'].value_counts(

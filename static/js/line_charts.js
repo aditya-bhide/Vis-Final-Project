@@ -317,7 +317,7 @@ function multi_line_chart(data) {
     }
 
     states_trigger.registerListener(function (val) {
-        // console.log(Array.from(states))
+        console.log(Array.from(states))
         $(document).ready(function () {
             $.ajax({
                 type: 'POST',

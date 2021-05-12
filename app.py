@@ -91,6 +91,8 @@ class getCrimeDonutChart(Resource):
         state = args['state']
         yearList = args['yearList']
 
+        
+    
         # create a df copy to work on
         crimeDonutDf = crimeDataframe.copy()
 
@@ -99,6 +101,7 @@ class getCrimeDonutChart(Resource):
             crimeDonutDf, state, yearList)
 
         return jsonify({"data": crimeDonutDict, "yearList": yearList, "state": state, "totalCrimes": str(totalCrimes)})
+
 
 
 class getDisasterTypes(Resource):
@@ -119,6 +122,8 @@ class getDisasterTypes(Resource):
             disasterDf, state, yearList)
 
         return jsonify({"data": disasterTypesDict,  "yearList": yearList, "state": state,  "totalDisasters": str(totalDisasters)})
+
+
 
 
 api.add_resource(getPcpData, "/getPcpData")
