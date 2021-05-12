@@ -110,7 +110,7 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
     .attr('fill', function (d) { return (color(d.data.key)) })
     .attr("stroke", "black")
     .style("stroke-width", "1.5px")
-    .style("opacity", 0.7)
+    .style("opacity", 1)
 
   slices
     .on("mouseover", function (d) {
@@ -131,11 +131,14 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
         d3.selectAll(".my-paths")
           .attr("stroke", "#736f64")
           .style("stroke-width", "0.5px")
+          .style("opacity", "0.6")
+
 
         // Increase radius of current slice
         d3.select(this)
           .attr("stroke", "black")
           .style("stroke-width", "1.5px")
+          .style("opacity", "1")
           .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
       }
 
@@ -152,6 +155,7 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
         d3.selectAll(".my-paths")
           .attr("stroke", "black")
           .style("stroke-width", "1.5px")
+          .style("opacity", "1")
           .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
       }
 
@@ -174,6 +178,7 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
         d3.selectAll(".my-paths")
           .attr("stroke", "black")
           .style("stroke-width", "1.5px")
+          .style("opacity", "1")
           .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
 
         selectedDonutPath = false
@@ -182,12 +187,15 @@ async function createCrimeDonutChart(donutChartStateList, donutChartYearList) {
         d3.selectAll(".my-paths")
           .attr("stroke", "#736f64")
           .style("stroke-width", "0.5px")
+          .style("opacity", "0.6")
+
 
         // Increase radius of current slice
         d3.select(this)
           .attr("stroke", "black")
           .style("stroke-width", "1.5px")
           .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
+          .style("opacity", "1")
 
         selectedDonutPath = true
       }

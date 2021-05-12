@@ -106,12 +106,15 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         d3.selectAll(".radialBarChartPaths")
           .attr("stroke", "#736f64")
           .style("stroke-width", "0.3px")
+          .style("opacity", "0.2")
 
 
         // Increase selected path size
         d3.select(this)
           .attr("stroke", "black")
           .style("stroke-width", "0.6px")
+          .style("opacity", "1")
+
           .attr("d", d3.arc()
             .innerRadius(innerRadius)
             .outerRadius(function (d) { return y(d['count'] + 40); })
@@ -153,6 +156,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         d3.selectAll(".radialBarChartPaths")
           .attr("stroke", "black")
           .style("stroke-width", "0.6px")
+          .style("opacity", "1")
           .attr("d", d3.arc()     // imagine your doing a part of a donut plot
             .innerRadius(innerRadius)
             .outerRadius(function (d) { return y(d['count']); })
@@ -176,6 +180,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         d3.selectAll(".radialBarChartPaths")
           .attr("stroke", "black")
           .style("stroke-width", "0.6px")
+          .style("opacity", "1")
+
           .attr("d", d3.arc()     // imagine your doing a part of a donut plot
             .innerRadius(innerRadius)
             .outerRadius(function (d) { return y(d['count']); })
@@ -197,12 +203,15 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         d3.selectAll(".radialBarChartPaths")
           .attr("stroke", "#736f64")
           .style("stroke-width", "0.3px")
+          .style("opacity", "0.2")
+
 
 
         // Increase selected path size
         d3.select(this)
           .attr("stroke", "black")
           .style("stroke-width", "0.6px")
+          .style("opacity", "1")
           .attr("d", d3.arc()
             .innerRadius(innerRadius)
             .outerRadius(function (d) { return y(d['count'] + 40); })
