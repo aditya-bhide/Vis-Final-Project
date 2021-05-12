@@ -78,7 +78,7 @@ function US_map(data) {
         .attr("stop-opacity", 1);
 
     key.append("rect")
-        .attr("width", w - 40)
+        .attr("width", w - 50)
         .attr("height", h)
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
@@ -94,7 +94,7 @@ function US_map(data) {
 
     key.append("g")
         .attr("class", "y-axis")
-        .attr("transform", "translate(41,10)")
+        .attr("transform", "translate(31,10)")
         .call(yAxis)
 
     function update_US_map(data) {

@@ -82,6 +82,15 @@
     top: 30px;
 }
 
+#US-map-legend-svg .y-axis line,
+#US-map-legend-svg .y-axis path {
+    stroke: white;
+}
+
+#US-map-legend-svg .y-axis text {
+    fill: white;
+}
+
 #US-map-svg .axis text {
     font: 10px sans-serif;
 }
