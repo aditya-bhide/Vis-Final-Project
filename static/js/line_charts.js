@@ -267,8 +267,8 @@ function multi_line_chart(data) {
         d3.select(".axis--y").transition().duration(1000).call(yAxis);
         d3.select(".axis--y-R").transition().duration(1000).call(yAxisR);
 
-        d3.select('.line1').datum(data.line_chart_data_crime).attr('d', line1)
-        d3.select('.line2').datum(data.line_chart_data_disaster).attr('d', line2)
+        d3.select('.line1').datum(data.line_chart_data_crime).transition().duration(1000).attr('d', line1)
+        d3.select('.line2').datum(data.line_chart_data_disaster).transition().duration(1000).attr('d', line2)
 
         points1 = Line_chart1_points.selectAll('.dot1').data(data.line_chart_data_crime)
 
@@ -298,8 +298,8 @@ function multi_line_chart(data) {
 
         points2.exit().remove()
 
-        d3.select('.line1-mini').datum(data.line_chart_data_crime).attr('d', line1_mini)
-        d3.select('.line2-mini').datum(data.line_chart_data_disaster).attr('d', line2_mini)
+        d3.select('.line1-mini').datum(data.line_chart_data_crime).transition().duration(1000).attr('d', line1_mini)
+        d3.select('.line2-mini').datum(data.line_chart_data_disaster).transition().duration(1000).attr('d', line2_mini)
     }
 
     function brushed() {
@@ -393,7 +393,6 @@ function multi_line_chart(data) {
             year_range_trigger.a = parseInt(start_date)
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
-
         }
 
         d3.select('.line1').attr('d', line1)
@@ -431,7 +430,6 @@ function multi_line_chart(data) {
                 .style("top", (d3.event.pageY - 15) + "px")
                 .style("opacity", 1);
         }
-
     }
 
     function mouseout(d) {

@@ -83,19 +83,19 @@ function US_map(data) {
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
 
-    // console.log(data)
-    minVal = data.other_features.min_value
-    maxVal = data.other_features.max_value
-    var y = d3.scaleLinear()
-        .range([h, 0])
-        .domain([minVal, maxVal]);
+    // // console.log(data)
+    // minVal = data.other_features.min_value
+    // maxVal = data.other_features.max_value
+    // var y = d3.scaleLinear()
+    //     .range([h, 0])
+    //     .domain([minVal, maxVal]);
 
-    var yAxis = d3.axisRight(y);
+    // var yAxis = d3.axisRight(y);
 
-    key.append("g")
-        .attr("class", "y-axis")
-        .attr("transform", "translate(31,10)")
-        .call(yAxis)
+    // key.append("g")
+    //     .attr("class", "y-axis")
+    //     .attr("transform", "translate(31,10)")
+    //     .call(yAxis)
 
     function update_US_map(data) {
         features = data.other_features.feature_name
@@ -133,7 +133,7 @@ function US_map(data) {
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 15) + "px");
 
-            d3.select(this).style("stroke-width", 4)
+            d3.select(this).style("stroke-width", 1)
         }
 
         function mousemove(d) {
@@ -152,7 +152,18 @@ function US_map(data) {
         }
 
         function click(d) {
-            if (states.has(d.properties['name'])) {
+            console.log(d)
+            if (states.size == 0) {
+                states.add(d.properties['name'])
+                states_for_donut_chart.add(d.properties['name'])
+                states_for_radial_chart.add(d.properties['name'])
+
+                states_trigger.a = d.properties['name']
+                states_trigger_for_donut_chart.a = d.properties['name']
+                states_trigger_for_radial_chart.a = d.properties['name']
+
+                d3.select(this).style("fill", "red")
+            } else if (states.has(d.properties['name'])) {
                 d3.select(this).style("fill", function(d) {
                     return ramp(d.properties[features])
                 })
@@ -164,17 +175,8 @@ function US_map(data) {
                 states_trigger_for_donut_chart.a = d.properties['name']
                 states_trigger_for_radial_chart.a = d.properties['name']
 
-            } else if (states.size < 5) {
-                states.add(d.properties['name'])
-                states_for_donut_chart.add(d.properties['name'])
-                states_for_radial_chart.add(d.properties['name'])
+            } else if (states.size != 0) {
 
-
-                states_trigger.a = d.properties['name']
-                states_trigger_for_donut_chart.a = d.properties['name']
-                states_trigger_for_radial_chart.a = d.properties['name']
-
-                d3.select(this).style("fill", "red")
             }
         }
 
