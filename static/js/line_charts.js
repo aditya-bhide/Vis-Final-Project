@@ -31,10 +31,10 @@ function multi_line_chart(data) {
     yRAxisLabel = 'Disaster'
     xAxisLabel = 'Years'
 
-    svg.append("circle").attr("class", "dot1-legend").attr("cx", 470).attr("cy", 10).attr("r", 6)
-    svg.append("circle").attr("class", "dot2-legend").attr("cx", 470).attr("cy", 30).attr("r", 6)
-    svg.append("text").attr('class', 'text1-legend').attr("x", 480).attr("y", 10).text(yAxisLabel).attr("alignment-baseline", "middle")
-    svg.append("text").attr('class', 'text2-legend').attr("x", 480).attr("y", 30).text(yRAxisLabel).attr("alignment-baseline", "middle")
+    svg.append("circle").attr("class", "dot1-legend").attr("cx", 440).attr("cy", 10).attr("r", 6)
+    svg.append("circle").attr("class", "dot2-legend").attr("cx", 440).attr("cy", 30).attr("r", 6)
+    svg.append("text").attr('class', 'text1-legend').attr("x", 450).attr("y", 10).text(yAxisLabel).attr("alignment-baseline", "middle")
+    svg.append("text").attr('class', 'text2-legend').attr("x", 450).attr("y", 30).text(yRAxisLabel).attr("alignment-baseline", "middle")
 
     var x = d3.scaleLinear().range([0, width]),
         x2 = d3.scaleLinear().range([0, width]),
@@ -146,8 +146,8 @@ function multi_line_chart(data) {
 
 
     x.domain(d3.extent(data.line_chart_data_crime, d => xValue(d)))
-    y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d))]).nice()
-    yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d))]).nice()
+    y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.10]).nice()
+    yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.10]).nice()
 
     x2.domain(x.domain());
     y2.domain(y.domain());
@@ -168,7 +168,7 @@ function multi_line_chart(data) {
 
     focus.select(".axis--y").transition().duration(1000).call(yAxis);
     focus.select(".axis--y").append('text')
-        .attr("class", "axis-labels-yR")
+        .attr("class", "axis-labels-y")
         .attr('fill', 'black')
         .attr('y', -45)
         .attr('x', -height / 2)
@@ -179,7 +179,7 @@ function multi_line_chart(data) {
 
     focus.select(".axis--y-R").transition().duration(1000).call(yAxisR);
     focus.select(".axis--y-R").append('text')
-        .attr("class", "axis-labels")
+        .attr("class", "axis-labels-yR")
         .attr('fill', 'black')
         .attr('y', -47)
         .attr('x', height / 2)
@@ -246,8 +246,8 @@ function multi_line_chart(data) {
 
     function variableChange(data) {
         x.domain(d3.extent(data.line_chart_data_crime, d => xValue(d)))
-        y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d))]).nice()
-        yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d))]).nice()
+        y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.10]).nice()
+        yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.10]).nice()
 
         x2.domain(x.domain());
         y2.domain(y.domain());

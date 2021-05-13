@@ -4,7 +4,7 @@ function US_map(data_init) {
     var height = 370;
 
     var lowColor = 'White'
-    var highColor = 'Orange'
+    var highColor = '#ff8c00'
     var start_year = 0
     var end_year = 0
     console.log(year_range)
