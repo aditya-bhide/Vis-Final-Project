@@ -146,8 +146,8 @@ function multi_line_chart(data) {
 
 
     x.domain(d3.extent(data.line_chart_data_crime, d => xValue(d)))
-    y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.10]).nice()
-    yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.10]).nice()
+    y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.20]).nice()
+    yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.20]).nice()
 
     x2.domain(x.domain());
     y2.domain(y.domain());
@@ -172,7 +172,7 @@ function multi_line_chart(data) {
         .attr('fill', 'black')
         .attr('y', -45)
         .attr('x', -height / 2)
-        .text(yAxisLabel)
+        .text((yAxisLabel + " (in thousand)"))
         .style('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)');
 
@@ -246,8 +246,8 @@ function multi_line_chart(data) {
 
     function variableChange(data) {
         x.domain(d3.extent(data.line_chart_data_crime, d => xValue(d)))
-        y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.10]).nice()
-        yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.10]).nice()
+        y.domain([0, d3.max(data.line_chart_data_crime, d => yValue(d)) * 1.20]).nice()
+        yR.domain([0, d3.max(data.line_chart_data_disaster, d => yValueR(d)) * 1.20]).nice()
 
         x2.domain(x.domain());
         y2.domain(y.domain());
