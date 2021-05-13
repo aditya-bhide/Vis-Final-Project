@@ -297,6 +297,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
 
   states_trigger_for_radial_chart.registerListener(function (val) {
+    console.log(Array.from(states_for_radial_chart))
     $(document).ready(function () {
       updateRadialChart(Array.from(states_for_radial_chart), year_range)
     });
@@ -309,9 +310,11 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     });
   });
 
-  function updateRadialChart(states, year_range) {
-    getDisasterTypesData(states, year_range)
+  async function updateRadialChart(states, year_range) {
+    await getDisasterTypesData(states, year_range)
     let data = disasterTypesData
+    console.log(data)
+
     let maxCount = 0
     for (var i = 0; i < data.length; i++) {
       if (maxCount < data[i]['count']) {
