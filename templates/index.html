@@ -16,6 +16,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/radialBarChart.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/donutChart.css') }}" />
 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/horizontalBarChart.css') }}" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="static/js/framework/jquery-3.6.0.min.js"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
@@ -30,6 +32,7 @@
     <script src="../../static/js/pcp.js"></script>
     <script src="../../static/js/crime_donut_chart.js"></script>
     <script src="../../static/js/disasterTypes.js"></script>
+    <script src="../../static/js/horizontalBarChart.js"></script>
 
     <title>Document</title>
 </head>
@@ -41,13 +44,16 @@
 
     <div class="row with-space no-gutter">
         <!-- Start column for map -->
-        <div class="col-md-6 left-space-2 no-left-padding" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c">
+        <div class="col-md-6 left-space-2 no-left-padding" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c; padding-top: 1%">
             <div class="row no-gutter" style="margin-left: 40px">
+
                 <!-- Start column for legend -->
+                <div id="div-year-range-text" style="text-align: center; font-size: 1.5em; color:white"><span id="US-map-title-crime">All Crimes</span><span> from </span><span id="div-year-range-text-start">1979</span><span> - </span><span id="div-year-range-text-end">2019</span></div>
                 <div class="col-md-1 no-left-padding">
                     <div id="US-map-legend-svg" style="margin-top: 50px"></div>
                 </div>
                 <!-- End column for legend -->
+
                 <!-- Start column for map -->
                 <div class="col-md-5">
                     <div id="US-map-svg" style="margin-left: 20px; margin-top: 20px"></div>
@@ -58,21 +64,42 @@
         <!-- End column for map -->
 
         <!--start column for line chart-->
-        <div class="col-md-5 left-space-1" id="line-chart-svg" style="
+        <div class="col-md-5 left-space-1" style="
           background-color: #1e1f21;
           box-shadow: 4px 6px #171a1c;
           padding-top: 1%;
-        "></div>
+        ">
+            <div class="titles-all-graphs" style="text-align: center; font-size: 1.5em; color:white">
+                <span id="US-map-title-crime">Crime VS Disaster</span>
+            </div>
+
+            <div id="line-chart-svg"></div>
+        </div>
     </div>
 
     <div class="row with-space">
         <!--Start column for donut chart-->
-        <div class="col-md-4 left-space-2" id="crimeDonutChartId" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"></div>
+        <div class="col-md-4 left-space-2" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c; padding-top: 1%;">
+            <div class="titles-all-graphs" style="text-align: center; font-size: 1.5em; color:white">
+                <span id="US-map-title-crime">Crime Distribution</span>
+            </div>
+            <div id="crimeDonutChartId"></div>
+        </div>
         <!--end column for donut chart-->
 
         <!-- start column for radial bar chart-->
-        <div class="col-md-4 left-space-1" id="radialBarChartId" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c">
-            <!-- end column for radial bar chart-->
+        <div class="col-md-4 left-space-1" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c; padding-top: 1%">
+            <div class="titles-all-graphs" style="text-align: center; font-size: 1.5em; color:white">
+                <span id="US-map-title-crime">Disaster Distribution</span>
+            </div>
+            <div id="radialBarChartId"></div>
+        </div>
+        <!-- end column for radial bar chart-->
+        <div class="col-md-3 left-space-1" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c; padding-top: 1%">
+            <div class="titles-all-graphs" style="text-align: center; font-size: 1.5em; color:white">
+                <span id="US-map-title-crime">Top states with Disaster</span>
+            </div>
+            <div id="horizontalBarChartId"></div>
         </div>
     </div>
 

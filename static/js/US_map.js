@@ -8,6 +8,7 @@ function US_map(data_init) {
     var start_year = 0
     var end_year = 0
     console.log(year_range)
+    graphTitle = 'All Crimes'
 
     // D3 Projection
     var projection = d3.geoAlbersUsa()
@@ -333,6 +334,7 @@ function US_map(data_init) {
         end_year = 2019
         $('#amount1').text(start_year)
         $('#amount2').text(end_year)
+        $('#US-map-title-crime').text(humanize(crimesList))
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',

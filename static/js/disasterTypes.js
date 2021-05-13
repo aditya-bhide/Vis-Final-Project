@@ -349,7 +349,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                 .padAngle(0.01)
                 .padRadius(innerRadius))
 
-        path.transition().duration(100)
+        path
             .attr("d", d3.arc() // imagine your doing a part of a donut plot
                 .innerRadius(innerRadius)
                 .outerRadius(function(d) { return y(d['count']); })
@@ -357,7 +357,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                 .endAngle(function(d) { return x(d.incident_type) + x.bandwidth(); })
                 .padAngle(0.01)
                 .padRadius(innerRadius))
-            .delay(0)
+
 
         path
             .on("mouseover", function(d) {
