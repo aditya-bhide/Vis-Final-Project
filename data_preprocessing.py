@@ -159,12 +159,12 @@ def line_chart_begin():
     #     data_crime_chart['all_crimes']/data_crime_chart['population']) * 100000
     # data_crime_chart = data_crime_chart.astype({'crimes': int})
     data_crime_chart = data_crime_chart.groupby('year', as_index=False).sum()
-    data_crime_chart['crimes'] = data_crime_chart['all_crimes']/10000
+    data_crime_chart['crimes'] = data_crime_chart['all_crimes']/1000
     data_crime_chart_dict = data_crime_chart.to_dict('records')
 
-    # for i in range(len(data_crime_chart_dict)):
-    #     data_crime_chart_dict[i]['crimes'] = int(
-    #         data_crime_chart_dict[i]['crimes'])
+    for i in range(len(data_crime_chart_dict)):
+        data_crime_chart_dict[i]['crimes'] = int(
+            data_crime_chart_dict[i]['crimes'])
 
     data_disaster_chart = data_disaster[['fy_declared', 'incident_type']]
     # data_disaster_chart = data_disaster_chart.loc[data_disaster_chart['incident_type'] == selected_disaster]
@@ -195,12 +195,12 @@ def line_chart_update(selected_states="all", attribute_crime="all_crimes", selec
     # data_crime_chart = data_crime_chart.astype({'crimes': int})
     # data_crime_chart = data_crime_chart.groupby('year', as_index=False).mean()
     data_crime_chart = data_crime_chart.groupby('year', as_index=False).sum()
-    data_crime_chart['crimes'] = data_crime_chart[attribute_crime]/10000
+    data_crime_chart['crimes'] = data_crime_chart[attribute_crime]/1000
     data_crime_chart_dict = data_crime_chart.to_dict('records')
 
-    # for i in range(len(data_crime_chart_dict)):
-    #     data_crime_chart_dict[i]['crimes'] = int(
-    #         data_crime_chart_dict[i]['crimes'])
+    for i in range(len(data_crime_chart_dict)):
+        data_crime_chart_dict[i]['crimes'] = int(
+            data_crime_chart_dict[i]['crimes'])
 
     data_disaster_chart = data_disaster[['fy_declared', 'incident_type']]
     if selected_disaster == "all_disasters":
