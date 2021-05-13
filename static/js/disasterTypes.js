@@ -300,6 +300,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
   states_trigger_for_radial_chart.registerListener(function (val) {
     $(document).ready(function () {
+      console.log("trigger called")
       updateRadialChart(Array.from(states_for_radial_chart), year_range)
     });
   });
@@ -312,6 +313,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   });
 
   function updateRadialChart(states, year_range) {
+    console.log(Array.from(states_for_radial_chart))
+
     getDisasterTypesData(states, year_range)
     let data = disasterTypesData
     let maxCount = 0

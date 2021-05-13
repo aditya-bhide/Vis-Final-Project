@@ -1,5 +1,4 @@
 var states = new Set()
-
 var states_trigger = {
     aInternal: null,
     aListener: function (val) { },
@@ -33,6 +32,38 @@ var states_trigger_for_donut_chart = {
 
 var states_for_radial_chart = new Set()
 var states_trigger_for_radial_chart = {
+    aInternal: null,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+var states_for_horizontal_bar_chart = new Set()
+var states_trigger_for_horizontal_bar_chart = {
+    aInternal: null,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+var states_for_us_map = new Set()
+var states_trigger_for_us_map = {
     aInternal: null,
     aListener: function (val) { },
     set a(val) {

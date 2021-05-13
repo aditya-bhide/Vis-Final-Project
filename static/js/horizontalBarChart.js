@@ -1,4 +1,5 @@
 var disastersPerStateData, totalDisastersOccured
+var selectedHorizontalBarFlag = false, selectedHorizontalBarId = ""
 
 $(document).ready(function () {
   createHorizontalBarGraph(Array.from(disaster_list_for_horizontal_chart), year_range_for_horizontal_bar_chart)
@@ -41,6 +42,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
 
 
   // set the ranges
@@ -87,6 +89,9 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
   //append rects
   bars.append("rect")
     .attr("class", "bar")
+    .attr("id", function (d) {
+      return "horizontal-bar-" + d.state_name
+    })
     .attr("y", function (d) {
       return y(d.state_name);
     })
@@ -96,10 +101,18 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
       return x(d.count);
     })
     .style("fill", "red")
+    .on("mouseover", horizontalMouseOver)
+    .on("mousemove", horizontalMouseMove)
+    .on("mouseout", horizontalMouseOut)
+    .on("click", horizontalMouseClick)
 
   //add a value label to the right of each bar
   bars.append("text")
     .attr("class", "label")
+    .attr("id", function (d) {
+      return "horizontal-bar-label-" + d.state_name
+    })
+
     //y position of the label is halfway down the bar
     .attr("y", function (d) {
       return y(d.state_name) + y.bandwidth() / 2 + 4;
@@ -166,6 +179,9 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     //append rects
     let rect = newBars.append("rect")
       .attr("class", "bar")
+      .attr("id", function (d) {
+        return "horizontal-bar-" + d.state_name
+      })
       .attr("y", function (d) {
         return y(d.state_name);
       })
@@ -173,6 +189,10 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
       .attr("x", 0)
       .attr("width", 0)
       .style("fill", "red")
+      .on("mouseover", horizontalMouseOver)
+      .on("mousemove", horizontalMouseMove)
+      .on("mouseout", horizontalMouseOut)
+      .on("click", horizontalMouseClick)
 
     rect.transition().duration(400)
       .attr("y", function (d) {
@@ -186,9 +206,13 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
       .style("fill", "red")
 
 
+
     //add a value label to the right of each bar
     newBars.append("text")
       .attr("class", "label")
+      .attr("id", function (d) {
+        return "horizontal-bar-label-" + d.state_name
+      })
       //y position of the label is halfway down the bar
       .attr("y", function (d) {
         return y(d.state_name) + y.bandwidth() / 2 + 4;
@@ -201,6 +225,14 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         return d.count;
       })
       .style('fill', 'white')
+      .on("mouseover", horizontalMouseOver)
+      .on("mousemove", horizontalMouseMove)
+      .on("mouseout", horizontalMouseOut)
+      .on("click", horizontalMouseClick)
+
+    selectedHorizontalBarFlag = false
+    selectedHorizontalBarId = ""
+
 
   }
 
@@ -216,4 +248,97 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     });
   });
 
+
+  function horizontalMouseOver(d) {
+
+    // show tooltip
+
+
+    if (!selectedHorizontalBarFlag) {
+      // Blur all bars
+      d3.selectAll(".bar").style("opacity", 0.3)
+
+      // Highlight selected element
+      d3.select(this).style("opacity", 1)
+    }
+
+  }
+  function horizontalMouseMove(d) {
+  }
+  function horizontalMouseOut(d) {
+
+    if (!selectedHorizontalBarFlag) {
+      d3.selectAll(".bar").style("opacity", 1)
+    }
+  }
+  function horizontalMouseClick(d) {
+    //   if (selectedHorizontalBarFlag) {
+    //     if (this.id == selectedHorizontalBarId) {
+
+    //       d3.selectAll(".bar").style("opacity", 1)
+
+
+    //       states.clear()
+    //       states_for_donut_chart.clear()
+    //       states_for_radial_chart.clear()
+    //       states_for_us_map.clear()
+
+    //       states_trigger_for_donut_chart = d.state_name
+    //       states_trigger_for_radial_chart = d.state_name
+    //       states_trigger_for_us_map = d.state_name
+    //       states_trigger.a = d.state_name
+
+
+    //       selectedHorizontalBarFlag = false
+    //       selectedHorizontalBarId = ""
+
+
+
+    //     } else {
+    //       // Blur all bars
+    //       d3.selectAll(".bar").style("opacity", 0.3)
+
+    //       // Highlight selected element
+    //       d3.select(this).style("opacity", 1)
+
+
+    //       states.clear()
+    //       states_for_donut_chart.clear()
+    //       states_for_radial_chart.clear()
+    //       states_for_us_map.clear()
+
+    //       states.add(d.state_name)
+    //       states_for_donut_chart.add(d.state_name)
+    //       states_for_radial_chart.add(d.state_name)
+    //       states_for_us_map.add(d.state_name)
+
+    //       states_trigger_for_donut_chart = d.state_name
+    //       states_trigger_for_radial_chart = d.state_name
+    //       states_trigger_for_us_map = d.state_name
+    //       states_trigger.a = d.state_name
+
+    //       selectedHorizontalBarId = this.id
+    //     }
+    //   }
+    //   else {
+    //     // Blur all bars
+    //     d3.selectAll(".bar").style("opacity", 0.3)
+
+    //     // Highlight selected element
+    //     d3.select(this).style("opacity", 1)
+
+    //     states.add(d.state_name)
+    //     states_for_donut_chart.add(d.state_name)
+    //     states_for_radial_chart.add(d.state_name)
+    //     states_for_us_map.add(d.state_name)
+
+    //     states_trigger_for_donut_chart = d.state_name
+    //     states_trigger_for_radial_chart = d.state_name
+    //     states_trigger_for_us_map = d.state_name
+    //     states_trigger.a = d.state_name
+
+    //     selectedHorizontalBarFlag = true
+    //     selectedHorizontalBarId = this.id
+    //   }
+  }
 }

@@ -156,4 +156,4 @@ if __name__ == "__main__":
     crimeDataframe = crime_db()
     disasterDataframe = disaster_db()
     # print(final_data)
-    app.run(debug=False)
+    app.run(debug=True)

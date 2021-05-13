@@ -33,7 +33,6 @@ def disaster_db():
 
 def crime_db():
     df = pd.read_csv("data/crime_dataset.csv", index_col=False)
-    print(df.columns)
     for i, rows in df.iterrows():
         if rows['state_name'] not in states_name_to_abbr:
             states_name_to_abbr[rows['state_name']] = rows['state_abbr']
