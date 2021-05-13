@@ -459,12 +459,12 @@ function multi_line_chart(data) {
     function mouseover(d) {
         // console.log(d)
         if ("crimes" in d) {
-            div.html(`Crime Value: ${yValue(d)}`)
+            div.html(`Year: ${xValue(d)}    Crime Value: ${yValue(d)}`)
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 15) + "px")
                 .style("opacity", 1);
         } else {
-            div.html(`Disaster Value: ${yValueR(d)}`)
+            div.html(`Year: ${xValue(d)}    Disaster Value: ${yValueR(d)}`)
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 15) + "px")
                 .style("opacity", 1);
