@@ -1,57 +1,65 @@
 #project-heading {
-  text-align: center;
+    text-align: center;
 }
 
 #project-name {
-  /* font-size: 3.5em; */
-  color: white;
+    /* font-size: 3.5em; */
+    color: white;
 }
 
 .grid-container {
-  display: grid;
-  grid-gap: 10px;
-  padding: 10px;
+    display: grid;
+    grid-gap: 10px;
+    padding: 10px;
 }
 
 .grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  padding: 20px;
-  font-size: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
 }
 
 .item1 {
-  grid-column: 1;
-  grid-row: 1;
+    grid-column: 1;
+    grid-row: 1;
 }
 
 .item2 {
-  grid-column: 2;
-  grid-row: 1;
+    grid-column: 2;
+    grid-row: 1;
 }
 
 .item3 {
-  grid-column: 1;
-  grid-row: 2;
+    grid-column: 1;
+    grid-row: 2;
 }
 
 .item4 {
-  grid-column: 2;
-  grid-row: 2;
+    grid-column: 2;
+    grid-row: 2;
 }
 
 .with-space {
-  margin-top: 1%;
+    margin-top: 1%;
 }
 
 .left-space-2 {
-  margin-left: 2%;
+    margin-left: 2%;
 }
 
 .left-space-1 {
-  margin-left: 1%;
+    margin-left: 1%;
+}
+
+.left-space-3 {
+    margin-left: 3%;
+}
+
+.left-space-5 {
+    margin-left: 0.5%;
 }
 
 .no-left-padding {
-  padding-left: 0% important!;
+    padding-left: 0% important!;
 }
