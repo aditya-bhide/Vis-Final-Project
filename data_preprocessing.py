@@ -306,7 +306,7 @@ def fetchStatesWithMaxDisasters(disasterDf, disasterTypeList, yearRange):
 
     for i in disastersPerStateDict:
         i['state_name'] = states_abbr_to_name[i['state_name']]
-
+    print(disastersPerStateDict)
     totalDisastersOccured = disasterDf['state'].value_counts().sum()
 
     return disastersPerStateDict, totalDisastersOccured

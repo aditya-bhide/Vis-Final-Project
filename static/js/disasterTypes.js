@@ -236,10 +236,12 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                     selectedRadialBarId = d.incident_type
                     disasterList = d.incident_type
                     disasterListTrigger_line_chart.a = d.incident_type
+                    disaster_list_for_horizontal_chart.clear()
                     disaster_list_for_horizontal_chart.add(d.incident_type)
                     disaster_list_trigger_for_horizontal_chart.a = d.incident_type
                 }
             } else {
+
                 // Blur other paths
                 d3.selectAll(".radialBarChartPaths")
                     .attr("stroke", "#736f64")
@@ -265,10 +267,12 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                 // d3.select(this.parentNode).selectAll(".radialLabelClass")
                 //     .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
                 //     .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
-
+                console.log(disaster_list_for_horizontal_chart)
                 disasterList = d.incident_type
                 disasterListTrigger_line_chart.a = d.incident_type
                 disaster_list_for_horizontal_chart.add(d.incident_type)
+                console.log(disaster_list_for_horizontal_chart)
+
                 disaster_list_trigger_for_horizontal_chart.a = d.incident_type
                 selectedRadialBarFlag = true
                 selectedRadialBarId = d.incident_type
@@ -364,6 +368,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                     selectedRadialBarId = d.incident_type
                     disasterList = d.incident_type
                     disasterListTrigger_line_chart.a = d.incident_type
+                    disaster_list_for_horizontal_chart.clear()
+
                     disaster_list_for_horizontal_chart.add(d.incident_type)
                     disaster_list_trigger_for_horizontal_chart.a = d.incident_type
                 }
@@ -631,6 +637,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                         selectedRadialBarId = d.incident_type
                         disasterList = d.incident_type
                         disasterListTrigger_line_chart.a = d.incident_type
+                        disaster_list_for_horizontal_chart.clear()
                         disaster_list_for_horizontal_chart.add(d.incident_type)
                         disaster_list_trigger_for_horizontal_chart.a = d.incident_type
                     }
@@ -758,6 +765,8 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
                         selectedRadialBarId = d.incident_type
                         disasterList = d.incident_type
                         disasterListTrigger_line_chart.a = d.incident_type
+                        disaster_list_for_horizontal_chart.clear()
+
                         disaster_list_for_horizontal_chart.add(d.incident_type)
                         disaster_list_trigger_for_horizontal_chart.a = d.incident_type
                     }
