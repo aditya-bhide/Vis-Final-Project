@@ -1,4 +1,4 @@
-function US_map(data) {
+function US_map(data_init) {
 
     var width = 560;
     var height = 370;
@@ -7,6 +7,7 @@ function US_map(data) {
     var highColor = 'Orange'
     var start_year = 0
     var end_year = 0
+    console.log(year_range)
 
     // D3 Projection
     var projection = d3.geoAlbersUsa()
@@ -40,7 +41,7 @@ function US_map(data) {
     svg.call(zoom);
 
     g.selectAll("path")
-        .data(data.features)
+        .data(data_init.features)
         .enter()
         .append("path")
         .attr("d", path)
@@ -83,27 +84,28 @@ function US_map(data) {
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
 
-    // // console.log(data)
-    // minVal = data.other_features.min_value
-    // maxVal = data.other_features.max_value
-    // var y = d3.scaleLinear()
-    //     .range([h, 0])
-    //     .domain([minVal, maxVal]);
+    minVal = data_init.other_features.min_value
+    maxVal = data_init.other_features.max_value
+    var y = d3.scaleLinear()
+        .range([h, 0])
+        .domain([minVal, maxVal]);
 
-    // var yAxis = d3.axisRight(y);
+    var yAxis = d3.axisRight(y);
 
-    // key.append("g")
-    //     .attr("class", "y-axis")
-    //     .attr("transform", "translate(31,10)")
-    //     .call(yAxis)
+    key.append("g")
+        .attr("class", "y-axis")
+        .attr("transform", "translate(31,10)")
+        .call(yAxis)
+
+
 
     function update_US_map(data) {
+        console.log(data)
         features = data.other_features.feature_name
         minVal = data.other_features.min_value
         maxVal = data.other_features.max_value
         var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor])
             // Bind the data to the SVG and create one path per GeoJSON feature
-
         g.selectAll("path")
             .data(data.features)
             .on("mouseover", mouseover)
@@ -111,12 +113,24 @@ function US_map(data) {
             .on("mousemove", mousemove)
             .on("click", click)
             .style("stroke", "#FFFFFF")
-            .style("stroke-width", 1)
-            .style("fill", function(d) {
-                if (!states.has(d.properties['name'])) {
-                    return ramp(d.properties[features])
+            .style("stroke-width", function(d) {
+                if (states.has(d.properties['name'])) {
+                    return 4
                 } else {
-                    return "red"
+                    return 1
+                }
+            })
+            .style("fill", function(d) {
+                return ramp(d.properties[features])
+            })
+            .style("opacity", function(d) {
+                if (states.size == 0) {
+                    return 1
+                }
+                if (states.has(d.properties['name'])) {
+                    return 1
+                } else {
+                    return 0.5
                 }
             });
 
@@ -128,12 +142,29 @@ function US_map(data) {
             div.transition()
                 .duration(100)
                 .style("opacity", 1);
-
             div.html(`${d.properties['name']} : ${d.properties[features]}`)
                 .style("left", (d3.event.pageX + 10) + "px")
                 .style("top", (d3.event.pageY - 15) + "px");
 
-            d3.select(this).style("stroke-width", 1)
+            g.selectAll("path")
+                .data(data.features)
+                .style("stroke-width", function(d) {
+                    if (states.has(d.properties['name'])) {
+                        return 4
+                    } else {
+                        return 1
+                    }
+                })
+                .style("fill", f => ramp(f.properties[features]))
+                .style("opacity", function(f) {
+                    if (states.has(f.properties['name'])) {
+                        return 1
+                    } else if (f.properties['name'] == d.properties['name']) {
+                        return 1
+                    } else {
+                        return 0.50
+                    }
+                })
         }
 
         function mousemove(d) {
@@ -147,12 +178,29 @@ function US_map(data) {
                 .duration('200')
                 .style("opacity", 0);
 
-            d3.select(this).style("stroke-width", 1)
-
+            g.selectAll("path")
+                .data(data.features)
+                .style("stroke-width", function(d) {
+                    if (states.has(d.properties['name'])) {
+                        return 4
+                    } else {
+                        return 1
+                    }
+                })
+                .style("fill", f => ramp(f.properties[features]))
+                .style("opacity", function(f) {
+                    if (states.size == 0) {
+                        return 1
+                    }
+                    if (states.has(f.properties['name'])) {
+                        return 1
+                    } else {
+                        return 0.50
+                    }
+                })
         }
 
         function click(d) {
-            console.log(d)
             if (states.size == 0) {
                 states.add(d.properties['name'])
                 states_for_donut_chart.add(d.properties['name'])
@@ -162,11 +210,25 @@ function US_map(data) {
                 states_trigger_for_donut_chart.a = d.properties['name']
                 states_trigger_for_radial_chart.a = d.properties['name']
 
-                d3.select(this).style("fill", "red")
+                g.selectAll("path")
+                    .data(data.features)
+                    .style("stroke-width", function(f) {
+                        if (states.has(f.properties['name'])) {
+                            return 4
+                        } else {
+                            return 1
+                        }
+                    })
+                    .style("fill", f => ramp(f.properties[features]))
+                    .style("opacity", function(f) {
+                        if (states.has(f.properties['name'])) {
+                            return 1
+                        } else {
+                            return 0.5
+                        }
+                    });
+
             } else if (states.has(d.properties['name'])) {
-                d3.select(this).style("fill", function(d) {
-                    return ramp(d.properties[features])
-                })
                 states_for_donut_chart.delete(d.properties['name'])
                 states_for_radial_chart.delete(d.properties['name'])
                 states.delete(d.properties['name'])
@@ -175,8 +237,42 @@ function US_map(data) {
                 states_trigger_for_donut_chart.a = d.properties['name']
                 states_trigger_for_radial_chart.a = d.properties['name']
 
-            } else if (states.size != 0) {
+                g.selectAll("path")
+                    .data(data.features)
+                    .style("stroke-width", 1)
+                    .style("fill", f => ramp(f.properties[features]))
+                    .style("opacity", 1);
 
+            } else if (states.size != 0) {
+                states_for_donut_chart.clear()
+                states_for_radial_chart.clear()
+                states.clear()
+
+                states.add(d.properties['name'])
+                states_for_donut_chart.add(d.properties['name'])
+                states_for_radial_chart.add(d.properties['name'])
+
+                states_trigger.a = d.properties['name']
+                states_trigger_for_donut_chart.a = d.properties['name']
+                states_trigger_for_radial_chart.a = d.properties['name']
+
+                g.selectAll("path")
+                    .data(data.features)
+                    .style("stroke-width", function(d) {
+                        if (states.has(d.properties['name'])) {
+                            return 4
+                        } else {
+                            return 1
+                        }
+                    })
+                    .style("fill", f => ramp(f.properties[features]))
+                    .style("opacity", function(d) {
+                        if (states.has(d.properties['name'])) {
+                            return 1
+                        } else {
+                            return 0.5
+                        }
+                    });
             }
         }
 
@@ -207,11 +303,11 @@ function US_map(data) {
         if (d3.event.defaultPrevented) d3.event.stopPropagation();
     }
 
-
-    update_US_map(data)
+    update_US_map(data_init)
 
 
     year_range_trigger.registerListener(function(val) {
+        console.log("wtf is happening in years", year_range_trigger.a)
         start_year = year_range[0]
         end_year = year_range[1];
         $('#amount1').text(start_year)
@@ -232,6 +328,7 @@ function US_map(data) {
     });
 
     crimeListTrigger_us_map.registerListener(function(val) {
+        console.log("wtf is happening in crime")
         start_year = 1979
         end_year = 2019
         console.log(crimesList)

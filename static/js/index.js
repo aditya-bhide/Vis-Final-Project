@@ -2,7 +2,7 @@ var states = new Set()
 
 var states_trigger = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -10,7 +10,7 @@ var states_trigger = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -18,7 +18,7 @@ var states_trigger = {
 var states_for_donut_chart = new Set()
 var states_trigger_for_donut_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -26,7 +26,7 @@ var states_trigger_for_donut_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -34,7 +34,7 @@ var states_trigger_for_donut_chart = {
 var states_for_radial_chart = new Set()
 var states_trigger_for_radial_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -42,16 +42,16 @@ var states_trigger_for_radial_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
 
 
-var year_range = [2010, 2019]
+var year_range = [1979, 2019]
 var year_range_trigger = {
     aInternal: 1000,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -59,15 +59,15 @@ var year_range_trigger = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
 
-var year_range_for_donut_chart = [2010, 2019]
+var year_range_for_donut_chart = [1979, 2019]
 var year_range_trigger_for_donut_chart = {
     aInternal: 1000,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -75,16 +75,16 @@ var year_range_trigger_for_donut_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
 
 
-var year_range_for_radial_chart = [2010, 2019]
+var year_range_for_radial_chart = [1979, 2019]
 var year_range_trigger_for_radial_chart = {
     aInternal: 1000,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -92,7 +92,7 @@ var year_range_trigger_for_radial_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -101,7 +101,7 @@ var year_range_trigger_for_radial_chart = {
 var crimesList = "all_crimes"
 var crimeListTrigger_us_map = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -109,13 +109,13 @@ var crimeListTrigger_us_map = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
 var crimeListTrigger_line_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -123,7 +123,7 @@ var crimeListTrigger_line_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -131,7 +131,7 @@ var crimeListTrigger_line_chart = {
 var disasterList = "all_disasters"
 var disasterListTrigger_line_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -139,7 +139,7 @@ var disasterListTrigger_line_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }

@@ -5,7 +5,7 @@ function multi_line_chart(data) {
         .append('svg')
         .attr("width", 600)
         .attr("height", 390);
-
+    ticks_values = [1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
     var svg = d3.select("#line-chart-svg svg"),
         margin = {
             top: 10,
@@ -253,6 +253,8 @@ function multi_line_chart(data) {
         y2.domain(y.domain());
         y2R.domain(yR.domain());
 
+        // d3.select('.brush').call(brush.move, x.range())
+
         if (crimesList == 'all_crimes') {
             d3.select(".text1-legend").text(yAxisLabel)
         } else {
@@ -306,12 +308,16 @@ function multi_line_chart(data) {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         var s = d3.event.selection || x2.range();
         x.domain(s.map(x2.invert, x2));
+        console.log()
         start_date = parseInt(s.map(x2.invert, x2)[0])
         end_date = parseInt(s.map(x2.invert, x2)[1])
         if ((start_date != parseInt(year_range[0]) && start_date != null) || (end_date != parseInt(year_range[1]) && end_date != null)) {
             year_range_trigger.a = parseInt(start_date)
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
+
+            $("#div-year-range-text-start").text(year_range[0])
+            $("#div-year-range-text-end").text(year_range[1])
 
             year_range_trigger_for_donut_chart.a = parseInt(start_date)
             year_range_for_donut_chart[0] = parseInt(start_date)
@@ -344,7 +350,7 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-                    console.log(response)
+                        // console.log(response)
                 },
                 error: function(error) {
                     console.log(error);
@@ -354,7 +360,7 @@ function multi_line_chart(data) {
     });
 
     crimeListTrigger_line_chart.registerListener(function(val) {
-        console.log("crimeListTrigger in line chart")
+        // console.log("crimeListTrigger in line chart")
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
@@ -363,7 +369,7 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-                    console.log(response)
+                        // console.log(response)
                 },
                 error: function(error) {
                     console.log(error);
@@ -373,7 +379,7 @@ function multi_line_chart(data) {
     });
 
     disasterListTrigger_line_chart.registerListener(function(val) {
-        console.log("disaster trigger in line chart")
+        // console.log("disaster trigger in line chart")
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
@@ -382,7 +388,7 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-                    console.log(response)
+                        // console.log(response)
                 },
                 error: function(error) {
                     console.log(error);
@@ -395,12 +401,16 @@ function multi_line_chart(data) {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
         var t = d3.event.transform;
         x.domain(t.rescaleX(x2).domain());
+
         start_date = parseInt(t.rescaleX(x2).domain()[0])
         end_date = parseInt(t.rescaleX(x2).domain()[1])
         if ((start_date != parseInt(year_range[0]) && start_date != null) || (end_date != parseInt(year_range[1]) && end_date != null)) {
             year_range_trigger.a = parseInt(start_date)
             year_range[0] = parseInt(start_date)
             year_range[1] = parseInt(end_date)
+
+            $("#div-year-range-text-start").text(year_range[0])
+            $("#div-year-range-text-end").text(year_range[1])
 
             year_range_trigger_for_donut_chart.a = parseInt(start_date)
             year_range_for_donut_chart[0] = parseInt(start_date)
@@ -436,7 +446,7 @@ function multi_line_chart(data) {
         .style("opacity", 0);
 
     function mouseover(d) {
-        console.log(d)
+        // console.log(d)
         if ("crimes" in d) {
             div.html(`Crime Value: ${yValue(d)}`)
                 .style("left", (d3.event.pageX + 10) + "px")
