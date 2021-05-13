@@ -98,6 +98,23 @@ var year_range_trigger_for_radial_chart = {
 }
 
 
+var year_range_for_horizontal_bar_chart = [1979, 2019]
+var year_range_trigger_for_horizontal_bar_chart = {
+    aInternal: 1000,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+
 var crimesList = "all_crimes"
 var crimeListTrigger_us_map = {
     aInternal: null,
@@ -140,6 +157,22 @@ var disasterListTrigger_line_chart = {
         return this.aInternal;
     },
     registerListener: function(listener) {
+        this.aListener = listener;
+    }
+}
+
+var disaster_list_for_horizontal_chart = new Set()
+var disaster_list_trigger_for_horizontal_chart = {
+    aInternal: null,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
         this.aListener = listener;
     }
 }

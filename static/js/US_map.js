@@ -331,7 +331,6 @@ function US_map(data_init) {
         console.log("wtf is happening in crime")
         start_year = 1979
         end_year = 2019
-        console.log(crimesList)
         $('#amount1').text(start_year)
         $('#amount2').text(end_year)
         $(document).ready(function() {

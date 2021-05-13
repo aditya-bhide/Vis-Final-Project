@@ -5,7 +5,7 @@ import json
 # from preprocess import get_state_data
 # from data_preprocessing import merge_db
 from data_preprocessing import us_begin, us_update, line_chart_begin, line_chart_update
-from data_preprocessing import crime_db, disaster_db, fetchAllCrimesForStateAndYears, fetchDisasterTypes
+from data_preprocessing import crime_db, disaster_db, fetchAllCrimesForStateAndYears, fetchDisasterTypes, fetchStatesWithMaxDisasters
 from data_preprocessing import us_begin, us_update
 
 
@@ -22,6 +22,7 @@ def index():
     # return render_template("index.html", data=data)
     return render_template("index.html")
 
+
 @app.route("/init_All", methods=["POST", "GET"])
 def init_All():
     if request.method == "POST":
@@ -29,7 +30,8 @@ def init_All():
         line_chart_data_crime, line_chart_data_disaster = line_chart_begin()
         data = {}
         data['US_begin'] = us_map_data
-        data['line_chart_begin'] = {'line_chart_data_crime': line_chart_data_crime, 'line_chart_data_disaster': line_chart_data_disaster}
+        data['line_chart_begin'] = {
+            'line_chart_data_crime': line_chart_data_crime, 'line_chart_data_disaster': line_chart_data_disaster}
         # data_json = json.dumps(raw_data, indent=2)
         return data
     else:
@@ -48,13 +50,15 @@ def update_US():
     else:
         print("ERROR")
 
+
 @app.route("/update_line_chart", methods=["POST", "GET"])
 def update_line_chart():
     if request.method == "POST":
         data_requested = request.get_json()
-        data_crime_chart_dict, data_disaster_chart_dict = line_chart_update(data_requested['states'], data_requested['crimes'], data_requested['disasters'])
-        data = {'line_chart_data_crime':data_crime_chart_dict, 'line_chart_data_disaster': data_disaster_chart_dict}
-        print(data_requested)
+        data_crime_chart_dict, data_disaster_chart_dict = line_chart_update(
+            data_requested['states'], data_requested['crimes'], data_requested['disasters'])
+        data = {'line_chart_data_crime': data_crime_chart_dict,
+                'line_chart_data_disaster': data_disaster_chart_dict}
         return data
     else:
         print("ERROR")
@@ -93,8 +97,6 @@ class getCrimeDonutChart(Resource):
         state = args['state']
         yearList = args['yearList']
 
-        
-    
         # create a df copy to work on
         crimeDonutDf = crimeDataframe.copy()
 
@@ -103,7 +105,6 @@ class getCrimeDonutChart(Resource):
             crimeDonutDf, state, yearList)
 
         return jsonify({"data": crimeDonutDict, "yearList": yearList, "state": state, "totalCrimes": str(totalCrimes)})
-
 
 
 class getDisasterTypes(Resource):
@@ -115,7 +116,6 @@ class getDisasterTypes(Resource):
 
         state = args['state']
         yearList = args['yearList']
-
         # create a df copy to work on
         disasterDf = disasterDataframe.copy()
 
@@ -126,11 +126,29 @@ class getDisasterTypes(Resource):
         return jsonify({"data": disasterTypesDict,  "yearList": yearList, "state": state,  "totalDisasters": str(totalDisasters)})
 
 
+class getDisasterStateStats(Resource):
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('disasterTypeList', type=str, action="append")
+        parser.add_argument('yearList', type=str, action="append")
+        args = parser.parse_args()
+
+        disasterTypeList = args['disasterTypeList']
+        yearList = args['yearList']
+
+        # create a df copy to work on
+        disasterDf = disasterDataframe.copy()
+
+        disastersPerStateDict, totalDisastersOccured = fetchStatesWithMaxDisasters(
+            disasterDf, disasterTypeList, yearList)
+
+        return jsonify({"data": disastersPerStateDict,  "yearList": yearList,  "totalDisasters": str(totalDisastersOccured)})
 
 
 api.add_resource(getPcpData, "/getPcpData")
 api.add_resource(getCrimeDonutChart, "/getCrimeDonutChart")
 api.add_resource(getDisasterTypes, "/getDisasterTypes")
+api.add_resource(getDisasterStateStats, "/getDisasterStateStats")
 
 
 if __name__ == "__main__":
@@ -138,4 +156,4 @@ if __name__ == "__main__":
     crimeDataframe = crime_db()
     disasterDataframe = disaster_db()
     # print(final_data)
-    app.run(debug=True)
+    app.run(debug=False)

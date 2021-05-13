@@ -1,20 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="shortcut icon" href="#" />
 
     <!-- Latest compiled and minified CSS using Bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/us_map.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/us_map.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/index.css') }}"
+    />
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/main.css') }}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/main.css') }}"
+    />
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/radialBarChart.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/donutChart.css') }}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/radialBarChart.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/donutChart.css') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='css/horizontalBarChart.css') }}"
+    />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="static/js/framework/jquery-3.6.0.min.js"></script>
@@ -30,15 +60,17 @@
     <script src="../../static/js/pcp.js"></script>
     <script src="../../static/js/crime_donut_chart.js"></script>
     <script src="../../static/js/disasterTypes.js"></script>
+    <script src="../../static/js/horizontalBarChart.js"></script>
 
     <title>Document</title>
-</head>
+  </head>
 
-<body style="background-color: #23282d">
+  <body style="background-color: #23282d">
     <div id="project-heading">
-        <h3 id="project-name">Crime and Disaster Data Analysis</h3>
+      <h3 id="project-name">Crime and Disaster Data Analysis</h3>
     </div>
     <div class="row with-space no-gutter">
+<<<<<<< HEAD
         <!-- Start column for map -->
         <div class="col-md-6 left-space-2 no-left-padding" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c">
             <div id="div-year-range-text" style="text-align: center; font-size: 1.5em; color:white"><span>Year Range: </span><span id="div-year-range-text-start">1979</span><span> - </span><span id="div-year-range-text-end">2019</span></div>
@@ -55,46 +87,83 @@
                 </div>
                 <!-- End column for map -->
             </div>
+=======
+      <!-- Start column for map -->
+      <div
+        class="col-md-6 left-space-2 no-left-padding"
+        style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"
+      >
+        <div class="row no-gutter" style="margin-left: 40px">
+          <!-- Start column for legend -->
+          <div class="col-md-1 no-left-padding">
+            <div id="US-map-legend-svg" style="margin-top: 50px"></div>
+          </div>
+          <!-- End column for legend -->
+          <!-- Start column for map -->
+          <div class="col-md-5">
+            <div
+              id="US-map-svg"
+              style="margin-left: 20px; margin-top: 20px"
+            ></div>
+          </div>
+          <!-- End column for map -->
+>>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
         </div>
-        <!-- End column for map -->
+      </div>
+      <!-- End column for map -->
 
-        <!--start column for line chart-->
-        <div class="col-md-5 left-space-1" id="line-chart-svg" style="
+      <!--start column for line chart-->
+      <div
+        class="col-md-5 left-space-1"
+        id="line-chart-svg"
+        style="
           background-color: #1e1f21;
           box-shadow: 4px 6px #171a1c;
           padding-top: 1%;
-        "></div>
+        "
+      ></div>
     </div>
 
     <div class="row with-space">
-        <!--Start column for donut chart-->
-        <div class="col-md-4 left-space-2" id="crimeDonutChartId" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"></div>
-        <!--end column for donut chart-->
+      <!--Start column for donut chart-->
+      <div
+        class="col-md-4 left-space-2"
+        id="crimeDonutChartId"
+        style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"
+      ></div>
+      <!--end column for donut chart-->
 
-        <!-- start column for radial bar chart-->
-        <div class="col-md-4 left-space-1" id="radialBarChartId" style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c">
-            <!-- end column for radial bar chart-->
-        </div>
+      <!-- start column for radial bar chart-->
+      <div
+        class="col-md-4 left-space-1"
+        id="radialBarChartId"
+        style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"
+      ></div>
+      <!-- end column for radial bar chart-->
+      <div
+        class="col-md-3 left-space-1"
+        id="horizontalBarChartId"
+        style="background-color: #1e1f21; box-shadow: 4px 6px #171a1c"
+      ></div>
     </div>
 
     <script>
-        //Width and height of map
-        data = null;
-        $(document).ready(function() {
-            $.ajax({
-                type: "POST",
-                url: "http://127.0.0.1:5000/init_All",
-                data: null,
-                success: function(response) {
-                    US_map(response.US_begin);
-                    multi_line_chart(response.line_chart_begin);
-                },
-                error: function(error) {
-                    console.log(error);
-                },
-            });
+      //Width and height of map
+      data = null;
+      $(document).ready(function () {
+        $.ajax({
+          type: "POST",
+          url: "http://127.0.0.1:5000/init_All",
+          data: null,
+          success: function (response) {
+            US_map(response.US_begin);
+            multi_line_chart(response.line_chart_begin);
+          },
+          error: function (error) {
+            console.log(error);
+          },
         });
+      });
     </script>
-</body>
-
+  </body>
 </html>
