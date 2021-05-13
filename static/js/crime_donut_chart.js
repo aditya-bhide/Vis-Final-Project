@@ -22,20 +22,10 @@ async function getDonutChartData(states, year_range) {
     var response_json = await response.json()
     crimeDonutChartData = response_json['data']
     totalCrimes = response_json['totalCrimes']
-<<<<<<< HEAD
-        // console.log(totalCrimes)
-        // console.log(crimeDonutChartData)
-=======
-
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
 
 }
 
 async function createCrimeDonutChart(states, year_range) {
-<<<<<<< HEAD
-    // console.log(states)
-=======
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
     await getDonutChartData(states, year_range)
 
     // set the dimensions and margins of the graph
@@ -45,7 +35,7 @@ async function createCrimeDonutChart(states, year_range) {
 
     var data = crimeDonutChartData
     console.log(data)
-    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     var radius = Math.min(width, height) / 2.5 - margin
     var innerRadius = 50
 
@@ -189,8 +179,7 @@ async function createCrimeDonutChart(states, year_range) {
                     crimeListTrigger_line_chart.a = "all_crimes"
                     crimeListTrigger_us_map.a = "all_crimes"
 
-                }
-                else {
+                } else {
                     // Blur other slices
                     d3.selectAll(".my-paths")
                         .attr("stroke", "#736f64")
@@ -258,12 +247,7 @@ async function createCrimeDonutChart(states, year_range) {
 
     legendlabels = legendGroup
         .append("text")
-<<<<<<< HEAD
         .text(function(d) {
-            // console.log(d.data.key)
-=======
-        .text(function (d) {
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
             return d.data.key
         })
         .attr("x", legendLabelX)
@@ -283,14 +267,8 @@ async function createCrimeDonutChart(states, year_range) {
         .attr("class", "white-font")
         .style("font-size", 24)
 
-<<<<<<< HEAD
     states_trigger_for_donut_chart.registerListener(function(val) {
         $(document).ready(function() {
-            // console.log(states_for_donut_chart)
-=======
-    states_trigger_for_donut_chart.registerListener(function (val) {
-        $(document).ready(function () {
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
             updateDonutChart(Array.from(states_for_donut_chart), year_range)
         });
     });
@@ -414,8 +392,7 @@ async function createCrimeDonutChart(states, year_range) {
                         crimeListTrigger_line_chart.a = "all_crimes"
                         crimeListTrigger_us_map.a = "all_crimes"
 
-                    }
-                    else {
+                    } else {
                         // Blur other slices
                         d3.selectAll(".my-paths")
                             .attr("stroke", "#736f64")

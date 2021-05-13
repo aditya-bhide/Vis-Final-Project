@@ -344,14 +344,8 @@ function multi_line_chart(data) {
             .translate(-s[0], 0));
     }
 
-<<<<<<< HEAD
     states_trigger.registerListener(function(val) {
-        // console.log(Array.from(states))
         $(document).ready(function() {
-=======
-    states_trigger.registerListener(function (val) {
-        $(document).ready(function () {
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
@@ -359,10 +353,6 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-<<<<<<< HEAD
-                        // console.log(response)
-=======
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
                 },
                 error: function(error) {
                     console.log(error);
@@ -371,14 +361,9 @@ function multi_line_chart(data) {
         });
     });
 
-<<<<<<< HEAD
     crimeListTrigger_line_chart.registerListener(function(val) {
         // console.log("crimeListTrigger in line chart")
         $(document).ready(function() {
-=======
-    crimeListTrigger_line_chart.registerListener(function (val) {
-        $(document).ready(function () {
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
@@ -386,10 +371,7 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-<<<<<<< HEAD
                         // console.log(response)
-=======
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
                 },
                 error: function(error) {
                     console.log(error);
@@ -398,14 +380,9 @@ function multi_line_chart(data) {
         });
     });
 
-<<<<<<< HEAD
     disasterListTrigger_line_chart.registerListener(function(val) {
         // console.log("disaster trigger in line chart")
         $(document).ready(function() {
-=======
-    disasterListTrigger_line_chart.registerListener(function (val) {
-        $(document).ready(function () {
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_line_chart",
@@ -413,10 +390,7 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function(response) {
                     variableChange(response)
-<<<<<<< HEAD
                         // console.log(response)
-=======
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
                 },
                 error: function(error) {
                     console.log(error);
@@ -476,10 +450,7 @@ function multi_line_chart(data) {
         .style("opacity", 0);
 
     function mouseover(d) {
-<<<<<<< HEAD
         // console.log(d)
-=======
->>>>>>> 9c89d9136a010dfc1bdf7d751cda9c00fbf0b581
         if ("crimes" in d) {
             div.html(`Crime Value: ${yValue(d)}`)
                 .style("left", (d3.event.pageX + 10) + "px")

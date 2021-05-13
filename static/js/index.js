@@ -101,7 +101,7 @@ var year_range_trigger_for_radial_chart = {
 var year_range_for_horizontal_bar_chart = [1979, 2019]
 var year_range_trigger_for_horizontal_bar_chart = {
     aInternal: 1000,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -109,7 +109,7 @@ var year_range_trigger_for_horizontal_bar_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -164,7 +164,7 @@ var disasterListTrigger_line_chart = {
 var disaster_list_for_horizontal_chart = new Set()
 var disaster_list_trigger_for_horizontal_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -172,7 +172,7 @@ var disaster_list_trigger_for_horizontal_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
