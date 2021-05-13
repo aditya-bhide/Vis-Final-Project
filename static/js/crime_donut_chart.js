@@ -51,8 +51,8 @@ async function createCrimeDonutChart(states, year_range) {
     // .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     // set the color scale
-    var color = d3.scaleOrdinal(d3.schemeBlues[6])
-        .domain([0, 14807])
+    var color = d3.scaleOrdinal(d3.schemeOranges[5])
+        .domain([0, d3.max(data, d => d.value)])
     // .interpolator(d3.interpolateBlues);
 
     // Compute the position of each group on the pie
@@ -288,6 +288,9 @@ async function createCrimeDonutChart(states, year_range) {
 
         var data = crimeDonutChartData
 
+        // set the color scale
+        var color = d3.scaleOrdinal(d3.schemeOranges[5])
+            .domain([0, d3.max(data, d => d.value)])
         // Compute the position of each group on the pie
         var pie = d3.pie()
             .value(function (d) {
