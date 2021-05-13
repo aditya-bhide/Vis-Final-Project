@@ -3,6 +3,7 @@ var crimeDonutChartData,
 
 var crimeDonutChartData, totalCrimes
 var selectedDonutPath = false
+var selectedDonutPathId = ""
 
 $(document).ready(function () {
     createCrimeDonutChart(Array.from(states_for_donut_chart), year_range)
@@ -21,24 +22,23 @@ async function getDonutChartData(states, year_range) {
     var response_json = await response.json()
     crimeDonutChartData = response_json['data']
     totalCrimes = response_json['totalCrimes']
-    console.log(totalCrimes)
-    console.log(crimeDonutChartData)
+
 
 }
 
 async function createCrimeDonutChart(states, year_range) {
-    console.log(states)
     await getDonutChartData(states, year_range)
 
     // set the dimensions and margins of the graph
-    var width = 450
-    height = 400
-    margin = 60
+    var width = 370
+    height = 370
+    margin = 40
 
     var data = crimeDonutChartData
-
+    console.log(data)
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    var radius = Math.min(width, height) / 2.2 - margin
+    var radius = Math.min(width, height) / 2.5 - margin
+    var innerRadius = 50
 
     // append the svg object to the div called crimeDonutChartId
     var svg = d3.select("#crimeDonutChartId")
@@ -65,7 +65,7 @@ async function createCrimeDonutChart(states, year_range) {
 
     // shape helper to build arcs
     var arcGenerator = d3.arc()
-        .innerRadius(50) // This is the size of the donut hole
+        .innerRadius(innerRadius) // This is the size of the donut hole
         .outerRadius(radius)
 
     // Another arc that won't be drawn. Just for labels positioning
@@ -131,7 +131,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .attr("stroke", "black")
                     .style("stroke-width", "1.5px")
                     .style("opacity", "1")
-                    .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
+                    .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
             }
 
         })
@@ -148,7 +148,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .attr("stroke", "black")
                     .style("stroke-width", "1.5px")
                     .style("opacity", "1")
-                    .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
+                    .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
             }
 
         })
@@ -165,19 +165,43 @@ async function createCrimeDonutChart(states, year_range) {
         })
         .on("click", function (d) {
             if (selectedDonutPath) {
+                if (this.id == selectedDonutPathId) {
+                    // Make all slices normal
+                    d3.selectAll(".my-paths")
+                        .attr("stroke", "black")
+                        .style("stroke-width", "1.5px")
+                        .style("opacity", "1")
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
 
-                // Make all slices normal
-                d3.selectAll(".my-paths")
-                    .attr("stroke", "black")
-                    .style("stroke-width", "1.5px")
-                    .style("opacity", "1")
-                    .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
+                    selectedDonutPath = false
+                    selectedDonutPathId = ""
 
-                selectedDonutPath = false
+                    crimesList = "all_crimes"
+                    crimeListTrigger_line_chart.a = "all_crimes"
+                    crimeListTrigger_us_map.a = "all_crimes"
 
-                crimesList = "all_crimes"
-                crimeListTrigger_line_chart.a = "all_crimes"
-                crimeListTrigger_us_map.a = "all_crimes"
+                }
+                else {
+                    // Blur other slices
+                    d3.selectAll(".my-paths")
+                        .attr("stroke", "#736f64")
+                        .style("stroke-width", "0.5px")
+                        .style("opacity", "0.6")
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
+
+                    // Increase radius of current slice
+                    d3.select(this)
+                        .attr("stroke", "black")
+                        .style("stroke-width", "1.5px")
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
+                        .style("opacity", "1")
+
+                    selectedDonutPathId = this.id
+
+                    crimesList = d.data.key
+                    crimeListTrigger_us_map.a = d.data.key
+                    crimeListTrigger_line_chart.a = d.data.key
+                }
 
             } else {
                 // Blur other slices
@@ -191,10 +215,11 @@ async function createCrimeDonutChart(states, year_range) {
                 d3.select(this)
                     .attr("stroke", "black")
                     .style("stroke-width", "1.5px")
-                    .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
+                    .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
                     .style("opacity", "1")
 
                 selectedDonutPath = true
+                selectedDonutPathId = this.id
 
                 crimesList = d.data.key
                 crimeListTrigger_us_map.a = d.data.key
@@ -225,7 +250,6 @@ async function createCrimeDonutChart(states, year_range) {
     legendlabels = legendGroup
         .append("text")
         .text(function (d) {
-            console.log(d.data.key)
             return d.data.key
         })
         .attr("x", legendLabelX)
@@ -247,7 +271,6 @@ async function createCrimeDonutChart(states, year_range) {
 
     states_trigger_for_donut_chart.registerListener(function (val) {
         $(document).ready(function () {
-            console.log(states_for_donut_chart)
             updateDonutChart(Array.from(states_for_donut_chart), year_range)
         });
     });
@@ -259,9 +282,7 @@ async function createCrimeDonutChart(states, year_range) {
         });
     });
 
-    // states_triggerf=.registerListener(function (val) {
-    //   console.log(Array.from(states))
-    // })
+
 
     async function updateDonutChart(states, year_range) {
         await getDonutChartData(states, year_range)
@@ -324,7 +345,7 @@ async function createCrimeDonutChart(states, year_range) {
                         .attr("stroke", "black")
                         .style("stroke-width", "1.5px")
                         .style("opacity", "1")
-                        .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
                 }
 
             })
@@ -341,7 +362,7 @@ async function createCrimeDonutChart(states, year_range) {
                         .attr("stroke", "black")
                         .style("stroke-width", "1.5px")
                         .style("opacity", "1")
-                        .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
                 }
 
             })
@@ -358,19 +379,43 @@ async function createCrimeDonutChart(states, year_range) {
             })
             .on("click", function (d) {
                 if (selectedDonutPath) {
+                    if (this.id == selectedDonutPathId) {
+                        // Make all slices normal
+                        d3.selectAll(".my-paths")
+                            .attr("stroke", "black")
+                            .style("stroke-width", "1.5px")
+                            .style("opacity", "1")
+                            .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
 
-                    // Make all slices normal
-                    d3.selectAll(".my-paths")
-                        .attr("stroke", "black")
-                        .style("stroke-width", "1.5px")
-                        .style("opacity", "1")
-                        .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
+                        selectedDonutPath = false
+                        selectedDonutPathId = ""
 
-                    selectedDonutPath = false
+                        crimesList = "all_crimes"
+                        crimeListTrigger_line_chart.a = "all_crimes"
+                        crimeListTrigger_us_map.a = "all_crimes"
 
-                    crimesList = "all_crimes"
-                    crimeListTrigger_line_chart.a = "all_crimes"
-                    crimeListTrigger_us_map.a = "all_crimes"
+                    }
+                    else {
+                        // Blur other slices
+                        d3.selectAll(".my-paths")
+                            .attr("stroke", "#736f64")
+                            .style("stroke-width", "0.5px")
+                            .style("opacity", "0.6")
+                            .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius))
+
+                        // Increase radius of current slice
+                        d3.select(this)
+                            .attr("stroke", "black")
+                            .style("stroke-width", "1.5px")
+                            .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
+                            .style("opacity", "1")
+
+                        selectedDonutPathId = this.id
+
+                        crimesList = d.data.key
+                        crimeListTrigger_us_map.a = d.data.key
+                        crimeListTrigger_line_chart.a = d.data.key
+                    }
 
                 } else {
                     // Blur other slices
@@ -384,10 +429,11 @@ async function createCrimeDonutChart(states, year_range) {
                     d3.select(this)
                         .attr("stroke", "black")
                         .style("stroke-width", "1.5px")
-                        .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
+                        .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
                         .style("opacity", "1")
 
                     selectedDonutPath = true
+                    selectedDonutPathId = this.id
 
                     crimesList = d.data.key
                     crimeListTrigger_us_map.a = d.data.key
@@ -395,122 +441,27 @@ async function createCrimeDonutChart(states, year_range) {
                 }
             })
 
+        if (selectedDonutPath) {
+            selected_path_element = d3.select('#' + selectedDonutPathId)
+
+            // Blur other slices
+            d3.selectAll(".my-paths")
+                .attr("stroke", "#736f64")
+                .style("stroke-width", "0.5px")
+                .style("opacity", "0.6")
+
+
+            // Increase radius of current slice
+            selected_path_element
+                .attr("stroke", "black")
+                .style("stroke-width", "1.5px")
+                .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
+                .style("opacity", "1")
+        }
 
 
 
 
-
-
-        // newPaths = shapeGroup.selectAll(".my-paths").data(dataReady)
-
-        // newSlices = newPaths.enter().append("path")
-        //     .merge(newPaths)
-        //     .attr("id", function (d) {
-        //         return "slice-" + d.data.key
-        //     })
-        //     .attr("class", "my-paths")
-        //     .attr('d', arcGenerator)
-        //     .attr('fill', function (d) { return (color(d.data.key)) })
-        //     .attr("stroke", "black")
-        //     .style("stroke-width", "1.5px")
-        //     .style("opacity", 1)
-
-        // newPaths.exit().remove()
-        // newSlices
-        //     .on("mouseover", function (d) {
-
-        //         if (!selectedDonutPath) {
-
-        //             // Make tooltip visible
-        //             div.transition()
-        //                 .duration(0)
-        //                 .style("opacity", .9);
-
-        //             // Set tooltip text
-        //             div.html(d.data.key + "=" + d.value)
-        //                 .style("left", (d3.event.pageX) + "px")
-        //                 .style("top", (d3.event.pageY) + "px");
-
-        //             // Blur other slices
-        //             d3.selectAll(".my-paths")
-        //                 .attr("stroke", "#736f64")
-        //                 .style("stroke-width", "0.5px")
-        //                 .style("opacity", "0.6")
-
-
-        //             // Increase radius of current slice
-        //             d3.select(this)
-        //                 .attr("stroke", "black")
-        //                 .style("stroke-width", "1.5px")
-        //                 .style("opacity", "1")
-        //                 .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
-        //         }
-
-        //     })
-        //     .on("mouseout", function (d) {
-
-        //         // Hide tooltip
-        //         div.transition()
-        //             .duration(0)
-        //             .style("opacity", 0);
-
-        //         if (!selectedDonutPath) {
-        //             // Make all slices normal
-        //             d3.selectAll(".my-paths")
-        //                 .attr("stroke", "black")
-        //                 .style("stroke-width", "1.5px")
-        //                 .style("opacity", "1")
-        //                 .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
-        //         }
-
-        //     })
-        //     .on("mousemove", function (d) {
-        //         // Make tooltip visible
-        //         div.transition()
-        //             .duration(0)
-        //             .style("opacity", .9);
-
-        //         // Set tooltip text
-        //         div.html(d.data.key + "=" + d.value)
-        //             .style("left", (d3.event.pageX) + "px")
-        //             .style("top", (d3.event.pageY) + "px");
-        //     })
-        //     .on("click", function (d) {
-        //         if (selectedDonutPath) {
-
-        //             // Make all slices normal
-        //             d3.selectAll(".my-paths")
-        //                 .attr("stroke", "black")
-        //                 .style("stroke-width", "1.5px")
-        //                 .style("opacity", "1")
-        //                 .attr("d", d3.arc().innerRadius(50).outerRadius(radius))
-
-        //             selectedDonutPath = false
-
-        //             crimesList = "all_crimes"
-        //             crimeListTrigger_line_chart.a = "all_crimes"
-        //             crimeListTrigger_us_map.a = "all_crimes"
-        //         } else {
-        //             // Blur other slices
-        //             d3.selectAll(".my-paths")
-        //                 .attr("stroke", "#736f64")
-        //                 .style("stroke-width", "0.5px")
-        //                 .style("opacity", "0.6")
-
-
-        //             // Increase radius of current slice
-        //             d3.select(this)
-        //                 .attr("stroke", "black")
-        //                 .style("stroke-width", "1.5px")
-        //                 .attr("d", d3.arc().innerRadius(50).outerRadius(radius + 6))
-        //                 .style("opacity", "1")
-
-        //             selectedDonutPath = true
-        //             crimesList = d.data.key
-        //             crimeListTrigger_us_map.a = d.data.key
-        //             crimeListTrigger_line_chart.a = d.data.key
-        //         }
-        //     })
 
 
         svg.select("#donut-middle-text")

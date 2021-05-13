@@ -44,7 +44,7 @@ function US_map(data) {
         .enter()
         .append("path")
         .attr("d", path)
-        // .attr("class", "state");
+    // .attr("class", "state");
 
     // add a legend
     var w = 80,
@@ -55,8 +55,8 @@ function US_map(data) {
         .attr('margin-top', '0px')
         .attr("width", w)
         .attr("height", h)
-        // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
-        // .attr("class", "legend");
+    // .attr("viewbox", "0 0 " + String(width) + " " + String(height))
+    // .attr("class", "legend");
 
     var legend = key.append("defs")
         .append("svg:linearGradient")
@@ -83,7 +83,6 @@ function US_map(data) {
         .style("fill", "url(#gradient)")
         .attr("transform", "translate(0,10)");
 
-    // console.log(data)
     minVal = data.other_features.min_value
     maxVal = data.other_features.max_value
     var y = d3.scaleLinear()
@@ -102,7 +101,7 @@ function US_map(data) {
         minVal = data.other_features.min_value
         maxVal = data.other_features.max_value
         var ramp = d3.scaleLinear().domain([minVal, maxVal]).range([lowColor, highColor])
-            // Bind the data to the SVG and create one path per GeoJSON feature
+        // Bind the data to the SVG and create one path per GeoJSON feature
 
         g.selectAll("path")
             .data(data.features)
@@ -112,7 +111,7 @@ function US_map(data) {
             .on("click", click)
             .style("stroke", "#FFFFFF")
             .style("stroke-width", 1)
-            .style("fill", function(d) {
+            .style("fill", function (d) {
                 if (!states.has(d.properties['name'])) {
                     return ramp(d.properties[features])
                 } else {
@@ -153,7 +152,7 @@ function US_map(data) {
 
         function click(d) {
             if (states.has(d.properties['name'])) {
-                d3.select(this).style("fill", function(d) {
+                d3.select(this).style("fill", function (d) {
                     return ramp(d.properties[features])
                 })
                 states_for_donut_chart.delete(d.properties['name'])
@@ -209,41 +208,40 @@ function US_map(data) {
     update_US_map(data)
 
 
-    year_range_trigger.registerListener(function(val) {
+    year_range_trigger.registerListener(function (val) {
         start_year = year_range[0]
         end_year = year_range[1];
         $('#amount1').text(start_year)
         $('#amount2').text(end_year)
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_US",
                 data: { 'min_year': start_year, 'max_year': end_year, 'crimesList': crimesList },
-                success: function(response) {
+                success: function (response) {
                     update_US_map(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });
         });
     });
 
-    crimeListTrigger_us_map.registerListener(function(val) {
+    crimeListTrigger_us_map.registerListener(function (val) {
         start_year = 1979
         end_year = 2019
-        console.log(crimesList)
         $('#amount1').text(start_year)
         $('#amount2').text(end_year)
-        $(document).ready(function() {
+        $(document).ready(function () {
             $.ajax({
                 type: 'POST',
                 url: "http://127.0.0.1:5000/update_US",
                 data: { 'min_year': start_year, 'max_year': end_year, 'crimesList': crimesList },
-                success: function(response) {
+                success: function (response) {
                     update_US_map(response)
                 },
-                error: function(error) {
+                error: function (error) {
                     console.log(error);
                 }
             });

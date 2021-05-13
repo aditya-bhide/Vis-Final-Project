@@ -48,7 +48,7 @@ var states_trigger_for_radial_chart = {
 }
 
 
-var year_range = [2010, 2019]
+var year_range = [1979, 2019]
 var year_range_trigger = {
     aInternal: 1000,
     aListener: function (val) { },
@@ -64,7 +64,7 @@ var year_range_trigger = {
     }
 }
 
-var year_range_for_donut_chart = [2010, 2019]
+var year_range_for_donut_chart = [1979, 2019]
 var year_range_trigger_for_donut_chart = {
     aInternal: 1000,
     aListener: function (val) { },
@@ -81,8 +81,25 @@ var year_range_trigger_for_donut_chart = {
 }
 
 
-var year_range_for_radial_chart = [2010, 2019]
+var year_range_for_radial_chart = [1979, 2019]
 var year_range_trigger_for_radial_chart = {
+    aInternal: 1000,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+
+var year_range_for_horizontal_bar_chart = [1979, 2019]
+var year_range_trigger_for_horizontal_bar_chart = {
     aInternal: 1000,
     aListener: function (val) { },
     set a(val) {
@@ -130,6 +147,22 @@ var crimeListTrigger_line_chart = {
 
 var disasterList = "all_disasters"
 var disasterListTrigger_line_chart = {
+    aInternal: null,
+    aListener: function (val) { },
+    set a(val) {
+        this.aInternal = val;
+        this.aListener(val);
+    },
+    get a() {
+        return this.aInternal;
+    },
+    registerListener: function (listener) {
+        this.aListener = listener;
+    }
+}
+
+var disaster_list_for_horizontal_chart = new Set()
+var disaster_list_trigger_for_horizontal_chart = {
     aInternal: null,
     aListener: function (val) { },
     set a(val) {

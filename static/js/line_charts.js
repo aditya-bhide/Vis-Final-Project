@@ -321,6 +321,10 @@ function multi_line_chart(data) {
             year_range_for_radial_chart[0] = parseInt(start_date)
             year_range_for_radial_chart[1] = parseInt(end_date)
 
+            year_range_trigger_for_horizontal_bar_chart.a = parseInt(start_date)
+            year_range_for_horizontal_bar_chart[0] = parseInt(start_date)
+            year_range_for_horizontal_bar_chart[1] = parseInt(end_date)
+
         }
 
         d3.select('.line1').attr('d', line1)
@@ -335,7 +339,6 @@ function multi_line_chart(data) {
     }
 
     states_trigger.registerListener(function (val) {
-        // console.log(Array.from(states))
         $(document).ready(function () {
             $.ajax({
                 type: 'POST',
@@ -344,7 +347,6 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function (response) {
                     variableChange(response)
-                    console.log(response)
                 },
                 error: function (error) {
                     console.log(error);
@@ -354,7 +356,6 @@ function multi_line_chart(data) {
     });
 
     crimeListTrigger_line_chart.registerListener(function (val) {
-        console.log("crimeListTrigger in line chart")
         $(document).ready(function () {
             $.ajax({
                 type: 'POST',
@@ -363,7 +364,6 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function (response) {
                     variableChange(response)
-                    console.log(response)
                 },
                 error: function (error) {
                     console.log(error);
@@ -373,7 +373,6 @@ function multi_line_chart(data) {
     });
 
     disasterListTrigger_line_chart.registerListener(function (val) {
-        console.log("disaster trigger in line chart")
         $(document).ready(function () {
             $.ajax({
                 type: 'POST',
@@ -382,7 +381,6 @@ function multi_line_chart(data) {
                 data: JSON.stringify({ 'states': Array.from(states), 'crimes': crimesList, 'disasters': disasterList }),
                 success: function (response) {
                     variableChange(response)
-                    console.log(response)
                 },
                 error: function (error) {
                     console.log(error);
@@ -410,7 +408,9 @@ function multi_line_chart(data) {
             year_range_for_radial_chart[0] = parseInt(start_date)
             year_range_for_radial_chart[1] = parseInt(end_date)
 
-
+            year_range_trigger_for_horizontal_bar_chart.a = parseInt(start_date)
+            year_range_for_horizontal_bar_chart[0] = parseInt(start_date)
+            year_range_for_horizontal_bar_chart[1] = parseInt(end_date)
         }
 
         d3.select('.line1').attr('d', line1)
@@ -436,7 +436,6 @@ function multi_line_chart(data) {
         .style("opacity", 0);
 
     function mouseover(d) {
-        console.log(d)
         if ("crimes" in d) {
             div.html(`Crime Value: ${yValue(d)}`)
                 .style("left", (d3.event.pageX + 10) + "px")

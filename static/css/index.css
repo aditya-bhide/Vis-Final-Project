@@ -1,195 +1,193 @@
 #pcp_svg_id .foreground path {
-    fill: none;
-    stroke: steelblue;
+  fill: none;
+  stroke: steelblue;
 }
 
 #pcp_svg_id .foreground path.fade {
-    stroke: #000;
-    stroke-opacity: 0.05;
+  stroke: #000;
+  stroke-opacity: 0.05;
 }
 
 #pcp_svg_id .background path {
-    fill: none;
-    stroke: #ddd;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
 }
 
 #pcp_svg_id .foreground path {
-    fill: none;
-    stroke: steelblue;
+  fill: none;
+  stroke: steelblue;
 }
 
 #pcp_svg_id .foreground path.fade {
-    stroke: #000;
-    stroke-opacity: 0.05;
+  stroke: #000;
+  stroke-opacity: 0.05;
 }
-
 
 /* Brush no eixo */
 
 #pcp_svg_id .brush .extent .selection {
-    /*fill: red;*/
-    fill-opacity: 0.3;
-    stroke: #fff;
-    shape-rendering: crispEdges;
+  /*fill: red;*/
+  fill-opacity: 0.3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
 }
 
 #pcp_svg_id .pcp_axis line,
 #pcp_svg_id .pcp_axis path {
-    fill: none;
-    stroke: rgb(36, 33, 33);
-    stroke-width: 1px;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: rgb(36, 33, 33);
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
 }
 
 #pcp_svg_id .pcp_axis text {
-    text-shadow: 0 1px 0 #fff;
-    cursor: move;
-    font-size: 8pt;
-    fill: black;
+  text-shadow: 0 1px 0 #fff;
+  cursor: move;
+  font-size: 8pt;
+  fill: black;
 }
 
 #pcp_svg_id .background path {
-    fill: none;
-    stroke: #ddd;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #ddd;
+  shape-rendering: crispEdges;
 }
-
 
 /* Brush no eixo */
 
 #pcp_svg_id .brush .extent .selection {
-    /*fill: red;*/
-    fill-opacity: 0.3;
-    stroke: #fff;
-    shape-rendering: crispEdges;
+  /*fill: red;*/
+  fill-opacity: 0.3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
 }
-
 
 /* Legend Position Style */
 
 #US-map-svg .background {
-    fill: none;
-    pointer-events: all;
+  fill: none;
+  pointer-events: all;
 }
 
 #US-map-legend-svg .legend {
-    margin-top: 100px;
-    font: 11px sans-serif;
-    background-color: #ffffff;
-    /* position: absolute; */
-    left: 20px;
-    top: 30px;
+  margin-top: 100px;
+  font: 11px sans-serif;
+  background-color: #ffffff;
+  /* position: absolute; */
+  left: 20px;
+  top: 30px;
 }
 
 #US-map-legend-svg .y-axis line,
 #US-map-legend-svg .y-axis path {
-    stroke: white;
+  stroke: white;
 }
 
 #US-map-legend-svg .y-axis text {
-    fill: white;
+  fill: white;
 }
 
 #US-map-svg .axis text {
-    font: 10px sans-serif;
+  font: 10px sans-serif;
 }
 
 #US-map-svg .axis line,
 #US-map-svg .axis path {
-    fill: none;
-    stroke: #000;
-    shape-rendering: crispEdges;
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .tooltip {
-    position: absolute;
-    text-align: center;
-    padding: 0.7rem;
-    background: #313639;
-    color: #f9f9f9;
-    border: 0px;
-    border-radius: 8px;
-    pointer-events: none;
-    font-size: 0.7rem;
-    white-space: pre-wrap;
-    font-size: 1em;
+  position: absolute;
+  text-align: center;
+  padding: 0.7rem;
+  background: #313639;
+  color: #f9f9f9;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+  font-size: 0.7rem;
+  white-space: pre-wrap;
+  font-size: 1em;
 }
 
 #year-slider {
-    margin-left: 200px;
-    width: 400px;
+  margin-left: 200px;
+  width: 400px;
 }
 
 #project-heading {
-    text-align: center;
+  text-align: center;
 }
 
 #project-name {
-    font-size: 3.5em;
+  font-size: 3.5em;
 }
-
 
 /*  Line chart */
 
-#line-chart-svg .axis-labels-y, #line-chart-svg .axis-labels-yR {
-    fill: white;
-    font-size: 1.5em;
+#line-chart-svg .axis-labels-y,
+#line-chart-svg .axis-labels-yR {
+  fill: white;
+  font-size: 1.5em;
 }
 
 #line-chart-svg .axis--y line,
 #line-chart-svg .axis--x line,
 #line-chart-svg .axis--y-R line {
-    stroke: white;
+  stroke: white;
 }
 
 #line-chart-svg .axis--y path,
 #line-chart-svg .axis--x path,
 #line-chart-svg .axis--y-R path {
-    stroke: white;
+  stroke: white;
 }
 
 #line-chart-svg .axis--y text,
 #line-chart-svg .axis--x text,
 #line-chart-svg .axis--y-R text {
-    fill: white;
+  fill: white;
 }
 
 #line-chart-svg .line1,
 #line-chart-svg .line2,
 #line-chart-svg .line1-mini,
 #line-chart-svg .line2-mini {
-    fill: none;
-    stroke-width: 1.5px;
+  fill: none;
+  stroke-width: 1.5px;
 }
 
 #line-chart-svg .line1,
 #line-chart-svg .line1-mini {
-    stroke: orange;
+  stroke: orange;
 }
 
 #line-chart-svg .line2,
 #line-chart-svg .line2-mini {
-    stroke: rgb(0, 153, 255);
+  stroke: rgb(0, 153, 255);
 }
 
 #line-chart-svg .dot1,
 #line-chart-svg .dot1-legend {
-    fill: orange;
+  fill: orange;
 }
 
 #line-chart-svg .dot2,
 #line-chart-svg .dot2-legend {
-    fill: rgb(0, 153, 255);
+  fill: rgb(0, 153, 255);
 }
 
-#line-chart-svg .text1-legend, #line-chart-svg .text2-legend{
-    fill: white;
-    font-size: 0.7em;
+#line-chart-svg .text1-legend,
+#line-chart-svg .text2-legend {
+  fill: white;
+  font-size: 0.7em;
 }
 
 #line-chart-svg .zoom {
-    cursor: move;
-    fill: none;
-    pointer-events: all;
+  cursor: move;
+  fill: none;
+  pointer-events: all;
 }

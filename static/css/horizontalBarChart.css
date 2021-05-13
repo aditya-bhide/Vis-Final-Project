@@ -1,0 +1,13 @@
+.horizontal-bar-chart-x-axis line,
+.horizontal-bar-chart-y-axis line {
+  stroke: white;
+}
+
+.horizontal-bar-chart-x-axis path,
+.horizontal-bar-chart-y-axis path {
+  stroke: white;
+}
+.horizontal-bar-chart-x-axis text,
+.horizontal-bar-chart-y-axis text {
+  fill: white;
+}

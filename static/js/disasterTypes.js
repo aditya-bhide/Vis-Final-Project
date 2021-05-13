@@ -1,5 +1,6 @@
 var disasterTypesData, totalDisasters
 var selectedRadialBarFlag = false
+var selectedRadialBarId = ""
 
 $(document).ready(function () {
   createDisasterTypeChart(Array.from(states_for_radial_chart), year_range)
@@ -24,11 +25,11 @@ async function getDisasterTypesData(radialBarChartStateList, radialBarChartYearL
 async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYearList) {
   await getDisasterTypesData(radialBarChartStateList, radialBarChartYearList)
 
-  var margin = { top: 40, right: 0, bottom: 0, left: 0 }
+  var margin = { top: 50, right: 0, bottom: 0, left: 0 }
   width = 400 - margin.left - margin.right
   height = 400 - margin.top - margin.bottom
 
-  innerRadius = 50
+  innerRadius = 40
   outerRadius = Math.min(width, height) / 2.2
 
   var svg = d3.select("#radialBarChartId")
@@ -175,39 +176,73 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
       // Depending on flag, select/unselect the radialBar
       if (selectedRadialBarFlag) {
+        if (this.id == selectedRadialBarId) {
+          // Set bars back to normal stroke width and stroke color
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
+            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count']); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius))
 
-        // Set bars back to normal stroke width and stroke color
-        d3.selectAll(".radialBarChartPaths")
-          .attr("stroke", "black")
-          .style("stroke-width", "0.6px")
-          .style("opacity", "1")
+          // Move text label back to position
+          d3.select(this.parentNode).select(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
 
-          .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-            .innerRadius(innerRadius)
-            .outerRadius(function (d) { return y(d['count']); })
-            .startAngle(function (d) { return x(d.incident_type); })
-            .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-            .padAngle(0.01)
-            .padRadius(innerRadius))
+          selectedRadialBarFlag = false
+          selectedRadialBarId = ""
+          disasterList = "all_disasters"
+          disasterListTrigger_line_chart.a = "all_disasters"
+          disaster_list_for_horizontal_chart.clear()
+          disaster_list_trigger_for_horizontal_chart.a = d.incident_type
+        }
+        else {
+          // Blur all paths
+          d3.selectAll(".radialBarChartPaths")
+            .attr("stroke", "#736f64")
+            .style("stroke-width", "0.3px")
+            .style("opacity", "0.2")
 
-        // Move text label back to position
-        d3.select(this.parentNode).select(".radialLabelClass")
-          .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-          .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+          // Increase selected path size
+          d3.select(this)
+            .attr("stroke", "black")
+            .style("stroke-width", "0.6px")
+            .style("opacity", "1")
+            .attr("d", d3.arc()
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .startAngle(function (d) { return x(d.incident_type); })
+              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+              .padAngle(0.01)
+              .padRadius(innerRadius + 10)
+            )
 
-        selectedRadialBarFlag = false
-        disasterList = "all_disasters"
-        disasterListTrigger_line_chart.a = "all_disasters"
+          // Push label text
+          d3.select(this.parentNode).selectAll(".radialLabelClass")
+            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
 
-      } else {
+
+          selectedRadialBarId = this.id
+          disasterList = d.incident_type
+          disasterListTrigger_line_chart.a = d.incident_type
+          disaster_list_for_horizontal_chart.add(d.incident_type)
+          disaster_list_trigger_for_horizontal_chart.a = d.incident_type
+        }
+      }
+      else {
 
         // Blur other paths
         d3.selectAll(".radialBarChartPaths")
           .attr("stroke", "#736f64")
           .style("stroke-width", "0.3px")
           .style("opacity", "0.2")
-
-
 
         // Increase selected path size
         d3.select(this)
@@ -230,8 +265,12 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
         disasterList = d.incident_type
         disasterListTrigger_line_chart.a = d.incident_type
+        disaster_list_for_horizontal_chart.add(d.incident_type)
+        disaster_list_trigger_for_horizontal_chart.a = d.incident_type
         selectedRadialBarFlag = true
+        selectedRadialBarId = this.id
       }
+
     })
 
   // Add the labels
@@ -267,17 +306,14 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
   year_range_trigger_for_radial_chart.registerListener(function (val) {
     $(document).ready(function () {
-      console.log("year trigger getting called")
+
       updateRadialChart(Array.from(states_for_donut_chart), year_range)
     });
   });
 
-  async function updateRadialChart(states, year_range) {
-    await getDisasterTypesData(states, year_range)
-
-    console.log(states)
+  function updateRadialChart(states, year_range) {
+    getDisasterTypesData(states, year_range)
     let data = disasterTypesData
-
     let maxCount = 0
     for (var i = 0; i < data.length; i++) {
       if (maxCount < data[i]['count']) {
@@ -315,7 +351,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         .padAngle(0.01)
         .padRadius(innerRadius))
 
-    path.transition().duration(200)
+    path.transition().duration(100)
       .attr("d", d3.arc()     // imagine your doing a part of a donut plot
         .innerRadius(innerRadius)
         .outerRadius(function (d) { return y(d['count']); })
@@ -412,39 +448,73 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
         // Depending on flag, select/unselect the radialBar
         if (selectedRadialBarFlag) {
+          if (this.id == selectedRadialBarId) {
+            // Set bars back to normal stroke width and stroke color
+            d3.selectAll(".radialBarChartPaths")
+              .attr("stroke", "black")
+              .style("stroke-width", "0.6px")
+              .style("opacity", "1")
+              .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+                .innerRadius(innerRadius)
+                .outerRadius(function (d) { return y(d['count']); })
+                .startAngle(function (d) { return x(d.incident_type); })
+                .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+                .padAngle(0.01)
+                .padRadius(innerRadius))
 
-          // Set bars back to normal stroke width and stroke color
-          d3.selectAll(".radialBarChartPaths")
-            .attr("stroke", "black")
-            .style("stroke-width", "0.6px")
-            .style("opacity", "1")
+            // Move text label back to position
+            d3.select(this.parentNode).select(".radialLabelClass")
+              .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+              .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
 
-            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-              .innerRadius(innerRadius)
-              .outerRadius(function (d) { return y(d['count']); })
-              .startAngle(function (d) { return x(d.incident_type); })
-              .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
-              .padAngle(0.01)
-              .padRadius(innerRadius))
+            selectedRadialBarFlag = false
+            selectedRadialBarId = ""
+            disasterList = "all_disasters"
+            disasterListTrigger_line_chart.a = "all_disasters"
+            disaster_list_for_horizontal_chart.clear()
+            disaster_list_trigger_for_horizontal_chart.a = d.incident_type
+          }
+          else {
+            // Blur all paths
+            d3.selectAll(".radialBarChartPaths")
+              .attr("stroke", "#736f64")
+              .style("stroke-width", "0.3px")
+              .style("opacity", "0.2")
 
-          // Move text label back to position
-          d3.select(this.parentNode).select(".radialLabelClass")
-            .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-            .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 10) + ",0)"; })
+            // Increase selected path size
+            d3.select(this)
+              .attr("stroke", "black")
+              .style("stroke-width", "0.6px")
+              .style("opacity", "1")
+              .attr("d", d3.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(function (d) { return y(d['count'] + 40); })
+                .startAngle(function (d) { return x(d.incident_type); })
+                .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+                .padAngle(0.01)
+                .padRadius(innerRadius + 10)
+              )
 
-          selectedRadialBarFlag = false
-          disasterList = "all_disasters"
-          disasterListTrigger_line_chart.a = "all_disasters"
+            // Push label text
+            d3.select(this.parentNode).selectAll(".radialLabelClass")
+              .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+              .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
 
-        } else {
+
+            selectedRadialBarId = this.id
+            disasterList = d.incident_type
+            disasterListTrigger_line_chart.a = d.incident_type
+            disaster_list_for_horizontal_chart.add(d.incident_type)
+            disaster_list_trigger_for_horizontal_chart.a = d.incident_type
+          }
+        }
+        else {
 
           // Blur other paths
           d3.selectAll(".radialBarChartPaths")
             .attr("stroke", "#736f64")
             .style("stroke-width", "0.3px")
             .style("opacity", "0.2")
-
-
 
           // Increase selected path size
           d3.select(this)
@@ -467,7 +537,10 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
           disasterList = d.incident_type
           disasterListTrigger_line_chart.a = d.incident_type
+          disaster_list_for_horizontal_chart.add(d.incident_type)
+          disaster_list_trigger_for_horizontal_chart.a = d.incident_type
           selectedRadialBarFlag = true
+          selectedRadialBarId = this.id
         }
       })
 
@@ -489,6 +562,34 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
       .attr("class", "white-font")
       .attr("alignment-baseline", "middle")
 
+    if (selectedRadialBarFlag) {
+      let selected_element = d3.select("#" + selectedRadialBarId)
+      // Blur other paths
+      d3.selectAll(".radialBarChartPaths")
+        .attr("stroke", "#736f64")
+        .style("stroke-width", "0.3px")
+        .style("opacity", "0.2")
+
+      // Increase selected path size
+      selected_element
+        .attr("stroke", "black")
+        .style("stroke-width", "0.6px")
+        .style("opacity", "1")
+        .attr("d", d3.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(function (d) { return y(d['count'] + 40); })
+          .startAngle(function (d) { return x(d.incident_type); })
+          .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
+          .padAngle(0.01)
+          .padRadius(innerRadius + 10)
+        )
+
+      // Push label text
+      selected_element.select(this.parentNode).selectAll(".radialLabelClass")
+        .attr("text-anchor", function (d) { return (x(d.incident_type) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+        .attr("transform", function (d) { return "rotate(" + ((x(d.incident_type) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")" + "translate(" + (y(d['count']) + 20) + ",0)"; })
+
+    }
 
 
     svg.select("#radial-middle-text")
