@@ -33,7 +33,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
   };
 
   var width = 350 - margin.left - margin.right,
-    height = 350 - margin.top - margin.bottom;
+    height = 400 - margin.top - margin.bottom;
 
 
   var svg = d3.select("#horizontalBarChartId")
@@ -96,7 +96,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
       return y(d.state_name);
     })
     .attr("height", y.bandwidth() - 5)
-    .attr("x", 0)
+    .attr("x", 2)
     .attr("width", function (d) {
       return x(d.count);
     })
@@ -147,6 +147,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
       .padding(0.2);
 
     var x = d3.scaleLinear()
+
       .range([0, width]);
 
 
@@ -186,7 +187,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         return y(d.state_name);
       })
       .attr("height", y.bandwidth() - 5)
-      .attr("x", 0)
+      .attr("x", 2)
       .attr("width", 0)
       .style("fill", "red")
       .on("mouseover", horizontalMouseOver)
@@ -199,7 +200,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         return y(d.state_name);
       })
       .attr("height", y.bandwidth() - 5)
-      .attr("x", 0)
+      .attr("x", 2)
       .attr("width", function (d) {
         return x(d.count);
       })
