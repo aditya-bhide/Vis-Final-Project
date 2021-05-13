@@ -122,7 +122,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .style("opacity", .9);
 
                 // Set tooltip text
-                div.html(d.data.key + " : " + d.value)
+                div.html(humanize(d.data.key) + " : " + d.value)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
 
@@ -166,7 +166,7 @@ async function createCrimeDonutChart(states, year_range) {
                 .style("opacity", .9);
 
             // Set tooltip text
-            div.html(d.data.key + " : " + d.value)
+            div.html(humanize(d.data.key) + " : " + d.value)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
         })
@@ -256,7 +256,7 @@ async function createCrimeDonutChart(states, year_range) {
     legendlabels = legendGroup
         .append("text")
         .text(function(d) {
-            return d.data.key
+            return humanize(d.data.key)
         })
         .attr("x", legendLabelX)
         .attr("y", function(d) {
@@ -339,7 +339,7 @@ async function createCrimeDonutChart(states, year_range) {
                         .style("opacity", .9);
 
                     // Set tooltip text
-                    div.html(d.data.key + " : " + d.value)
+                    div.html(humanize(d.data.key) + " : " + d.value)
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY) + "px");
 
@@ -383,7 +383,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .style("opacity", .9);
 
                 // Set tooltip text
-                div.html(d.data.key + " : " + d.value)
+                div.html(humanize(d.data.key) + " : " + d.value)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
             })
@@ -467,9 +467,6 @@ async function createCrimeDonutChart(states, year_range) {
                 .attr("d", d3.arc().innerRadius(innerRadius).outerRadius(radius + 6))
                 .style("opacity", "1")
         }
-
-
-
 
 
 

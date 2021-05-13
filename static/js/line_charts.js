@@ -3,7 +3,7 @@
 function multi_line_chart(data) {
     var svg = d3.select("#line-chart-svg")
         .append('svg')
-        .attr("width", 650)
+        .attr("width", 600)
         .attr("height", 390);
     ticks_values = [1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019]
     var svg = d3.select("#line-chart-svg svg"),
@@ -258,7 +258,7 @@ function multi_line_chart(data) {
         if (crimesList == 'all_crimes') {
             d3.select(".text1-legend").text(yAxisLabel)
         } else {
-            d3.select(".text1-legend").text(crimesList)
+            d3.select(".text1-legend").text(humanize(crimesList))
         }
         if (disasterList == 'all_disasters') {
             d3.select(".text2-legend").text(yRAxisLabel)
@@ -345,6 +345,12 @@ function multi_line_chart(data) {
     }
 
     states_trigger.registerListener(function(val) {
+        if (states.size == 0) {
+            $("#US-map-place-selected").text("the USA")
+        } {
+            $("#US-map-place-selected").text(Array.from(states)[0])
+        }
+
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
@@ -382,6 +388,7 @@ function multi_line_chart(data) {
 
     disasterListTrigger_line_chart.registerListener(function(val) {
         // console.log("disaster trigger in line chart")
+        $('#title-bar-char-disaster').text(humanize(disasterList))
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
