@@ -25,7 +25,7 @@ async function getDisasterTypesData(radialBarChartStateList, radialBarChartYearL
 async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYearList) {
   await getDisasterTypesData(radialBarChartStateList, radialBarChartYearList)
 
-  var margin = { top: 50, right: 0, bottom: 0, left: 0 }
+  var margin = { top: 80, right: 0, bottom: 0, left: 60 }
   width = 400 - margin.left - margin.right
   height = 400 - margin.top - margin.bottom
 
@@ -118,7 +118,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
           .attr("d", d3.arc()
             .innerRadius(innerRadius)
-            .outerRadius(function (d) { return y(d['count'] + 40); })
+            .outerRadius(function (d) { return y(d['count']); })
             .startAngle(function (d) { return x(d.incident_type); })
             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
             .padAngle(0.01)
@@ -215,7 +215,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             .style("opacity", "1")
             .attr("d", d3.arc()
               .innerRadius(innerRadius)
-              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .outerRadius(function (d) { return y(d['count']); })
               .startAngle(function (d) { return x(d.incident_type); })
               .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
               .padAngle(0.01)
@@ -249,7 +249,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .style("opacity", "1")
           .attr("d", d3.arc()
             .innerRadius(innerRadius)
-            .outerRadius(function (d) { return y(d['count'] + 40); })
+            .outerRadius(function (d) { return y(d['count']); })
             .startAngle(function (d) { return x(d.incident_type); })
             .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
             .padAngle(0.01)
@@ -391,7 +391,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
             .attr("d", d3.arc()
               .innerRadius(innerRadius)
-              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .outerRadius(function (d) { return y(d['count']); })
               .startAngle(function (d) { return x(d.incident_type); })
               .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
               .padAngle(0.01)
@@ -488,7 +488,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
               .style("opacity", "1")
               .attr("d", d3.arc()
                 .innerRadius(innerRadius)
-                .outerRadius(function (d) { return y(d['count'] + 40); })
+                .outerRadius(function (d) { return y(d['count']); })
                 .startAngle(function (d) { return x(d.incident_type); })
                 .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
                 .padAngle(0.01)
@@ -522,7 +522,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             .style("opacity", "1")
             .attr("d", d3.arc()
               .innerRadius(innerRadius)
-              .outerRadius(function (d) { return y(d['count'] + 40); })
+              .outerRadius(function (d) { return y(d['count']); })
               .startAngle(function (d) { return x(d.incident_type); })
               .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
               .padAngle(0.01)
@@ -576,7 +576,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         .style("opacity", "1")
         .attr("d", d3.arc()
           .innerRadius(innerRadius)
-          .outerRadius(function (d) { return y(d['count'] + 40); })
+          .outerRadius(function (d) { return y(d['count']); })
           .startAngle(function (d) { return x(d.incident_type); })
           .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
           .padAngle(0.01)

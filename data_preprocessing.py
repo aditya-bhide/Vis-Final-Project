@@ -230,22 +230,19 @@ def fetchAllCrimesForStateAndYears(crimeDonutDf, stateName, yearRange):
         crimeDonutDf = crimeDonutDf.loc[(
             crimeDonutDf['state_name'].isin(stateName)) & (crimeDonutDf['year'] >= int(yearRange[0])) & (crimeDonutDf['year'] <= int(yearRange[1]))]
 
-    # print(crimeDonutDf.sum(numeric_only=True).to_dict())
-
     # convert crime to crime per capita/1000000
     crimeDonutDf[['violent_crime', 'homicide', 'property_crime', 'burglary', 'aggravated_assault']] = crimeDonutDf[[
-        'violent_crime', 'homicide', 'property_crime', 'burglary', 'aggravated_assault']].div(crimeDonutDf['population']/1000000000, axis=0)
+        'violent_crime', 'homicide', 'property_crime', 'burglary', 'aggravated_assault']].div(1000, axis=0)
 
     # drop all columns except crimes
     crimeDonutDf.drop(labels=["year", "population", "state_name",
-                              "state_abbr", "larceny", "robbery", "all_crimes"], axis=1, inplace=True)
+                              "state_abbr", "larceny", "motor_vehicle_theft", "robbery", "all_crimes"], axis=1, inplace=True)
 
     # convert all crimes to integers
-    crimeDonutDf = crimeDonutDf.astype(int)
-
+    crimeDonutDf = crimeDonutDf.sum(numeric_only=True).astype(int)
     totalCrimes = crimeDonutDf.to_numpy().sum()
-    # return the sum of crimes in dictionary form
-    crimeDonutDfDict = crimeDonutDf.sum(numeric_only=True).to_dict()
+
+    crimeDonutDfDict = crimeDonutDf.to_dict()
 
     return crimeDonutDfDict, totalCrimes
 
