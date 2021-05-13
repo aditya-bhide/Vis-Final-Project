@@ -49,7 +49,7 @@ var states_trigger_for_radial_chart = {
 var states_for_horizontal_bar_chart = new Set()
 var states_trigger_for_horizontal_bar_chart = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -57,7 +57,7 @@ var states_trigger_for_horizontal_bar_chart = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -65,7 +65,7 @@ var states_trigger_for_horizontal_bar_chart = {
 var states_for_us_map = new Set()
 var states_trigger_for_us_map = {
     aInternal: null,
-    aListener: function (val) { },
+    aListener: function(val) {},
     set a(val) {
         this.aInternal = val;
         this.aListener(val);
@@ -73,7 +73,7 @@ var states_trigger_for_us_map = {
     get a() {
         return this.aInternal;
     },
-    registerListener: function (listener) {
+    registerListener: function(listener) {
         this.aListener = listener;
     }
 }
@@ -215,3 +215,34 @@ function humanize(str) {
     }
     return frags.join(' ');
 }
+
+var interpolators = [
+    // These are from d3-scale.
+    "Viridis",
+    "Inferno",
+    "Magma",
+    "Plasma",
+    "Warm",
+    "Cool",
+    "Rainbow",
+    "CubehelixDefault",
+    // These are from d3-scale-chromatic
+    "Blues",
+    "Greens",
+    "Greys",
+    "Oranges",
+    "Purples",
+    "Reds",
+    "BuGn",
+    "BuPu",
+    "GnBu",
+    "OrRd",
+    "PuBuGn",
+    "PuBu",
+    "PuRd",
+    "RdPu",
+    "YlGnBu",
+    "YlGn",
+    "YlOrBr",
+    "YlOrRd"
+];

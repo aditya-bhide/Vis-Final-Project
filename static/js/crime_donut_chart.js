@@ -5,7 +5,7 @@ var crimeDonutChartData, totalCrimes
 var selectedDonutPath = false
 var selectedDonutPathId = ""
 
-$(document).ready(function () {
+$(document).ready(function() {
     createCrimeDonutChart(Array.from(states_for_donut_chart), year_range)
 })
 
@@ -36,7 +36,7 @@ async function createCrimeDonutChart(states, year_range) {
 
     var data = crimeDonutChartData
     console.log(data)
-    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+        // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     var radius = Math.min(width, height) / 2.5 - 40
     var innerRadius = 50
 
@@ -48,20 +48,23 @@ async function createCrimeDonutChart(states, year_range) {
         .attr("height", height + 30)
         .append("g")
         .attr("transform", "translate(" + (width / 3 + margin.left) + "," + height / 2 + ")")
-    // .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        // .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    // set the color scale
-    var color = d3.scaleOrdinal(d3.schemeOranges[5])
-        .domain([0, d3.max(data, d => d.value)])
-    // .interpolator(d3.interpolateBlues);
+
 
     // Compute the position of each group on the pie
     var pie = d3.pie()
-        .value(function (d) {
+        .value(function(d) {
             return d.value
         })
 
     var dataReady = pie(d3.entries(data))
+    console.log(dataReady)
+        // // set the color scale
+        // var color = d3.scaleSequential()
+        //     .domain([0, d3.max(dataReady, d => d.value)])
+        //     .range(["white", "#fcecdd", "#ffc288", "#fea82f", "#ff6701"])
+    var color = d3.scaleLinear().domain([0, d3.max(dataReady, d => d.value)]).range(["#fad6af", "#fc6f03"])
 
     // shape helper to build arcs
     var arcGenerator = d3.arc()
@@ -94,18 +97,22 @@ async function createCrimeDonutChart(states, year_range) {
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
     slices = shapeGroup
         .append('path')
-        .attr("id", function (d) {
+        .attr("id", function(d) {
             return "slice-" + d.data.key
         })
         .attr("class", "my-paths")
         .attr('d', arcGenerator)
-        .attr('fill', function (d) { return (color(d.data.key)) })
+        .attr('fill', function(d) {
+            console.log(d.data.value);
+            console.log(color(d.data.value));
+            return (color(d.data.value))
+        })
         .attr("stroke", "black")
         .style("stroke-width", "1.5px")
         .style("opacity", 1)
 
     slices
-        .on("mouseover", function (d) {
+        .on("mouseover", function(d) {
 
             if (!selectedDonutPath) {
 
@@ -135,7 +142,7 @@ async function createCrimeDonutChart(states, year_range) {
             }
 
         })
-        .on("mouseout", function (d) {
+        .on("mouseout", function(d) {
 
             // Hide tooltip
             div.transition()
@@ -152,7 +159,7 @@ async function createCrimeDonutChart(states, year_range) {
             }
 
         })
-        .on("mousemove", function (d) {
+        .on("mousemove", function(d) {
             // Make tooltip visible
             div.transition()
                 .duration(0)
@@ -163,7 +170,7 @@ async function createCrimeDonutChart(states, year_range) {
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
         })
-        .on("click", function (d) {
+        .on("click", function(d) {
             if (selectedDonutPath) {
                 if (this.id == selectedDonutPathId) {
                     // Make all slices normal
@@ -237,22 +244,22 @@ async function createCrimeDonutChart(states, year_range) {
     legendCircles = legendGroup
         .append("circle")
         .attr("cx", legendCircleX)
-        .attr("cy", function (d) {
+        .attr("cy", function(d) {
             legendCircleY = legendCircleY + 20
             return legendCircleY
         })
         .attr("r", 6)
-        .style("fill", function (d) {
-            return color(d.data.key)
+        .style("fill", function(d) {
+            return color(d.data.value)
         })
 
     legendlabels = legendGroup
         .append("text")
-        .text(function (d) {
+        .text(function(d) {
             return d.data.key
         })
         .attr("x", legendLabelX)
-        .attr("y", function (d) {
+        .attr("y", function(d) {
             legendLabelY = legendLabelY + 20
             return legendLabelY
         })
@@ -268,15 +275,15 @@ async function createCrimeDonutChart(states, year_range) {
         .attr("class", "white-font")
         .style("font-size", 24)
 
-    states_trigger_for_donut_chart.registerListener(function (val) {
-        $(document).ready(function () {
+    states_trigger_for_donut_chart.registerListener(function(val) {
+        $(document).ready(function() {
             updateDonutChart(Array.from(states_for_donut_chart), year_range)
         });
     });
 
 
-    year_range_trigger_for_donut_chart.registerListener(function (val) {
-        $(document).ready(function () {
+    year_range_trigger_for_donut_chart.registerListener(function(val) {
+        $(document).ready(function() {
             updateDonutChart(Array.from(states_for_donut_chart), year_range)
         });
     });
@@ -288,16 +295,17 @@ async function createCrimeDonutChart(states, year_range) {
 
         var data = crimeDonutChartData
 
-        // set the color scale
-        var color = d3.scaleOrdinal(d3.schemeOranges[5])
-            .domain([0, d3.max(data, d => d.value)])
-        // Compute the position of each group on the pie
+
         var pie = d3.pie()
-            .value(function (d) {
+            .value(function(d) {
                 return d.value
             })
 
         var dataReady = pie(d3.entries(data))
+            // set the color scale
+        var color = d3.scaleLinear().domain([0, d3.max(dataReady, d => d.value)]).range(["#fad6af", "#fc6f03"])
+
+        // Compute the position of each group on the pie
 
         oldGroups = svg.selectAll(".gDonut").remove()
 
@@ -310,18 +318,18 @@ async function createCrimeDonutChart(states, year_range) {
 
         newSlices = newGroups
             .append('path')
-            .attr("id", function (d) {
+            .attr("id", function(d) {
                 return "slice-" + d.data.key
             })
             .attr("class", "my-paths")
             .attr('d', arcGenerator)
-            .attr('fill', function (d) { return (color(d.data.key)) })
+            .attr('fill', function(d) { return (color(d.data.value)) })
             .attr("stroke", "black")
             .style("stroke-width", "1.5px")
             .style("opacity", 1)
 
         newSlices
-            .on("mouseover", function (d) {
+            .on("mouseover", function(d) {
 
                 if (!selectedDonutPath) {
 
@@ -351,7 +359,7 @@ async function createCrimeDonutChart(states, year_range) {
                 }
 
             })
-            .on("mouseout", function (d) {
+            .on("mouseout", function(d) {
 
                 // Hide tooltip
                 div.transition()
@@ -368,7 +376,7 @@ async function createCrimeDonutChart(states, year_range) {
                 }
 
             })
-            .on("mousemove", function (d) {
+            .on("mousemove", function(d) {
                 // Make tooltip visible
                 div.transition()
                     .duration(0)
@@ -379,7 +387,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
             })
-            .on("click", function (d) {
+            .on("click", function(d) {
                 if (selectedDonutPath) {
                     if (this.id == selectedDonutPathId) {
                         // Make all slices normal
