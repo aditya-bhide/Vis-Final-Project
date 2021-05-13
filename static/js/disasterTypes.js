@@ -99,7 +99,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .style("opacity", .9);
 
         // Set tooltip text
-        div.html(d.incident_type + "=" + d.count)
+        div.html(d.incident_type + " : " + d.count)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY) + "px");
 
@@ -139,7 +139,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         .style("opacity", .9);
 
       // Set tooltip text
-      div.html(d.incident_type + "=" + d.count)
+      div.html(d.incident_type + " : " + d.count)
         .style("left", (d3.event.pageX) + "px")
         .style("top", (d3.event.pageY) + "px");
 
@@ -372,7 +372,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             .style("opacity", .9);
 
           // Set tooltip text
-          div.html(d.incident_type + "=" + d.count)
+          div.html(d.incident_type + " : " + d.count)
             .style("left", (d3.event.pageX) + "px")
             .style("top", (d3.event.pageY) + "px");
 
@@ -412,7 +412,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .style("opacity", .9);
 
         // Set tooltip text
-        div.html(d.incident_type + "=" + d.count)
+        div.html(d.incident_type + " : " + d.count)
           .style("left", (d3.event.pageX) + "px")
           .style("top", (d3.event.pageY) + "px");
 

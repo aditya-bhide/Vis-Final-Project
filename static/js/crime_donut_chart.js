@@ -115,7 +115,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .style("opacity", .9);
 
                 // Set tooltip text
-                div.html(d.data.key + "=" + d.value)
+                div.html(d.data.key + " : " + d.value)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
 
@@ -159,7 +159,7 @@ async function createCrimeDonutChart(states, year_range) {
                 .style("opacity", .9);
 
             // Set tooltip text
-            div.html(d.data.key + "=" + d.value)
+            div.html(d.data.key + " : " + d.value)
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY) + "px");
         })
@@ -328,7 +328,7 @@ async function createCrimeDonutChart(states, year_range) {
                         .style("opacity", .9);
 
                     // Set tooltip text
-                    div.html(d.data.key + "=" + d.value)
+                    div.html(d.data.key + " : " + d.value)
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY) + "px");
 
@@ -372,7 +372,7 @@ async function createCrimeDonutChart(states, year_range) {
                     .style("opacity", .9);
 
                 // Set tooltip text
-                div.html(d.data.key + "=" + d.value)
+                div.html(d.data.key + " : " + d.value)
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY) + "px");
             })
