@@ -133,11 +133,13 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
 
 
         let data = disastersPerStateData
-
         //sort bars based on value
         data = data.sort(function (a, b) {
             return d3.descending(a.value, b.value);
         })
+
+        console.log(data)
+
 
         d3.select(".horizontal-bar-chart-y-axis").remove()
         d3.select(".horizontal-bar-chart-x-axis").remove()
