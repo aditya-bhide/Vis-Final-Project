@@ -81,7 +81,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
     .attr("fill", "#69b3a2")
     .attr("stroke", "black")
     .style("stroke-width", "0.6px")
-    .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+    .attr("d", d3.arc() // imagine your doing a part of a donut plot
       .innerRadius(innerRadius)
       .outerRadius(function (d) { return y(d['count']); })
       .startAngle(function (d) { return x(d.incident_type); })
@@ -158,7 +158,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           .attr("stroke", "black")
           .style("stroke-width", "0.6px")
           .style("opacity", "1")
-          .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+          .attr("d", d3.arc() // imagine your doing a part of a donut plot
             .innerRadius(innerRadius)
             .outerRadius(function (d) { return y(d['count']); })
             .startAngle(function (d) { return x(d.incident_type); })
@@ -182,7 +182,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             .attr("stroke", "black")
             .style("stroke-width", "0.6px")
             .style("opacity", "1")
-            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+            .attr("d", d3.arc() // imagine your doing a part of a donut plot
               .innerRadius(innerRadius)
               .outerRadius(function (d) { return y(d['count']); })
               .startAngle(function (d) { return x(d.incident_type); })
@@ -201,8 +201,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           disasterListTrigger_line_chart.a = "all_disasters"
           disaster_list_for_horizontal_chart.clear()
           disaster_list_trigger_for_horizontal_chart.a = d.incident_type
-        }
-        else {
+        } else {
           // Blur all paths
           d3.selectAll(".radialBarChartPaths")
             .attr("stroke", "#736f64")
@@ -235,8 +234,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
           disaster_list_for_horizontal_chart.add(d.incident_type)
           disaster_list_trigger_for_horizontal_chart.a = d.incident_type
         }
-      }
-      else {
+      } else {
 
         // Blur other paths
         d3.selectAll(".radialBarChartPaths")
@@ -300,7 +298,6 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
 
   states_trigger_for_radial_chart.registerListener(function (val) {
     $(document).ready(function () {
-      console.log("trigger called")
       updateRadialChart(Array.from(states_for_radial_chart), year_range)
     });
   });
@@ -313,8 +310,6 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
   });
 
   function updateRadialChart(states, year_range) {
-    console.log(Array.from(states_for_radial_chart))
-
     getDisasterTypesData(states, year_range)
     let data = disasterTypesData
     let maxCount = 0
@@ -346,7 +341,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
       .attr("fill", "#69b3a2")
       .attr("stroke", "black")
       .style("stroke-width", "0.6px")
-      .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+      .attr("d", d3.arc() // imagine your doing a part of a donut plot
         .innerRadius(innerRadius)
         .outerRadius(innerRadius + 0.1)
         .startAngle(function (d) { return x(d.incident_type); })
@@ -354,15 +349,15 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
         .padAngle(0.01)
         .padRadius(innerRadius))
 
-    path.transition().duration(100)
-      .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+    path
+      .attr("d", d3.arc() // imagine your doing a part of a donut plot
         .innerRadius(innerRadius)
         .outerRadius(function (d) { return y(d['count']); })
         .startAngle(function (d) { return x(d.incident_type); })
         .endAngle(function (d) { return x(d.incident_type) + x.bandwidth(); })
         .padAngle(0.01)
         .padRadius(innerRadius))
-      .delay(0)
+
 
     path
       .on("mouseover", function (d) {
@@ -433,7 +428,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             .attr("stroke", "black")
             .style("stroke-width", "0.6px")
             .style("opacity", "1")
-            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+            .attr("d", d3.arc() // imagine your doing a part of a donut plot
               .innerRadius(innerRadius)
               .outerRadius(function (d) { return y(d['count']); })
               .startAngle(function (d) { return x(d.incident_type); })
@@ -457,7 +452,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
               .attr("stroke", "black")
               .style("stroke-width", "0.6px")
               .style("opacity", "1")
-              .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+              .attr("d", d3.arc() // imagine your doing a part of a donut plot
                 .innerRadius(innerRadius)
                 .outerRadius(function (d) { return y(d['count']); })
                 .startAngle(function (d) { return x(d.incident_type); })
@@ -476,8 +471,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             disasterListTrigger_line_chart.a = "all_disasters"
             disaster_list_for_horizontal_chart.clear()
             disaster_list_trigger_for_horizontal_chart.a = d.incident_type
-          }
-          else {
+          } else {
             // Blur all paths
             d3.selectAll(".radialBarChartPaths")
               .attr("stroke", "#736f64")
@@ -510,8 +504,7 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
             disaster_list_for_horizontal_chart.add(d.incident_type)
             disaster_list_trigger_for_horizontal_chart.a = d.incident_type
           }
-        }
-        else {
+        } else {
 
           // Blur other paths
           d3.selectAll(".radialBarChartPaths")
@@ -600,9 +593,5 @@ async function createDisasterTypeChart(radialBarChartStateList, radialBarChartYe
       .text(totalDisasters)
       .attr("class", "white-font donut-middle-text")
       .style("font-size", 24)
-
-
-
   }
 }
-
