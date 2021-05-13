@@ -2,7 +2,7 @@ var disastersPerStateData, totalDisastersOccured
 var selectedHorizontalBarFlag = false,
     selectedHorizontalBarId = ""
 
-$(document).ready(function() {
+$(document).ready(function () {
     createHorizontalBarGraph(Array.from(disaster_list_for_horizontal_chart), year_range_for_horizontal_bar_chart)
 })
 
@@ -58,14 +58,14 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     let data = disastersPerStateData
 
     //sort bars based on value
-    data = data.sort(function(a, b) {
+    data = data.sort(function (a, b) {
         return d3.descending(a.value, b.value);
     })
 
 
     // Scale the range of the data in the domains
-    x.domain([0, d3.max(data, function(d) { return d.count; })])
-    y.domain(data.map(function(d) { return d.state_name; }));
+    x.domain([0, d3.max(data, function (d) { return d.count; })])
+    y.domain(data.map(function (d) { return d.state_name; }));
     //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
     // add the x Axis
@@ -90,15 +90,15 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     //append rects
     bars.append("rect")
         .attr("class", "bar")
-        .attr("id", function(d) {
+        .attr("id", function (d) {
             return "horizontal-bar-" + d.state_name
         })
-        .attr("y", function(d) {
+        .attr("y", function (d) {
             return y(d.state_name);
         })
         .attr("height", y.bandwidth() - 5)
         .attr("x", 2)
-        .attr("width", function(d) {
+        .attr("width", function (d) {
             return x(d.count);
         })
         .style("fill", "rgb(0, 153, 255)")
@@ -110,19 +110,19 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
     //add a value label to the right of each bar
     bars.append("text")
         .attr("class", "label")
-        .attr("id", function(d) {
+        .attr("id", function (d) {
             return "horizontal-bar-label-" + d.state_name
         })
 
-    //y position of the label is halfway down the bar
-    .attr("y", function(d) {
+        //y position of the label is halfway down the bar
+        .attr("y", function (d) {
             return y(d.state_name) + y.bandwidth() / 2 + 4;
         })
         //x position is 3 pixels to the right of the bar
-        .attr("x", function(d) {
+        .attr("x", function (d) {
             return x(d.count) + 3;
         })
-        .text(function(d) {
+        .text(function (d) {
             return d.count;
         })
         .style('fill', 'white')
@@ -135,7 +135,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         let data = disastersPerStateData
 
         //sort bars based on value
-        data = data.sort(function(a, b) {
+        data = data.sort(function (a, b) {
             return d3.descending(a.value, b.value);
         })
 
@@ -149,12 +149,12 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
 
         var x = d3.scaleLinear()
 
-        .range([0, width]);
+            .range([0, width]);
 
 
         // Scale the range of the data in the domains
-        x.domain([0, d3.max(data, function(d) { return d.count; })])
-        y.domain(data.map(function(d) { return d.state_name; }));
+        x.domain([0, d3.max(data, function (d) { return d.count; })])
+        y.domain(data.map(function (d) { return d.state_name; }));
         //y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 
         // add the x Axis
@@ -181,10 +181,10 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         //append rects
         let rect = newBars.append("rect")
             .attr("class", "bar")
-            .attr("id", function(d) {
+            .attr("id", function (d) {
                 return "horizontal-bar-" + d.state_name
             })
-            .attr("y", function(d) {
+            .attr("y", function (d) {
                 return y(d.state_name);
             })
             .attr("height", y.bandwidth() - 5)
@@ -197,12 +197,12 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
             .on("click", horizontalMouseClick)
 
         rect.transition().duration(400)
-            .attr("y", function(d) {
+            .attr("y", function (d) {
                 return y(d.state_name);
             })
             .attr("height", y.bandwidth() - 5)
             .attr("x", 2)
-            .attr("width", function(d) {
+            .attr("width", function (d) {
                 return x(d.count);
             })
             .style("fill", "rgb(0, 153, 255)")
@@ -212,18 +212,18 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
         //add a value label to the right of each bar
         newBars.append("text")
             .attr("class", "label")
-            .attr("id", function(d) {
+            .attr("id", function (d) {
                 return "horizontal-bar-label-" + d.state_name
             })
             //y position of the label is halfway down the bar
-            .attr("y", function(d) {
+            .attr("y", function (d) {
                 return y(d.state_name) + y.bandwidth() / 2 + 4;
             })
             //x position is 3 pixels to the right of the bar
-            .attr("x", function(d) {
+            .attr("x", function (d) {
                 return x(d.count) + 3;
             })
-            .text(function(d) {
+            .text(function (d) {
                 return d.count;
             })
             .style('fill', 'white')
@@ -238,14 +238,14 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
 
     }
 
-    disaster_list_trigger_for_horizontal_chart.registerListener(function(val) {
-        $(document).ready(function() {
+    disaster_list_trigger_for_horizontal_chart.registerListener(function (val) {
+        $(document).ready(function () {
             updateHorizontalBarChart(Array.from(disaster_list_for_horizontal_chart), year_range_for_horizontal_bar_chart)
         });
     });
 
-    year_range_trigger_for_horizontal_bar_chart.registerListener(function(val) {
-        $(document).ready(function() {
+    year_range_trigger_for_horizontal_bar_chart.registerListener(function (val) {
+        $(document).ready(function () {
             updateHorizontalBarChart(Array.from(disaster_list_for_horizontal_chart), year_range_for_horizontal_bar_chart)
         });
     });
@@ -266,7 +266,7 @@ async function createHorizontalBarGraph(disasterTypeList, year_range) {
 
     }
 
-    function horizontalMouseMove(d) {}
+    function horizontalMouseMove(d) { }
 
     function horizontalMouseOut(d) {
 
